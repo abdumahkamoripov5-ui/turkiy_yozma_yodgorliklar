@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, NumberFilter, CharFilter
-from django.db.models import Q, Sum, Count
+from django.db.models import F, Q, Sum, Count
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from django.utils import timezone
@@ -18,6 +18,7 @@ from .serializers import (
     MonumentListSerializer, MonumentDetailSerializer,
     MonumentSubmissionSerializer, SiteSettingsSerializer,
 )
+from .throttling import ScopedRateThrottle
 from .word_tr import WORD_TR
 
 
@@ -77,7 +78,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        Monument.objects.filter(pk=instance.pk).update(views=instance.views + 1)
+        # F() — bir vaqtdagi so'rovlarda ko'rishlar yo'qolmasligi uchun (bazada atomar oshiriladi)
+        Monument.objects.filter(pk=instance.pk).update(views=F('views') + 1)
         instance.refresh_from_db()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
@@ -118,16 +120,21 @@ class MonumentViewSet(viewsets.ModelViewSet):
         q = request.query_params.get('q', '').strip()
         if not q or len(q) < 2:
             return Response({'error': "Kamida 2 ta belgi kiriting"}, status=400)
+        max_results = 200
         results = []
+        q_lower = q.lower()
         qs = Monument.objects.filter(status='Chop etilgan')
         for m in qs:
+            if len(results) >= max_results:
+                break
             for field, text in [
                 ('Matn', m.full_text or ''),
                 ('Transliteratsiya', m.transliteration or ''),
                 ('Tarjima', m.translation or ''),
             ]:
-                idx = text.lower().find(q.lower())
-                while idx != -1:
+                text_lower = text.lower()
+                idx = text_lower.find(q_lower)
+                while idx != -1 and len(results) < max_results:
                     start = max(0, idx - 40)
                     end   = min(len(text), idx + len(q) + 40)
                     results.append({
@@ -138,10 +145,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
                         'match':  text[idx:idx + len(q)],
                         'right':  text[idx + len(q):end],
                     })
-                    idx = text.lower().find(q.lower(), idx + 1)
-                    if len(results) > 200:
-                        break
-        return Response({'query': q, 'count': len(results), 'results': results[:200]})
+                    idx = text_lower.find(q_lower, idx + 1)
+        return Response({'query': q, 'count': len(results), 'results': results})
 
     @action(detail=False, methods=['get'], url_path='word-frequency')
     def word_frequency(self, request):
@@ -155,7 +160,11 @@ class MonumentViewSet(viewsets.ModelViewSet):
                 if len(word) >= 3:
                     counter[word] += 1
 
-        limit = min(int(request.query_params.get('limit', 100)), 300)
+        try:
+            limit = int(request.query_params.get('limit', 100))
+        except (TypeError, ValueError):
+            return Response({'error': "limit butun son bo'lishi kerak"}, status=400)
+        limit = max(1, min(limit, 300))
         top = counter.most_common(limit)
         return Response({
             'count': len(top),
@@ -167,7 +176,9 @@ class MonumentViewSet(viewsets.ModelViewSet):
 
 class SubmissionCreateView(APIView):
     permission_classes = [permissions.AllowAny]
-    parser_classes_names = ['multipart', 'form', 'json']
+    # Spam va begona manzillarga xat yuborishni cheklash (settings: 'submit')
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'submit'
 
     def post(self, request):
         serializer = MonumentSubmissionSerializer(data=request.data)
@@ -179,13 +190,16 @@ class SubmissionCreateView(APIView):
 
         # Email — admin ga
         if django_settings.ADMIN_EMAIL:
+            review_url = request.build_absolute_uri(
+                f'/django-admin/korpus/monumentsubmission/{submission.id}/change/'
+            )
             send_mail(
                 subject=f'[Turkiy Korpus] Yangi taklif: {submission.title}',
                 message=(
                     f'Yangi yodgorlik taklifi keldi.\n\n'
                     f'Nomi: {submission.title}\n'
                     f'Muallif: {submission.author_name} <{submission.author_email}>\n'
-                    f'Ko\'rib chiqish: http://127.0.0.1:8000/django-admin/korpus/monumentsubmission/{submission.id}/change/'
+                    f'Ko\'rib chiqish: {review_url}'
                 ),
                 from_email=django_settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[django_settings.ADMIN_EMAIL],

@@ -14,3 +14,6 @@ gunicorn==23.0.0
 whitenoise==6.11.0
 psycopg2-binary==2.9.10
 dj-database-url==3.0.1
+
+# Yuklangan fayllar uchun tashqi xotira (S3 / Cloudflare R2) — AWS_STORAGE_BUCKET_NAME berilganda
+django-storages[s3]==1.14.6

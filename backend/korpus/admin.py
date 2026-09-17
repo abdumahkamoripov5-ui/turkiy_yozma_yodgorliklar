@@ -196,11 +196,13 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 @admin.action(description="✅ Tasdiqlash va yodgorlik sifatida qo'shish")
 def approve_submissions(modeladmin, request, queryset):
     count = 0
+    site_url = request.build_absolute_uri(django_settings.FRONTEND_URL.rstrip('/') + '/monuments')
     for sub in queryset.filter(status='pending'):
         # Rasm: yuklangan fayl ustunlik qiladi, aks holda URL ishlatiladi
         image_url = sub.image
         if sub.image_file:
-            image_url = sub.image_file.url
+            # Frontend boshqa domenda (Vercel) — to'liq URL kerak
+            image_url = request.build_absolute_uri(sub.image_file.url)
 
         monument = Monument.objects.create(
             title=sub.title,
@@ -211,6 +213,7 @@ def approve_submissions(modeladmin, request, queryset):
             language=sub.language,
             description=sub.description,
             image=image_url,
+            full_text=sub.full_text,
             transliteration=sub.transliteration,
             translation=sub.translation,
             bibliography=[sub.source_info] if sub.source_info else [],
@@ -231,7 +234,7 @@ def approve_submissions(modeladmin, request, queryset):
                 f'Assalomu alaykum, {sub.author_name}!\n\n'
                 f'Yaxshi xabar! "{sub.title}" nomli yodgorlik taklifingiz admin tomonidan\n'
                 f'tasdiqlandi va saytda chop etildi.\n\n'
-                f'Saytda ko\'rish: https://turkiy-korpus.uz/#yodgorliklar\n\n'
+                f'Saytda ko\'rish: {site_url}\n\n'
                 f'Turkiy Yozma Yodgorliklar Elektron Korpusi'
             ),
             from_email=django_settings.DEFAULT_FROM_EMAIL,
@@ -285,7 +288,7 @@ class MonumentSubmissionAdmin(admin.ModelAdmin):
                        'language', 'description', 'image',
                        'image_file', 'image_preview_thumb',
                        'document', 'document_download',
-                       'transliteration', 'translation', 'source_info')
+                       'full_text', 'transliteration', 'translation', 'source_info')
         }),
         ('👤 Muallif', {
             'fields': ('author_preview', 'author_name', 'author_email',

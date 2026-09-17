@@ -43,3 +43,18 @@ services:
       # API bosh sahifasi (/) saytga yo'naltiradi
       - key: FRONTEND_URL
         value: "https://turkiy-yozma-yodgorliklar.vercel.app"
+      # Yuklangan fayllar — Render diski vaqtinchalik, shuning uchun tashqi xotira.
+      # Cloudflare R2 (10 GB bepul) yoki S3 ma'lumotlarini dashboard'dan to'ldiring.
+      # AWS_STORAGE_BUCKET_NAME bo'sh qolsa — fayllar lokal diskka yoziladi (deploy'da o'chadi).
+      - key: AWS_STORAGE_BUCKET_NAME
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_S3_ENDPOINT_URL
+        sync: false
+      - key: AWS_S3_REGION_NAME
+        sync: false
+      - key: AWS_S3_CUSTOM_DOMAIN
+        sync: false

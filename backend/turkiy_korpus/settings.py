@@ -18,6 +18,13 @@ _render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if _render_host and _render_host not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(_render_host)
 
+# Mijoz IP'si qaysi sarlavhadan olinadi (korpus/ip.py). Bo'sh — REMOTE_ADDR.
+# Render Cloudflare ortida: True-Client-IP'ni Cloudflare doim qayta yozadi (soxtalashtirib bo'lmaydi).
+CLIENT_IP_HEADER = os.environ.get(
+    'CLIENT_IP_HEADER',
+    'HTTP_TRUE_CLIENT_IP' if os.environ.get('RENDER') else ''
+)
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -123,6 +130,22 @@ STORAGES = {
     'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'},
 }
 
+# ── Yuklangan fayllar uchun tashqi xotira (S3 / Cloudflare R2 / Backblaze B2) ──
+# Render bepul tarifida disk vaqtinchalik — media/ har deploy'da o'chadi.
+# AWS_STORAGE_BUCKET_NAME berilsa, fayllar bucket'ga yoziladi.
+# Kalitlar: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY (boto3 env'dan o'zi o'qiydi).
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', '')
+if AWS_STORAGE_BUCKET_NAME:
+    STORAGES['default'] = {'BACKEND': 'storages.backends.s3.S3Storage'}
+    AWS_S3_ENDPOINT_URL   = os.environ.get('AWS_S3_ENDPOINT_URL') or None   # R2: https://<id>.r2.cloudflarestorage.com
+    AWS_S3_REGION_NAME    = os.environ.get('AWS_S3_REGION_NAME') or None    # R2: auto
+    # Ochiq domen (R2 public bucket / CDN). Berilsa — doimiy ochiq URL'lar,
+    # aks holda vaqtinchalik imzolangan URL'lar (1 soat).
+    AWS_S3_CUSTOM_DOMAIN  = os.environ.get('AWS_S3_CUSTOM_DOMAIN') or None
+    AWS_QUERYSTRING_AUTH  = not AWS_S3_CUSTOM_DOMAIN
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL       = None
+
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -142,8 +165,8 @@ MAX_DOC_SIZE_MB   = 100
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL          = '/panel/login/'
-LOGIN_REDIRECT_URL = '/panel/'
+LOGIN_URL          = '/django-admin/login/'
+LOGIN_REDIRECT_URL = '/django-admin/'
 
 # ── Django REST Framework ─────────────────────────────────────────────────────
 REST_FRAMEWORK = {
@@ -164,13 +187,16 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
+    # korpus.throttling — IP'ni X-Forwarded-For'dan emas, ishonchli sarlavhadan oladi
     'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle',
+        'korpus.throttling.AnonRateThrottle',
+        'korpus.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/hour',
-        'user': '1000/hour',
+        # SPA bir sahifada bir necha so'rov yuboradi — 100/hour oddiy foydalanuvchiga ham yetmasdi
+        'anon':   '1000/hour',
+        'user':   '5000/hour',
+        'submit': '10/hour',   # taklif yuborish (SubmissionCreateView)
     },
 }
 
@@ -193,7 +219,6 @@ CORS_ALLOWED_ORIGIN_REGEXES = [r'^https://.*\.vercel\.app$']
 
 # ── Security ──────────────────────────────────────────────────────────────────
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER   = True
 X_FRAME_OPTIONS              = 'DENY'
 REFERRER_POLICY              = 'strict-origin-when-cross-origin'
 

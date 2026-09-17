@@ -2,15 +2,7 @@
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 from django.dispatch import receiver
 
-
-def client_ip(request):
-    if request is None:
-        return None
-    # Render/Vercel kabi proxy ortida haqiqiy IP X-Forwarded-For sarlavhasida keladi
-    xff = request.META.get('HTTP_X_FORWARDED_FOR')
-    if xff:
-        return xff.split(',')[0].strip()
-    return request.META.get('REMOTE_ADDR')
+from .ip import client_ip
 
 
 def client_agent(request):

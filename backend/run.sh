@@ -43,7 +43,7 @@ if ! "$PY" -m pip --version >/dev/null 2>&1; then
 fi
 
 # ── 3. Bog'liqliklar ──────────────────────────────────────────────────────────
-if ! "$PY" -c "import django, rest_framework, corsheaders, django_filters, PIL" 2>/dev/null; then
+if ! "$PY" -c "import django, rest_framework, rest_framework_simplejwt, corsheaders, django_filters, PIL, whitenoise, storages" 2>/dev/null; then
     echo -e "${YELLOW}⚙  Kutubxonalar o'rnatilmoqda (requirements.txt)...${NC}"
     "$PY" -m pip install --quiet --upgrade pip
     "$PY" -m pip install --quiet -r requirements.txt
@@ -84,14 +84,12 @@ echo ""
 echo -e "${BOLD}${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${BOLD}  Sayt manzillari:${NC}"
 echo ""
-echo -e "  ${CYAN}🌐  Asosiy sayt     →  ${BOLD}http://127.0.0.1:${PORT}/${NC}"
-echo -e "  ${CYAN}⚛️   React versiya   →  ${BOLD}http://127.0.0.1:${PORT}/app/${NC}"
-echo -e "  ${YELLOW}🔐  Admin panel     →  ${BOLD}http://127.0.0.1:${PORT}/panel/login/${NC}"
-echo -e "  ${YELLOW}⚙️   Django admin    →  ${BOLD}http://127.0.0.1:${PORT}/django-admin/${NC}"
-echo -e "  ${BLUE}📡  API (barcha)    →  ${BOLD}http://127.0.0.1:${PORT}/api/monuments/${NC}"
-echo -e "  ${BLUE}📊  Statistika API  →  ${BOLD}http://127.0.0.1:${PORT}/api/stats/${NC}"
+echo -e "  ${CYAN}⚛️   Sayt (React)    →  ${BOLD}http://127.0.0.1:${PORT}/app/${NC}  (build: VITE_BASE=/app/ npm run build)"
+echo -e "  ${YELLOW}⚙️   Admin panel     →  ${BOLD}http://127.0.0.1:${PORT}/django-admin/${NC}"
+echo -e "  ${BLUE}📡  API (barcha)    →  ${BOLD}http://127.0.0.1:${PORT}/api/v2/monuments/${NC}"
+echo -e "  ${BLUE}📊  Statistika API  →  ${BOLD}http://127.0.0.1:${PORT}/api/v2/monuments/stats/${NC}"
 echo ""
-echo -e "  ${YELLOW}👤  Admin login: ${BOLD}admin${NC} / ${BOLD}admin123${NC}"
+echo -e "  ${YELLOW}👤  Admin login: ${BOLD}admin${NC} / ${BOLD}admin123${NC}  (faqat lokal dev uchun!)"
 echo -e "  ${CYAN}🗄   Baza: ${BOLD}SQLite${NC} (PostgreSQL uchun: export USE_POSTGRES=True)"
 echo ""
 echo -e "${BOLD}${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

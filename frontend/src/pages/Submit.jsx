@@ -2,8 +2,26 @@ import { useState } from 'react'
 import { submit } from '../api'
 import { useApp } from '../context/AppContext'
 
-const SCRIPTS = ['Orxun-Enasoy', "Uyg'ur", 'Arab', "Mug'al", 'Kiril', 'Boshqa']
-const CATEGORIES = ['Epigrafiya', "Qo'lyozma", 'Yozishmalar', 'Shoir asari', 'Diniy matn', 'Huquqiy hujjat']
+// [qiymat (backend kaliti), ko'rinadigan nom] — backend/korpus/models.py bilan mos
+const SCRIPTS = [
+  ['koktürk', "Ko'ktürk (Orxun-Enasoy)"],
+  ["uyg'ur", "Uyg'ur"],
+  ['arab', 'Arab'],
+  ['sogd', "So'g'd"],
+  ['boshqa', 'Boshqa'],
+]
+const CATEGORIES = [
+  ['bitiglar', 'Bitik toshlar'],
+  ['qollanmalar', "Qo'llanmalar"],
+  ['diniy', 'Diniy matnlar'],
+  ['adabiy', 'Adabiy asarlar'],
+  ['boshqa', 'Boshqa'],
+]
+
+// backend/turkiy_korpus/settings.py dagi chegaralar bilan mos
+const MAX_IMAGE_MB = 20
+const MAX_DOC_MB = 100
+const DOC_ACCEPT = '.pdf,.doc,.docx,.odt,.txt,.rtf,.xls,.xlsx,.ods,.ppt,.pptx'
 
 function Field({ label, required, children }) {
   return (
@@ -33,6 +51,14 @@ export default function Submit() {
 
   const handleSubmit = async e => {
     e.preventDefault()
+    if (imageFile && imageFile.size > MAX_IMAGE_MB * 1024 * 1024) {
+      setError(`Rasm hajmi ${MAX_IMAGE_MB} MB dan oshmasligi kerak.`)
+      return
+    }
+    if (docFile && docFile.size > MAX_DOC_MB * 1024 * 1024) {
+      setError(`Hujjat hajmi ${MAX_DOC_MB} MB dan oshmasligi kerak.`)
+      return
+    }
     setLoading(true)
     setError(null)
     try {
@@ -80,19 +106,19 @@ export default function Submit() {
                 <input type="number" value={form.year} onChange={set('year')} required
                   min="-3000" max="2000" placeholder="-600" style={{ width:'100%' }} />
               </Field>
-              <Field label={t('submit_location')}>
-                <input type="text" value={form.location} onChange={set('location')} style={{ width:'100%' }} />
+              <Field label={t('submit_location')} required>
+                <input type="text" value={form.location} onChange={set('location')} required style={{ width:'100%' }} />
               </Field>
-              <Field label={t('submit_script')}>
-                <select value={form.script} onChange={set('script')} style={{ width:'100%' }}>
+              <Field label={t('submit_script')} required>
+                <select value={form.script} onChange={set('script')} required style={{ width:'100%' }}>
                   <option value="">—</option>
-                  {SCRIPTS.map(s => <option key={s} value={s}>{s}</option>)}
+                  {SCRIPTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </Field>
-              <Field label={t('submit_category')}>
-                <select value={form.category} onChange={set('category')} style={{ width:'100%' }}>
+              <Field label={t('submit_category')} required>
+                <select value={form.category} onChange={set('category')} required style={{ width:'100%' }}>
                   <option value="">—</option>
-                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  {CATEGORIES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </Field>
               <Field label={t('submit_language')}>
@@ -100,7 +126,7 @@ export default function Submit() {
               </Field>
             </div>
             <Field label={t('submit_description')} required>
-              <textarea value={form.description} onChange={set('description')} required rows={3}
+              <textarea value={form.description} onChange={set('description')} required minLength={30} rows={3}
                 style={{ width:'100%', resize:'vertical' }} />
             </Field>
           </div>
@@ -135,7 +161,7 @@ export default function Submit() {
                 {imageFile && <p style={{ fontSize:'0.8rem', color:'var(--text2)', marginTop:'0.25rem' }}>{imageFile.name}</p>}
               </Field>
               <Field label={`${t('submit_document')} (PDF, Word, ...)`}>
-                <input type="file" accept=".pdf,.doc,.docx,.odt,.txt,.rtf"
+                <input type="file" accept={DOC_ACCEPT}
                   onChange={e => setDocFile(e.target.files[0])}
                   style={{ width:'100%', padding:'0.4rem' }} />
                 {docFile && <p style={{ fontSize:'0.8rem', color:'var(--text2)', marginTop:'0.25rem' }}>{docFile.name}</p>}
