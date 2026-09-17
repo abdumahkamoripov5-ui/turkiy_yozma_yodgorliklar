@@ -1,4 +1,21 @@
+import os
+import uuid
+
 from django.db import models
+
+
+def _random_name(folder, filename):
+    # Tasodifiy nom — ochiq xotirada (S3/R2) fayl manzilini taxmin qilib bo'lmasin
+    ext = os.path.splitext(filename)[1].lower()[:10]
+    return f'{folder}/{uuid.uuid4().hex}{ext}'
+
+
+def submission_image_path(instance, filename):
+    return _random_name('submissions/images', filename)
+
+
+def submission_document_path(instance, filename):
+    return _random_name('submissions/docs', filename)
 
 
 class Monument(models.Model):
@@ -121,10 +138,11 @@ class MonumentSubmission(models.Model):
     language     = models.CharField(max_length=100, default="Ko'hna turkiy", verbose_name="Til")
     description  = models.TextField(verbose_name="Tavsif")
     image        = models.URLField(blank=True, verbose_name="Rasm URL (ixtiyoriy)")
-    image_file   = models.ImageField(upload_to='submissions/images/', blank=True, null=True,
+    image_file   = models.ImageField(upload_to=submission_image_path, blank=True, null=True,
                                      verbose_name="Rasm fayli (yuklash)")
-    document     = models.FileField(upload_to='submissions/docs/', blank=True, null=True,
+    document     = models.FileField(upload_to=submission_document_path, blank=True, null=True,
                                     verbose_name="Hujjat (PDF/Word/boshqa)")
+    full_text    = models.TextField(blank=True, verbose_name="To'liq matn (ixtiyoriy)")
     transliteration = models.TextField(blank=True, verbose_name="Transliteratsiya (ixtiyoriy)")
     translation  = models.TextField(blank=True, verbose_name="Tarjima (ixtiyoriy)")
     source_info  = models.TextField(blank=True, verbose_name="Manba / adabiyot")

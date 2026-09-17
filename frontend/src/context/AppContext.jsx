@@ -48,4 +48,6 @@ export function AppProvider({ children }) {
   )
 }
 
+// Provider va hook bir faylda — context uchun odatiy usul
+// eslint-disable-next-line react-refresh/only-export-components
 export const useApp = () => useContext(AppContext)

@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 from .models import Monument, MonumentSubmission, SiteSettings
 
@@ -26,12 +27,26 @@ class MonumentListSerializer(serializers.ModelSerializer):
 
 
 class MonumentDetailSerializer(MonumentListSerializer):
-    """To'liq ma'lumot uchun serializer."""
+    """To'liq ma'lumot uchun serializer.
+
+    author_email ataylab chiqarilmagan — API ochiq, muallif emaili maxfiy qolishi kerak.
+    """
     class Meta(MonumentListSerializer.Meta):
         fields = MonumentListSerializer.Meta.fields + [
             'significance', 'full_text', 'transliteration', 'translation',
-            'tags', 'author_email', 'created_at', 'updated_at',
+            'tags', 'created_at', 'updated_at',
         ]
+
+
+def _check_upload(file, allowed_exts, max_mb, kind):
+    ext = file.name.rsplit('.', 1)[-1].lower() if '.' in file.name else ''
+    if ext not in allowed_exts:
+        raise serializers.ValidationError(
+            f"{kind} turi ruxsat etilmagan. Ruxsat etilganlar: {', '.join(sorted(allowed_exts))}."
+        )
+    if file.size > max_mb * 1024 * 1024:
+        raise serializers.ValidationError(f"{kind} hajmi {max_mb} MB dan oshmasligi kerak.")
+    return file
 
 
 class MonumentSubmissionSerializer(serializers.ModelSerializer):
@@ -40,7 +55,7 @@ class MonumentSubmissionSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'year', 'location', 'script', 'category', 'language',
             'description', 'image', 'image_file', 'document',
-            'transliteration', 'translation', 'source_info',
+            'full_text', 'transliteration', 'translation', 'source_info',
             'author_name', 'author_email', 'author_institution', 'author_bio',
         ]
         extra_kwargs = {
@@ -57,6 +72,16 @@ class MonumentSubmissionSerializer(serializers.ModelSerializer):
         if len(value.strip()) < 30:
             raise serializers.ValidationError("Tavsif kamida 30 ta belgidan iborat bo'lishi kerak.")
         return value
+
+    def validate_image_file(self, value):
+        if not value:
+            return value
+        return _check_upload(value, settings.ALLOWED_IMAGE_EXTENSIONS, settings.MAX_IMAGE_SIZE_MB, 'Rasm')
+
+    def validate_document(self, value):
+        if not value:
+            return value
+        return _check_upload(value, settings.ALLOWED_DOC_EXTENSIONS, settings.MAX_DOC_SIZE_MB, 'Hujjat')
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):

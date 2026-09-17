@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
 import Navbar from './components/Navbar'
@@ -59,7 +59,7 @@ function NotFound() {
     <div className="page" style={{ textAlign:'center' }}>
       <div style={{ fontSize:'5rem', color:'var(--accent)', fontWeight:700 }}>404</div>
       <p style={{ color:'var(--text2)', margin:'1rem 0' }}>Sahifa topilmadi</p>
-      <a href="/" className="btn btn-outline">Bosh sahifaga</a>
+      <Link to="/" className="btn btn-outline">Bosh sahifaga</Link>
     </div>
   )
 }
