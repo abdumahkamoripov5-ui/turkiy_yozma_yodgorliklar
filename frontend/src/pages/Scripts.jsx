@@ -57,7 +57,8 @@ export default function Scripts() {
         {!loading && (
           <div style={{ display:'flex', gap:'1.5rem', flexWrap:'wrap' }}>
             {/* Script list */}
-            <div style={{ flex:'0 0 220px', display:'flex', flexDirection:'column', gap:'0.5rem' }}>
+            {/* Ro'yxat ~220px; tor ekranda kontent pastga o'tadi (flex-wrap) — siqilib qolmaydi */}
+            <div style={{ flex:'1 1 220px', display:'flex', flexDirection:'column', gap:'0.5rem' }}>
               {Object.entries(byScript).map(([script, items]) => (
                 <button key={script}
                   onClick={() => setActiveScript(script)}
@@ -81,7 +82,7 @@ export default function Scripts() {
             </div>
 
             {/* Monuments in script */}
-            <div style={{ flex:1, minWidth:0 }}>
+            <div style={{ flex:'999 1 300px', minWidth:0 }}>
               {activeScript && (
                 <>
                   {SCRIPT_INFO[activeScript] && (
