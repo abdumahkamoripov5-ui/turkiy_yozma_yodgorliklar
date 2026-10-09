@@ -11,7 +11,7 @@ const GLOSSARY_DATA = [
   { term: 'Kodeks', def: 'Qo\'lyozma kitobning qadimgi shakli.' },
   { term: "Ko'hna turkiy", def: 'VII-XIII asrlardagi qadimgi turkiy til. Orxun va Uyg\'ur yozuvida yodgorliklar mavjud.' },
   { term: "Qoraxoniylar davri", def: 'X-XIII asrlarda Markaziy Osiyoda hukm surgan turkiy sulola davri.' },
-  { term: 'Diwan', def: "Shoir asarlarining to'plami. Devonu lug'otit turk mashhur divandir." },
+  { term: 'Devon', def: "Bir shoir she'rlarining to'plami. (Mahmud Koshg'ariyning «Devonu lug'otit turk» asari esa she'rlar devoni emas, turkiy so'zlar lug'atidir — bu yerda «devon» «to'plam» ma'nosida.)" },
   { term: 'Chagatoy tili', def: 'XIV-XX asrlarda Markaziy Osiyoda keng qo\'llanilgan adabiy turkiy til.' },
   { term: "Lug'at", def: 'So\'z va atamalar ro\'yxati, ularning izohli tavsifi.' },
 ]

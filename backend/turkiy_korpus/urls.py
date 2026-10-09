@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.http import FileResponse, Http404
 from django.views.generic import RedirectView
+from django.views.static import serve as serve_file
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from korpus import api as korpus_api
@@ -32,6 +33,7 @@ urlpatterns = [
     path('api/v2/submit/',             korpus_api.SubmissionCreateView.as_view(),       name='v2-submit'),
     path('api/v2/settings/',           korpus_api.SiteSettingsView.as_view(),           name='v2-settings'),
     path('api/v2/export/',             korpus_api.ExportView.as_view(),                 name='v2-export'),
+    path('api/v2/submission-image/<int:pk>/', korpus_api.SubmissionImageView.as_view(), name='v2-submission-image'),
 
     # ── React SPA ─────────────────────────────────────────────────────────────
     # /app/assets/* — served by static() below (must be before re_path catch-all)
@@ -42,6 +44,12 @@ urlpatterns = [
     path('', RedirectView.as_view(url=settings.FRONTEND_URL, permanent=False)),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
-  + static(settings.MEDIA_URL,  document_root=settings.MEDIA_ROOT) \
   + static('/app/assets/', document_root=settings.REACT_BUILD_DIR / 'assets') \
   + static('/app/vite.svg', document_root=settings.REACT_BUILD_DIR)
+
+# Yuklangan fayllar lokal diskda bo'lsa (S3/R2 ulanmagan), ularni Django o'zi uzatadi.
+# static() faqat DEBUG=True'da ishlaydi — production'da rasmlar 404 bo'lib qolardi.
+if not settings.AWS_STORAGE_BUCKET_NAME:
+    urlpatterns.append(
+        re_path(r'^media/(?P<path>.*)$', serve_file, {'document_root': settings.MEDIA_ROOT})
+    )

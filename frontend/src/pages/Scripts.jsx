@@ -15,7 +15,9 @@ const SCRIPT_INFO = {
   },
   "Uyg'ur": {
     desc: "So'g'd yozuvi asosida shakllangan ko'hna uyg'ur yozuvi. VIII–XVIII asrlarda qo'llanilgan.",
-    sample: 'ᠤᠶᠭᠤᠷ ᠪᠢᠴᠢᠭ᠌',
+    // Eski uyg'ur yozuvining Unicode bloki (U+10F70) ko'p shriftlarda yo'q,
+    // mo'g'ul harflari esa boshqa yozuv — namuna ko'rsatilmaydi
+    sample: '',
   },
   'Arab': {
     desc: "Arab alifbosi asosida turkiy yozuv. X asrdan hozirgi kungacha.",
@@ -28,6 +30,7 @@ export default function Scripts() {
   const [byScript, setByScript] = useState({})
   const [activeScript, setActiveScript] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
@@ -41,15 +44,15 @@ export default function Scripts() {
       })
       setByScript(grouped)
       setActiveScript(Object.keys(grouped)[0] || null)
-      setLoading(false)
-    }).catch(() => setLoading(false))
-  }, [])
+    }).catch(() => setError(t('error_load'))).finally(() => setLoading(false))
+  }, [t])
 
   return (
     <div className="page">
       <div className="container">
         <h1 className="page-title">{t('scripts_title')}</h1>
         {loading && <div className="spinner" />}
+        {error && <div className="error-msg">{error}</div>}
 
         {!loading && (
           <div style={{ display:'flex', gap:'1.5rem', flexWrap:'wrap' }}>
@@ -58,6 +61,7 @@ export default function Scripts() {
               {Object.entries(byScript).map(([script, items]) => (
                 <button key={script}
                   onClick={() => setActiveScript(script)}
+                  aria-pressed={activeScript === script}
                   className={`card ${activeScript === script ? 'badge-accent' : ''}`}
                   style={{
                     textAlign:'left', cursor:'pointer',
@@ -66,7 +70,7 @@ export default function Scripts() {
                     color:'var(--text)',
                   }}>
                   <div style={{ fontWeight:600, fontSize:'0.95rem' }}>{script}</div>
-                  <div style={{ fontSize:'0.8rem', color:'var(--text2)' }}>{items.length} ta yodgorlik</div>
+                  <div style={{ fontSize:'0.8rem', color:'var(--text2)' }}>{t('scripts_count', { n: items.length })}</div>
                   {SCRIPT_INFO[script]?.sample && (
                     <div style={{ fontSize:'1.1rem', marginTop:'0.25rem', letterSpacing:'0.05em' }}>
                       {SCRIPT_INFO[script].sample}

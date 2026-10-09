@@ -149,6 +149,31 @@ const TRANSLATIONS = {
     footer_rights: "Barcha huquqlar himoyalangan",
     footer_contact: "Aloqa",
     footer_privacy: "Maxfiylik siyosati",
+
+    era_bce: "m.a.",
+    century_label: "{n}-asr",
+    map_desc: "Yodgorliklar topilgan joylar bo'yicha xaritada. Belgini bosing — batafsil ma'lumot.",
+    map_placed: "({n} ta joylashtirildi)",
+    year_from: "Yildan",
+    year_to: "Yilgacha",
+    submit_section_monument: "Yodgorlik ma'lumotlari",
+    submit_section_text: "Matn",
+    submit_section_files: "Fayllar",
+    submit_section_author: "Muallif",
+    submit_success_note: "Admin ko'rib chiqqandan so'ng saytda ko'rinadi.",
+    submit_again: "Yana yuborish",
+    submit_image_too_big: "Rasm hajmi {n} MB dan oshmasligi kerak.",
+    submit_doc_too_big: "Hujjat hajmi {n} MB dan oshmasligi kerak.",
+    modal_cite: "Iqtibos",
+    cite_intro: "Ushbu yodgorlikka ilmiy ishingizda quyidagi formatlarda iqtibos keltiring:",
+    cite_copy: "📋 Nusxa olish",
+    cite_copied: "✓ Nusxa olindi",
+    scripts_count: "{n} ta yodgorlik",
+    bibliography_researchers: "Tadqiqotchilar",
+    footer_pages: "Sahifalar",
+    footer_other: "Boshqa",
+    not_found: "Sahifa topilmadi",
+    not_found_home: "Bosh sahifaga",
   },
 
   ru: {
@@ -280,6 +305,31 @@ const TRANSLATIONS = {
     footer_rights: "Все права защищены",
     footer_contact: "Контакты",
     footer_privacy: "Политика конфиденциальности",
+
+    era_bce: "до н.э.",
+    century_label: "{n} век",
+    map_desc: "Памятники на карте по местам находок. Нажмите на метку — подробная информация.",
+    map_placed: "(размещено: {n})",
+    year_from: "С года",
+    year_to: "До года",
+    submit_section_monument: "Сведения о памятнике",
+    submit_section_text: "Текст",
+    submit_section_files: "Файлы",
+    submit_section_author: "Автор",
+    submit_success_note: "Появится на сайте после проверки администратором.",
+    submit_again: "Отправить ещё",
+    submit_image_too_big: "Размер изображения не должен превышать {n} МБ.",
+    submit_doc_too_big: "Размер документа не должен превышать {n} МБ.",
+    modal_cite: "Цитирование",
+    cite_intro: "Ссылайтесь на этот памятник в научной работе в следующих форматах:",
+    cite_copy: "📋 Копировать",
+    cite_copied: "✓ Скопировано",
+    scripts_count: "памятников: {n}",
+    bibliography_researchers: "Исследователи",
+    footer_pages: "Страницы",
+    footer_other: "Другое",
+    not_found: "Страница не найдена",
+    not_found_home: "На главную",
   },
 
   en: {
@@ -411,6 +461,31 @@ const TRANSLATIONS = {
     footer_rights: "All rights reserved",
     footer_contact: "Contact",
     footer_privacy: "Privacy Policy",
+
+    era_bce: "BCE",
+    century_label: "Century {n}",
+    map_desc: "Monuments on the map by find location. Click a marker for details.",
+    map_placed: "({n} placed)",
+    year_from: "From year",
+    year_to: "To year",
+    submit_section_monument: "Monument details",
+    submit_section_text: "Text",
+    submit_section_files: "Files",
+    submit_section_author: "Author",
+    submit_success_note: "It will appear on the site after admin review.",
+    submit_again: "Submit another",
+    submit_image_too_big: "Image size must not exceed {n} MB.",
+    submit_doc_too_big: "Document size must not exceed {n} MB.",
+    modal_cite: "Cite",
+    cite_intro: "Cite this monument in your research using the following formats:",
+    cite_copy: "📋 Copy",
+    cite_copied: "✓ Copied",
+    scripts_count: "{n} monuments",
+    bibliography_researchers: "Researchers",
+    footer_pages: "Pages",
+    footer_other: "More",
+    not_found: "Page not found",
+    not_found_home: "Back to home",
   },
 
   tr: {
@@ -542,6 +617,31 @@ const TRANSLATIONS = {
     footer_rights: "Tüm hakları saklıdır",
     footer_contact: "İletişim",
     footer_privacy: "Gizlilik Politikası",
+
+    era_bce: "MÖ",
+    century_label: "{n}. yüzyıl",
+    map_desc: "Anıtlar bulundukları yerlere göre haritada. Ayrıntılar için işarete tıklayın.",
+    map_placed: "({n} yerleştirildi)",
+    year_from: "Yıldan",
+    year_to: "Yıla kadar",
+    submit_section_monument: "Anıt bilgileri",
+    submit_section_text: "Metin",
+    submit_section_files: "Dosyalar",
+    submit_section_author: "Yazar",
+    submit_success_note: "Yönetici incelemesinden sonra sitede görünecektir.",
+    submit_again: "Yeniden gönder",
+    submit_image_too_big: "Görsel boyutu {n} MB'ı geçmemelidir.",
+    submit_doc_too_big: "Belge boyutu {n} MB'ı geçmemelidir.",
+    modal_cite: "Atıf",
+    cite_intro: "Bu anıta bilimsel çalışmanızda aşağıdaki biçimlerde atıf yapın:",
+    cite_copy: "📋 Kopyala",
+    cite_copied: "✓ Kopyalandı",
+    scripts_count: "{n} anıt",
+    bibliography_researchers: "Araştırmacılar",
+    footer_pages: "Sayfalar",
+    footer_other: "Diğer",
+    not_found: "Sayfa bulunamadı",
+    not_found_home: "Ana sayfaya",
   },
 }
 
@@ -554,8 +654,11 @@ export function setLang(lang) {
   localStorage.setItem('lang', lang)
 }
 
-export function t(key) {
-  return TRANSLATIONS[currentLang]?.[key] ?? TRANSLATIONS.uz[key] ?? key
+// vars — matndagi {nom} o'rinlarini to'ldiradi: t('scripts_count', { n: 5 })
+export function t(key, vars) {
+  const text = TRANSLATIONS[currentLang]?.[key] ?? TRANSLATIONS.uz[key] ?? key
+  if (!vars) return text
+  return text.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m))
 }
 
 export default { t, getLang, setLang }

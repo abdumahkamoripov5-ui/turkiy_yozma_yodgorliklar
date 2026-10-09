@@ -2,6 +2,22 @@ import { useState, useEffect } from 'react'
 import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 import { buildCitations } from '../utils/citation'
+import { formatYear } from '../utils/format'
+
+// Shu sessiyada ochilgan yodgorliklar — ko'rishlar soni har ochilishda emas,
+// bir marta oshsin (StrictMode'dagi ikki marta chaqiruv ham hisoblanmaydi)
+const VIEWED_KEY = 'viewed_monuments'
+
+function markViewed(id) {
+  try {
+    const seen = JSON.parse(sessionStorage.getItem(VIEWED_KEY) || '[]')
+    if (seen.includes(id)) return false
+    sessionStorage.setItem(VIEWED_KEY, JSON.stringify([...seen, id]))
+    return true
+  } catch {
+    return true
+  }
+}
 
 export default function MonumentModal({ monument, onClose }) {
   const { t } = useApp()
@@ -18,11 +34,26 @@ export default function MonumentModal({ monument, onClose }) {
   }
 
   useEffect(() => {
-    api.get(monument.id).then(r => {
-      setDetail(r.data)
-      setLoading(false)
-    }).catch(() => setLoading(false))
+    let active = true
+    api.get(monument.id, { countView: markViewed(monument.id) }).then(r => {
+      if (active) setDetail(r.data)
+    }).catch(() => {}).finally(() => {
+      if (active) setLoading(false)
+    })
+    return () => { active = false }
   }, [monument.id])
+
+  // Esc bilan yopish va orqa sahifa aylanmasligi
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [onClose])
 
   const data = detail || monument
 
@@ -32,7 +63,7 @@ export default function MonumentModal({ monument, onClose }) {
     { key: 'translation', label: t('modal_translation') },
     { key: 'info', label: t('modal_info') },
     ...(data.bibliography?.length ? [{ key: 'bibliography', label: t('modal_bibliography') }] : []),
-    { key: 'cite', label: 'Iqtibos' },
+    { key: 'cite', label: t('modal_cite') },
   ]
 
   const handleOverlayClick = e => {
@@ -41,15 +72,15 @@ export default function MonumentModal({ monument, onClose }) {
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal">
+      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="monument-modal-title">
         <div className="modal-header">
           <div>
-            <h2 style={{ fontSize:'1.2rem', marginBottom:'0.2rem' }}>{data.title}</h2>
+            <h2 id="monument-modal-title" style={{ fontSize:'1.2rem', marginBottom:'0.2rem' }}>{data.title}</h2>
             {data.title_original && (
               <p style={{ fontSize:'0.9rem', color:'var(--text2)', fontStyle:'italic' }}>{data.title_original}</p>
             )}
           </div>
-          <button onClick={onClose} className="btn btn-ghost" style={{ fontSize:'1.4rem', padding:'0.25rem 0.5rem' }}>✕</button>
+          <button onClick={onClose} className="btn btn-ghost" aria-label={t('modal_close')} title={t('modal_close')} style={{ fontSize:'1.4rem', padding:'0.25rem 0.5rem' }}>✕</button>
         </div>
 
         <div className="modal-tabs">
@@ -86,7 +117,7 @@ export default function MonumentModal({ monument, onClose }) {
             <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'0.9rem' }}>
               <tbody>
                 {[
-                  [t('modal_year'), data.year ? (data.year < 0 ? `${Math.abs(data.year)} BCE` : data.year) : '—'],
+                  [t('modal_year'), formatYear(data.year, t)],
                   [t('modal_location'), data.location],
                   [t('modal_script'), data.script_display || data.script],
                   [t('modal_language'), data.language],
@@ -115,7 +146,7 @@ export default function MonumentModal({ monument, onClose }) {
           {!loading && tab === 'cite' && (
             <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
               <p style={{ fontSize:'0.85rem', color:'var(--text2)' }}>
-                Ushbu yodgorlikka ilmiy ishingizda quyidagi formatlarda iqtibos keltiring:
+                {t('cite_intro')}
               </p>
               {buildCitations(data).map(c => (
                 <div key={c.key} style={{ border:'1px solid var(--border)', borderRadius:'8px', padding:'0.8rem' }}>
@@ -123,7 +154,7 @@ export default function MonumentModal({ monument, onClose }) {
                     <strong style={{ fontSize:'0.8rem', color:'var(--accent)', letterSpacing:'0.05em' }}>{c.label}</strong>
                     <button onClick={() => copy(c.key, c.text)} className="btn btn-ghost"
                       style={{ fontSize:'0.8rem', padding:'0.2rem 0.6rem' }}>
-                      {copied === c.key ? '✓ Nusxa olindi' : '📋 Nusxa olish'}
+                      {copied === c.key ? t('cite_copied') : t('cite_copy')}
                     </button>
                   </div>
                   <div style={{ fontSize:'0.88rem', lineHeight:1.6, color:'var(--text)' }}>{c.text}</div>

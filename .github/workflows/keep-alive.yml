@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "Ping: $(date -u)"
           code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 \
-            https://turkiy-korpus-api.onrender.com/api/v2/monuments/?limit=1)
+            https://turkiy-korpus-api.onrender.com/api/v2/monuments/?page_size=1)
           echo "HTTP $code"
           # 2xx yoki 3xx bo'lsa muvaffaqiyatli
           if [ "$code" -ge 200 ] && [ "$code" -lt 400 ]; then

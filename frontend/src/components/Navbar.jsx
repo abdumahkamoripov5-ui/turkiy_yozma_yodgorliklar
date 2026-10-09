@@ -15,6 +15,7 @@ export default function Navbar() {
     { to: '/scripts', label: t('nav_scripts') },
     { to: '/stats', label: t('nav_stats') },
     { to: '/concordance', label: t('nav_concordance') },
+    { to: '/compare', label: t('nav_compare') },
     { to: '/recommended-words', label: t('nav_recommended') },
     { to: '/frequent-words', label: t('nav_frequent') },
     { to: '/submit', label: t('nav_submit') },
@@ -35,7 +36,7 @@ export default function Navbar() {
 
         <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
           {/* Language switcher */}
-          <select value={lang} onChange={e => changeLang(e.target.value)}
+          <select value={lang} onChange={e => changeLang(e.target.value)} aria-label="Til / Language"
             style={{ fontSize:'0.8rem', padding:'0.25rem 0.5rem', minHeight:'32px' }}>
             <option value="uz">UZ</option>
             <option value="ru">RU</option>
@@ -45,7 +46,8 @@ export default function Navbar() {
 
           {/* Theme toggle */}
           <button onClick={toggleTheme} className="btn btn-ghost" style={{ padding:'0.35rem 0.5rem', fontSize:'1.1rem' }}
-            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}>
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            aria-label={theme === 'dark' ? 'Light mode' : 'Dark mode'}>
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
 
@@ -62,6 +64,7 @@ export default function Navbar() {
 
           {/* Hamburger */}
           <button onClick={() => setOpen(o => !o)} className="btn btn-ghost hamburger"
+            aria-label="Menu" aria-expanded={open}
             style={{ fontSize:'1.3rem', padding:'0.25rem 0.5rem' }}>
             {open ? '✕' : '☰'}
           </button>

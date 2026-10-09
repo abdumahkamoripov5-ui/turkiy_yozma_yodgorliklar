@@ -579,23 +579,28 @@ class Command(BaseCommand):
             }
         )
 
-        if options['refresh_demo']:
-            removed, _ = Monument.objects.filter(
-                title__in=DEMO_REMOVED, is_user_submission=False).delete()
-            if removed:
-                self.stdout.write(self.style.WARNING(
-                    f"{removed} ta eskirgan demo yozuv o'chirildi."))
+        # Seed'dan olib tashlangan (xato) demo yozuvlar — foydalanuvchi yuborganlariga tegilmaydi
+        removed, _ = Monument.objects.filter(
+            title__in=DEMO_REMOVED, is_user_submission=False).delete()
+        if removed:
+            self.stdout.write(self.style.WARNING(
+                f"{removed} ta eskirgan demo yozuv o'chirildi."))
+
+        # Ko'rishlar soni jonli statistika — mavjud yozuvda hech qachon qayta yozilmaydi
+        live_fields = {'views'}
 
         created = updated = 0
         for data in MONUMENTS:
-            if options['refresh_demo']:
-                _, was_created = Monument.objects.update_or_create(
-                    title=data['title'], defaults=data)
-                created += int(was_created)
-                updated += int(not was_created)
-            elif not Monument.objects.filter(title=data['title']).exists():
-                Monument.objects.create(**data)
-                created += 1
+            # Faqat demo yozuvlar (is_user_submission=False) — foydalanuvchi yuborgan,
+            # nomi demo bilan bir xil yodgorlik ustidan yozilmasin
+            demo = Monument.objects.filter(title=data['title'], is_user_submission=False)
+            if not demo.exists():
+                if not Monument.objects.filter(title=data['title']).exists():
+                    Monument.objects.create(**data)
+                    created += 1
+            elif options['refresh_demo']:
+                fields = {k: v for k, v in data.items() if k not in live_fields}
+                updated += demo.update(**fields)
 
         msg = f"{created} ta yangi yodgorlik qo'shildi."
         if options['refresh_demo']:

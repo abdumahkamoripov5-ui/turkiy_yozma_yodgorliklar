@@ -1,5 +1,6 @@
 import re
 from collections import Counter
+from datetime import timedelta
 
 from rest_framework import viewsets, permissions, status, filters
 from rest_framework.decorators import action
@@ -12,8 +13,10 @@ from django.db.models import F, Q, Sum, Count
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from django.utils import timezone
+from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404
 
-from .models import Monument, MonumentSubmission, SiteSettings
+from .models import Monument, MonumentSubmission, SiteSettings, century_of
 from .serializers import (
     MonumentListSerializer, MonumentDetailSerializer,
     MonumentSubmissionSerializer, SiteSettingsSerializer,
@@ -54,6 +57,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+    # Parol tanlab ko'rishdan himoya — IP bo'yicha qattiq cheklov (settings: 'login')
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'login'
 
 
 # ── Monument ViewSet ──────────────────────────────────────────────────────────
@@ -78,9 +84,12 @@ class MonumentViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        # F() — bir vaqtdagi so'rovlarda ko'rishlar yo'qolmasligi uchun (bazada atomar oshiriladi)
-        Monument.objects.filter(pk=instance.pk).update(views=F('views') + 1)
-        instance.refresh_from_db()
+        # ?noview=1 — frontend shu sessiyada bu yodgorlikni allaqachon ko'rgan,
+        # ko'rishlar soni qayta oshirilmaydi
+        if request.query_params.get('noview') != '1':
+            # F() — bir vaqtdagi so'rovlarda ko'rishlar yo'qolmasligi uchun (bazada atomar oshiriladi)
+            Monument.objects.filter(pk=instance.pk).update(views=F('views') + 1)
+            instance.refresh_from_db()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
@@ -98,13 +107,22 @@ class MonumentViewSet(viewsets.ModelViewSet):
             total_words=Sum('word_count'),
             total_lines=Sum('line_count'),
         )
-        by_script   = list(qs.values('script').annotate(count=Count('id')).order_by('-count'))
-        by_category = list(qs.values('category').annotate(count=Count('id')).order_by('-count'))
-        by_century  = {}
-        for m in qs.values_list('year', flat=True):
-            if m is not None:
-                c = f"{abs(m) // 100 + 1}-asr"
-                by_century[c] = by_century.get(c, 0) + 1
+        script_names   = dict(Monument.SCRIPT_CHOICES)
+        category_names = dict(Monument.CATEGORY_CHOICES)
+        by_script = [
+            {**row, 'label': script_names.get(row['script'], row['script'])}
+            for row in qs.values('script').annotate(count=Count('id')).order_by('-count')
+        ]
+        by_category = [
+            {**row, 'label': category_names.get(row['category'], row['category'])}
+            for row in qs.values('category').annotate(count=Count('id')).order_by('-count')
+        ]
+        # Kalit: (miloddan avvalgimi, asr) — sonli tartiblash uchun ("10-asr" "7-asr"dan keyin)
+        by_century = Counter()
+        for year in qs.values_list('year', flat=True):
+            if year is not None:
+                by_century[(year < 0, century_of(year))] += 1
+        centuries = sorted(by_century.items(), key=lambda kv: -kv[0][1] if kv[0][0] else kv[0][1])
         return Response({
             'total':      qs.count(),
             'totalViews': agg['total_views'] or 0,
@@ -112,7 +130,10 @@ class MonumentViewSet(viewsets.ModelViewSet):
             'totalLines': agg['total_lines'] or 0,
             'byScript':   by_script,
             'byCategory': by_category,
-            'byCentury':  [{'century': k, 'count': v} for k, v in sorted(by_century.items())],
+            'byCentury':  [
+                {'century': f"{c}-asr" + (' m.a.' if bce else ''), 'number': -c if bce else c, 'count': n}
+                for (bce, c), n in centuries
+            ],
         })
 
     @action(detail=False, methods=['get'], url_path='concordance')
@@ -122,7 +143,9 @@ class MonumentViewSet(viewsets.ModelViewSet):
             return Response({'error': "Kamida 2 ta belgi kiriting"}, status=400)
         max_results = 200
         results = []
-        q_lower = q.lower()
+        # re.IGNORECASE — moslik o'rinlari asl matnda hisoblanadi. text.lower() ba'zi
+        # harflarda (masalan 'İ' → 'i̇') qator uzunligini o'zgartirib, o'rinlarni siljitardi.
+        pattern = re.compile(re.escape(q), re.IGNORECASE)
         qs = Monument.objects.filter(status='Chop etilgan')
         for m in qs:
             if len(results) >= max_results:
@@ -132,20 +155,18 @@ class MonumentViewSet(viewsets.ModelViewSet):
                 ('Transliteratsiya', m.transliteration or ''),
                 ('Tarjima', m.translation or ''),
             ]:
-                text_lower = text.lower()
-                idx = text_lower.find(q_lower)
-                while idx != -1 and len(results) < max_results:
-                    start = max(0, idx - 40)
-                    end   = min(len(text), idx + len(q) + 40)
+                for match in pattern.finditer(text):
+                    if len(results) >= max_results:
+                        break
+                    idx, idx_end = match.span()
                     results.append({
                         'monumentId':    m.id,
                         'monumentTitle': m.title,
                         'field':  field,
-                        'left':   text[start:idx],
-                        'match':  text[idx:idx + len(q)],
-                        'right':  text[idx + len(q):end],
+                        'left':   text[max(0, idx - 40):idx],
+                        'match':  text[idx:idx_end],
+                        'right':  text[idx_end:min(len(text), idx_end + 40)],
                     })
-                    idx = text_lower.find(q_lower, idx + 1)
         return Response({'query': q, 'count': len(results), 'results': results})
 
     @action(detail=False, methods=['get'], url_path='word-frequency')
@@ -186,6 +207,18 @@ class SubmissionCreateView(APIView):
             first_error = next(iter(serializer.errors.values()))[0]
             return Response({'error': str(first_error)}, status=400)
 
+        # Bitta emailga qisqa vaqtda ko'p xat yuborilmasin (forma spam-quroli bo'lmasin)
+        email = serializer.validated_data['author_email']
+        recent = MonumentSubmission.objects.filter(
+            author_email__iexact=email,
+            submitted_at__gte=timezone.now() - timedelta(hours=1),
+        ).count()
+        if recent >= 3:
+            return Response(
+                {'error': "Bu email orqali so'nggi bir soatda juda ko'p taklif yuborildi. Keyinroq urinib ko'ring."},
+                status=429,
+            )
+
         submission = serializer.save()
 
         # Email — admin ga
@@ -224,6 +257,24 @@ class SubmissionCreateView(APIView):
             'id': submission.id,
             'message': "Yodgorlik muvaffaqiyatli yuborildi. Admin ko'rib chiqqandan so'ng saytda ko'rinadi.",
         }, status=201)
+
+
+# ── Taklif rasmi ──────────────────────────────────────────────────────────────
+
+class SubmissionImageView(APIView):
+    """Tasdiqlangan taklifning yuklangan rasmiga doimiy havola.
+
+    Monument.image ga xotiraning to'g'ridan-to'g'ri URL'i yozilmaydi: S3/R2'da ochiq
+    domen bo'lmasa u 1 soatda eskiradigan imzolangan havola bo'lardi. Bu manzil
+    har safar yangi URL'ga yo'naltiradi.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, pk):
+        sub = get_object_or_404(MonumentSubmission, pk=pk, status='approved')
+        if not sub.image_file:
+            raise Http404
+        return redirect(sub.image_file.url)
 
 
 # ── SiteSettings API ──────────────────────────────────────────────────────────

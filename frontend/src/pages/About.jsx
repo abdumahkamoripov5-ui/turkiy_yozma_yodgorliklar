@@ -24,7 +24,7 @@ export default function About() {
           <h2 style={{ color:'var(--accent)', marginBottom:'1rem', fontSize:'1.2rem' }}>Texnik ma'lumot</h2>
           <div style={{ display:'flex', flexDirection:'column', gap:'0.5rem', fontSize:'0.9rem' }}>
             {[
-              ['Backend', 'Django 6 + PostgreSQL'],
+              ['Backend', 'Django 4.2 + PostgreSQL'],
               ['API', 'Django REST Framework'],
               ['Frontend', 'React + Vite'],
               ['Autentifikatsiya', 'JWT (JSON Web Token)'],

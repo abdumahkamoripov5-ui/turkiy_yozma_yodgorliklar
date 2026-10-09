@@ -53,7 +53,9 @@ export default api
 
 export const monuments = {
   list: params => api.get('/monuments/', { params }),
-  get: id => api.get(`/monuments/${id}/`),
+  // countView=false — ko'rishlar soni oshirilmaydi (?noview=1)
+  get: (id, { countView = true } = {}) =>
+    api.get(`/monuments/${id}/`, { params: countView ? undefined : { noview: 1 } }),
   featured: () => api.get('/monuments/featured/'),
   stats: () => api.get('/monuments/stats/'),
   concordance: q => api.get('/monuments/concordance/', { params: { q } }),

@@ -1,15 +1,21 @@
 from pathlib import Path
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# DIQQAT: bu faqat dev (lokal) uchun. Production'da DJANGO_SECRET_KEY env'dan beriladi.
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY',
-    'django-insecure-dev-only-key-change-in-production'
-)
+# Standart — xavfsiz (DEBUG o'chiq). Lokal dev'da run.sh DJANGO_DEBUG=True qo'yadi.
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+# Production'da DJANGO_SECRET_KEY env'dan beriladi; dev kaliti faqat DEBUG rejimida.
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured(
+            "DJANGO_SECRET_KEY berilmagan. Lokal dev uchun: export DJANGO_DEBUG=True"
+        )
+    SECRET_KEY = 'django-insecure-dev-only-key-change-in-production'
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1 localhost').split()
 
@@ -75,7 +81,7 @@ WSGI_APPLICATION = 'turkiy_korpus.wsgi.application'
 
 # ── Database — Render DATABASE_URL > PostgreSQL > SQLite ─────────────────────
 _DATABASE_URL = os.environ.get('DATABASE_URL')
-_USE_POSTGRES = os.environ.get('USE_POSTGRES', 'True') == 'True'
+_USE_POSTGRES = os.environ.get('USE_POSTGRES', 'False') == 'True'
 
 if _DATABASE_URL:
     # Render avtomatik beradigan DATABASE_URL
@@ -154,8 +160,11 @@ REACT_BUILD_DIR = BASE_DIR.parent / 'frontend' / 'dist'
 # Bosh sahifa (/) shu manzilga yo'naltiriladi: lokalda /app/, Render'da Vercel sayti
 FRONTEND_URL = os.environ.get('FRONTEND_URL', '/app/')
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024
-FILE_UPLOAD_MAX_MEMORY_SIZE = 50  * 1024 * 1024
+# Fayl bo'lmagan so'rov tanasi chegarasi (matn maydonlari)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+# 2.5 MB dan katta fayllar RAM'da emas, vaqtinchalik faylda ushlanadi
+# (Render bepul tarifida 512 MB xotira — katta yuklashlar serverni o'chirib qo'ymasin)
+FILE_UPLOAD_MAX_MEMORY_SIZE = int(2.5 * 1024 * 1024)
 FILE_UPLOAD_PERMISSIONS     = 0o644
 
 ALLOWED_IMAGE_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif', 'tiff', 'bmp'}
@@ -182,7 +191,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # korpus.pagination — ?page_size= parametrini qabul qiladi (maks. 200)
+    'DEFAULT_PAGINATION_CLASS': 'korpus.pagination.StandardPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -197,6 +207,7 @@ REST_FRAMEWORK = {
         'anon':   '1000/hour',
         'user':   '5000/hour',
         'submit': '10/hour',   # taklif yuborish (SubmissionCreateView)
+        'login':  '10/minute', # parol tanlab ko'rishdan himoya (token olish)
     },
 }
 
@@ -214,8 +225,11 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
     'http://localhost:5173 http://localhost:3000 http://127.0.0.1:5173'
 ).split()
 CORS_ALLOW_CREDENTIALS = True
-# Vercel preview/production domenlariga ruxsat (*.vercel.app)
-CORS_ALLOWED_ORIGIN_REGEXES = [r'^https://.*\.vercel\.app$']
+# Faqat shu loyihaning Vercel domenlari (production va preview'lar).
+# Hamma *.vercel.app ga ruxsat berish — istalgan begona saytni ochib qo'yish edi.
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://turkiy-yozma-yodgorliklar(-[a-z0-9-]+)?\.vercel\.app$',
+]
 
 # ── Security ──────────────────────────────────────────────────────────────────
 SECURE_CONTENT_TYPE_NOSNIFF = True

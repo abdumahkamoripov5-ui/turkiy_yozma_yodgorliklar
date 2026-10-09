@@ -1,6 +1,6 @@
 from django.conf import settings
 from rest_framework import serializers
-from .models import Monument, MonumentSubmission, SiteSettings
+from .models import Monument, MonumentSubmission, SiteSettings, century_of
 
 
 class MonumentListSerializer(serializers.ModelSerializer):
@@ -21,9 +21,7 @@ class MonumentListSerializer(serializers.ModelSerializer):
         ]
 
     def get_century(self, obj):
-        if obj.year is None:
-            return None
-        return abs(obj.year) // 100 + (1 if abs(obj.year) % 100 else 0)
+        return century_of(obj.year)
 
 
 class MonumentDetailSerializer(MonumentListSerializer):
