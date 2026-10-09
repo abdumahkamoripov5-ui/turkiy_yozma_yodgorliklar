@@ -15,7 +15,7 @@ export default function Footer() {
           </p>
         </div>
         <div>
-          <div style={{ fontWeight:600, marginBottom:'0.75rem', fontSize:'0.9rem' }}>Sahifalar</div>
+          <div style={{ fontWeight:600, marginBottom:'0.75rem', fontSize:'0.9rem' }}>{t('footer_pages')}</div>
           <div style={{ display:'flex', flexDirection:'column', gap:'0.4rem' }}>
             {[
               ['/monuments', t('nav_monuments')],
@@ -28,10 +28,11 @@ export default function Footer() {
           </div>
         </div>
         <div>
-          <div style={{ fontWeight:600, marginBottom:'0.75rem', fontSize:'0.9rem' }}>Boshqa</div>
+          <div style={{ fontWeight:600, marginBottom:'0.75rem', fontSize:'0.9rem' }}>{t('footer_other')}</div>
           <div style={{ display:'flex', flexDirection:'column', gap:'0.4rem' }}>
             {[
               ['/concordance', t('nav_concordance')],
+              ['/compare', t('nav_compare')],
               ['/bibliography', t('nav_bibliography')],
               ['/glossary', t('nav_glossary')],
               ['/submit', t('nav_submit')],

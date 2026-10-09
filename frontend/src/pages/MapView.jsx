@@ -9,6 +9,7 @@ import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 import { geocode } from '../utils/geocode'
 import MonumentModal from '../components/MonumentModal'
+import { formatYear } from '../utils/format'
 
 // Vite'da Leaflet standart belgisi sinadi — rasmlarni import qilib tuzatamiz.
 delete L.Icon.Default.prototype._getIconUrl
@@ -45,17 +46,17 @@ export default function MapView() {
           .filter(x => x.coord)
         setItems(withCoords)
       })
-      .catch(() => setError(t('error_load') || 'Yuklashda xatolik'))
+      .catch(() => setError(t('error_load')))
       .finally(() => setLoading(false))
   }, [t])
 
   return (
     <div className="page">
       <div className="container">
-        <h1 className="page-title">Xarita</h1>
+        <h1 className="page-title">{t('map_title')}</h1>
         <p style={{ color:'var(--text2)', marginBottom:'1.5rem', fontSize:'0.9rem' }}>
-          Yodgorliklar topilgan joylar bo'yicha xaritada. Belgini bosing — batafsil ma'lumot.
-          {!loading && <> ({items.length} ta joylashtirildi)</>}
+          {t('map_desc')}
+          {!loading && !error && <> {t('map_placed', { n: items.length })}</>}
         </p>
 
         {loading && <div className="spinner" />}
@@ -74,7 +75,7 @@ export default function MapView() {
                     <div style={{ minWidth:'160px' }}>
                       <strong>{m.title}</strong>
                       <div style={{ fontSize:'0.8rem', color:'#666', margin:'0.3rem 0' }}>
-                        {m.year < 0 ? `${Math.abs(m.year)} m.a.` : m.year} · {m.location}
+                        {formatYear(m.year, t)} · {m.location}
                       </div>
                       <button
                         onClick={() => setSelected(m)}
@@ -83,7 +84,7 @@ export default function MapView() {
                           padding:'0.3rem 0.7rem', borderRadius:'6px', cursor:'pointer',
                           fontSize:'0.8rem', fontWeight:600,
                         }}>
-                        Batafsil →
+                        {t('card_read_more')} →
                       </button>
                     </div>
                   </Popup>

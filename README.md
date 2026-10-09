@@ -34,7 +34,7 @@ Qo'lda:
 cd backend
 python3 -m venv ~/venvs/turkiy_korpus
 ~/venvs/turkiy_korpus/bin/pip install -r requirements.txt
-export USE_POSTGRES=False
+export DJANGO_DEBUG=True     # lokal dev (standart holatda DEBUG o'chiq)
 ~/venvs/turkiy_korpus/bin/python manage.py migrate
 ~/venvs/turkiy_korpus/bin/python manage.py seed_data
 ~/venvs/turkiy_korpus/bin/python manage.py runserver

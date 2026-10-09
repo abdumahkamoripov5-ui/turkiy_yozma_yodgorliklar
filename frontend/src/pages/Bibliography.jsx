@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
+import { formatYear } from '../utils/format'
 
 export default function Bibliography() {
   const { t } = useApp()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -18,9 +20,8 @@ export default function Bibliography() {
         }))
         .filter(m => m.researchersText || m.bibliographyList.length)
       setItems(data)
-      setLoading(false)
-    }).catch(() => setLoading(false))
-  }, [])
+    }).catch(() => setError(t('error_load'))).finally(() => setLoading(false))
+  }, [t])
 
   const filtered = items.filter(m => {
     const q = search.toLowerCase()
@@ -38,18 +39,19 @@ export default function Bibliography() {
           style={{ marginBottom:'1.5rem', maxWidth:'400px', display:'block' }} />
 
         {loading && <div className="spinner" />}
+        {error && <div className="error-msg">{error}</div>}
 
         <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
           {filtered.map(m => (
             <div key={m.id} className="card">
               <h3 style={{ color:'var(--accent)', marginBottom:'0.5rem' }}>{m.title}</h3>
-              {m.year && <p style={{ fontSize:'0.8rem', color:'var(--text2)', marginBottom:'0.5rem' }}>
-                {m.year < 0 ? `${Math.abs(m.year)} BCE` : m.year}
+              {m.year != null && <p style={{ fontSize:'0.8rem', color:'var(--text2)', marginBottom:'0.5rem' }}>
+                {formatYear(m.year, t)}
                 {m.location && ` · ${m.location}`}
               </p>}
               {m.researchersText && (
                 <p style={{ fontSize:'0.9rem', marginBottom:'0.4rem' }}>
-                  <strong>Tadqiqotchilar:</strong> {m.researchersText}
+                  <strong>{t('bibliography_researchers')}:</strong> {m.researchersText}
                 </p>
               )}
               {m.bibliographyList.length > 0 && (
@@ -60,7 +62,7 @@ export default function Bibliography() {
               )}
             </div>
           ))}
-          {!loading && filtered.length === 0 && (
+          {!loading && !error && filtered.length === 0 && (
             <div style={{ textAlign:'center', color:'var(--text2)', padding:'2rem' }}>{t('no_results')}</div>
           )}
         </div>

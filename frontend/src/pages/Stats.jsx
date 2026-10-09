@@ -31,9 +31,10 @@ export default function Stats() {
   if (loading) return <div className="page"><div className="container"><div className="spinner" /></div></div>
   if (!stats) return <div className="page"><div className="container"><div className="error-msg">{t('error_load')}</div></div></div>
 
-  const maxScript = Math.max(...(stats.byScript?.map(s => s.count) || [1]))
-  const maxCentury = Math.max(...(stats.byCentury?.map(c => c.count) || [1]))
-  const maxCategory = Math.max(...(stats.byCategory?.map(c => c.count) || [1]))
+  const maxOf = list => Math.max(1, ...(list || []).map(x => x.count))
+  const maxScript = maxOf(stats.byScript)
+  const maxCentury = maxOf(stats.byCentury)
+  const maxCategory = maxOf(stats.byCategory)
 
   return (
     <div className="page">
@@ -60,7 +61,7 @@ export default function Stats() {
           <div className="card">
             <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>{t('stats_by_script')}</h3>
             {stats.byScript?.map(s => (
-              <Bar key={s.script} label={s.script || 'Boshqa'} count={s.count} max={maxScript} />
+              <Bar key={s.script} label={s.label || s.script || 'Boshqa'} count={s.count} max={maxScript} />
             ))}
           </div>
 
@@ -68,7 +69,7 @@ export default function Stats() {
           <div className="card">
             <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>{t('stats_by_category')}</h3>
             {stats.byCategory?.map(c => (
-              <Bar key={c.category} label={c.category || 'Boshqa'} count={c.count} max={maxCategory}
+              <Bar key={c.category} label={c.label || c.category || 'Boshqa'} count={c.count} max={maxCategory}
                 color='#7c9bbf' />
             ))}
           </div>
@@ -84,7 +85,9 @@ export default function Stats() {
                     <div style={{ background:'var(--accent)', width:'100%', height:`${Math.max(pct * 1.2, 4)}px`,
                       borderRadius:'3px 3px 0 0', marginBottom:'0.3rem' }} />
                     <div style={{ fontSize:'0.7rem', color:'var(--text2)', writingMode:'vertical-rl',
-                      transform:'rotate(180deg)', height:'60px' }}>{c.century}</div>
+                      transform:'rotate(180deg)', height:'60px' }}>{c.number != null
+                      ? t('century_label', { n: Math.abs(c.number) }) + (c.number < 0 ? ` ${t('era_bce')}` : '')
+                      : c.century}</div>
                     <div style={{ fontSize:'0.8rem', fontWeight:600 }}>{c.count}</div>
                   </div>
                 )

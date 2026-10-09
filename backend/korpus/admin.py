@@ -1,6 +1,7 @@
 import csv
 from django.contrib import admin
 from django.http import HttpResponse
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.db.models import Sum
@@ -198,11 +199,14 @@ def approve_submissions(modeladmin, request, queryset):
     count = 0
     site_url = request.build_absolute_uri(django_settings.FRONTEND_URL.rstrip('/') + '/monuments')
     for sub in queryset.filter(status='pending'):
-        # Rasm: yuklangan fayl ustunlik qiladi, aks holda URL ishlatiladi
+        # Rasm: yuklangan fayl ustunlik qiladi, aks holda URL ishlatiladi.
+        # Fayl uchun xotira URL'i emas, doimiy API manzili yoziladi — S3/R2'ning
+        # imzolangan havolasi 1 soatda eskirardi (SubmissionImageView).
+        # Frontend boshqa domenda (Vercel) — to'liq URL kerak.
         image_url = sub.image
         if sub.image_file:
-            # Frontend boshqa domenda (Vercel) — to'liq URL kerak
-            image_url = request.build_absolute_uri(sub.image_file.url)
+            image_url = request.build_absolute_uri(
+                reverse('v2-submission-image', args=[sub.pk]))
 
         monument = Monument.objects.create(
             title=sub.title,

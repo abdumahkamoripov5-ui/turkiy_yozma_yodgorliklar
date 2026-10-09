@@ -18,8 +18,11 @@ export default function Login() {
       const r = await auth.login(form.username, form.password)
       login(r.data)
       navigate('/')
-    } catch {
-      setError(t('login_error'))
+    } catch (err) {
+      // 429 — juda ko'p urinish (backend cheklovi); boshqa hollarda — login/parol xato
+      setError(err.response?.status === 429
+        ? (err.response.data?.detail || t('login_error'))
+        : t('login_error'))
     } finally {
       setLoading(false)
     }
@@ -33,23 +36,23 @@ export default function Login() {
         </h2>
         <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
           <div>
-            <label style={{ display:'block', marginBottom:'0.35rem', fontSize:'0.85rem', color:'var(--text2)' }}>
+            <label htmlFor="login_username" style={{ display:'block', marginBottom:'0.35rem', fontSize:'0.85rem', color:'var(--text2)' }}>
               {t('login_username')}
             </label>
-            <input type="text" value={form.username} required
+            <input id="login_username" autoComplete="username" type="text" value={form.username} required
               onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
               style={{ width:'100%' }} autoFocus />
           </div>
           <div>
-            <label style={{ display:'block', marginBottom:'0.35rem', fontSize:'0.85rem', color:'var(--text2)' }}>
+            <label htmlFor="login_password" style={{ display:'block', marginBottom:'0.35rem', fontSize:'0.85rem', color:'var(--text2)' }}>
               {t('login_password')}
             </label>
-            <input type="password" value={form.password} required
+            <input id="login_password" autoComplete="current-password" type="password" value={form.password} required
               onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
               style={{ width:'100%' }} />
           </div>
           {error && (
-            <div style={{ color:'#e57373', fontSize:'0.85rem', textAlign:'center' }}>{error}</div>
+            <div role="alert" style={{ color:'#e57373', fontSize:'0.85rem', textAlign:'center' }}>{error}</div>
           )}
           <button type="submit" className="btn btn-primary" disabled={loading}
             style={{ width:'100%', justifyContent:'center', fontSize:'1rem' }}>

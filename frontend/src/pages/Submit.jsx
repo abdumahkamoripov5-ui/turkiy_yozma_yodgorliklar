@@ -25,22 +25,25 @@ const DOC_ACCEPT = '.pdf,.doc,.docx,.odt,.txt,.rtf,.xls,.xlsx,.ods,.ppt,.pptx'
 
 function Field({ label, required, children }) {
   return (
-    <div style={{ marginBottom:'1rem' }}>
-      <label style={{ display:'block', marginBottom:'0.35rem', fontSize:'0.85rem', fontWeight:500, color:'var(--text2)' }}>
+    // <label> maydonni o'rab oladi — yozuv bosilganda maydon fokuslanadi, ekran o'quvchi nomini o'qiydi
+    <label style={{ display:'block', marginBottom:'1rem' }}>
+      <span style={{ display:'block', marginBottom:'0.35rem', fontSize:'0.85rem', fontWeight:500, color:'var(--text2)' }}>
         {label}{required && <span style={{ color:'#e57373' }}> *</span>}
-      </label>
+      </span>
       {children}
-    </div>
+    </label>
   )
+}
+
+const EMPTY_FORM = {
+  title: '', year: '', location: '', script: '', category: '', language: '',
+  description: '', full_text: '', transliteration: '', translation: '',
+  source_info: '', author_name: '', author_email: '', author_institution: '', author_bio: '',
 }
 
 export default function Submit() {
   const { t } = useApp()
-  const [form, setForm] = useState({
-    title: '', year: '', location: '', script: '', category: '', language: '',
-    description: '', full_text: '', transliteration: '', translation: '',
-    source_info: '', author_name: '', author_email: '', author_institution: '', author_bio: '',
-  })
+  const [form, setForm] = useState(EMPTY_FORM)
   const [imageFile, setImageFile] = useState(null)
   const [docFile, setDocFile] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -52,11 +55,11 @@ export default function Submit() {
   const handleSubmit = async e => {
     e.preventDefault()
     if (imageFile && imageFile.size > MAX_IMAGE_MB * 1024 * 1024) {
-      setError(`Rasm hajmi ${MAX_IMAGE_MB} MB dan oshmasligi kerak.`)
+      setError(t('submit_image_too_big', { n: MAX_IMAGE_MB }))
       return
     }
     if (docFile && docFile.size > MAX_DOC_MB * 1024 * 1024) {
-      setError(`Hujjat hajmi ${MAX_DOC_MB} MB dan oshmasligi kerak.`)
+      setError(t('submit_doc_too_big', { n: MAX_DOC_MB }))
       return
     }
     setLoading(true)
@@ -67,7 +70,12 @@ export default function Submit() {
       if (imageFile) fd.append('image_file', imageFile)
       if (docFile) fd.append('document', docFile)
       await submit(fd)
+      // Keyingi taklif uchun forma tozalanadi
+      setForm(EMPTY_FORM)
+      setImageFile(null)
+      setDocFile(null)
       setSuccess(true)
+      window.scrollTo({ top: 0 })
     } catch (err) {
       setError(err.response?.data?.error || t('submit_error'))
     } finally {
@@ -81,9 +89,9 @@ export default function Submit() {
         <div className="container" style={{ maxWidth:'600px', textAlign:'center', paddingTop:'4rem' }}>
           <div style={{ fontSize:'3rem', marginBottom:'1rem' }}>✅</div>
           <h2 style={{ color:'var(--accent)', marginBottom:'1rem' }}>{t('submit_success')}</h2>
-          <p style={{ color:'var(--text2)' }}>Admin ko'rib chiqqandan so'ng saytda ko'rinadi.</p>
+          <p style={{ color:'var(--text2)' }}>{t('submit_success_note')}</p>
           <button onClick={() => setSuccess(false)} className="btn btn-outline" style={{ marginTop:'1.5rem' }}>
-            Yana yuborish
+            {t('submit_again')}
           </button>
         </div>
       </div>
@@ -97,7 +105,7 @@ export default function Submit() {
 
         <form onSubmit={handleSubmit}>
           <div className="card" style={{ marginBottom:'1.5rem' }}>
-            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>Yodgorlik ma'lumotlari</h3>
+            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>{t('submit_section_monument')}</h3>
             <div className="grid grid-2">
               <Field label={t('submit_monument_name')} required>
                 <input type="text" value={form.title} onChange={set('title')} required style={{ width:'100%' }} />
@@ -132,7 +140,7 @@ export default function Submit() {
           </div>
 
           <div className="card" style={{ marginBottom:'1.5rem' }}>
-            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>Matn</h3>
+            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>{t('submit_section_text')}</h3>
             <Field label={t('submit_full_text')}>
               <textarea value={form.full_text} onChange={set('full_text')} rows={5}
                 style={{ width:'100%', resize:'vertical', fontFamily:'serif' }} />
@@ -152,7 +160,7 @@ export default function Submit() {
 
           {/* File uploads */}
           <div className="card" style={{ marginBottom:'1.5rem' }}>
-            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>Fayllar</h3>
+            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>{t('submit_section_files')}</h3>
             <div className="grid grid-2">
               <Field label={t('submit_image')}>
                 <input type="file" accept="image/*"
@@ -170,7 +178,7 @@ export default function Submit() {
           </div>
 
           <div className="card" style={{ marginBottom:'1.5rem' }}>
-            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>Muallif</h3>
+            <h3 style={{ marginBottom:'1rem', color:'var(--accent)' }}>{t('submit_section_author')}</h3>
             <div className="grid grid-2">
               <Field label={t('submit_author_name')} required>
                 <input type="text" value={form.author_name} onChange={set('author_name')} required style={{ width:'100%' }} />
@@ -189,7 +197,7 @@ export default function Submit() {
           </div>
 
           {error && (
-            <div style={{ color:'#e57373', padding:'0.75rem 1rem', background:'rgba(229,115,115,0.1)',
+            <div role="alert" style={{ color:'#e57373', padding:'0.75rem 1rem', background:'rgba(229,115,115,0.1)',
               border:'1px solid rgba(229,115,115,0.3)', borderRadius:'var(--radius)', marginBottom:'1rem' }}>
               {error}
             </div>

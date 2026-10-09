@@ -20,11 +20,15 @@ import About from './pages/About'
 import Login from './pages/Login'
 
 function Layout() {
-  const { theme } = useApp()
+  const { theme, lang } = useApp()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
+
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
 
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
@@ -55,11 +59,12 @@ function Layout() {
 }
 
 function NotFound() {
+  const { t } = useApp()
   return (
     <div className="page" style={{ textAlign:'center' }}>
       <div style={{ fontSize:'5rem', color:'var(--accent)', fontWeight:700 }}>404</div>
-      <p style={{ color:'var(--text2)', margin:'1rem 0' }}>Sahifa topilmadi</p>
-      <Link to="/" className="btn btn-outline">Bosh sahifaga</Link>
+      <p style={{ color:'var(--text2)', margin:'1rem 0' }}>{t('not_found')}</p>
+      <Link to="/" className="btn btn-outline">{t('not_found_home')}</Link>
     </div>
   )
 }

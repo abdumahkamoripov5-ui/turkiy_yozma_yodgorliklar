@@ -10,9 +10,11 @@ python manage.py collectstatic --no-input
 # Migratsiya
 python manage.py migrate
 
-# Demo ma'lumotlar — seed'dagi yozuvlar (nomi bo'yicha) yangilanadi,
-# admin orqali qo'shilgan boshqa yozuvlarga tegilmaydi.
-python manage.py seed_data --refresh-demo
+# Demo ma'lumotlar — faqat bazada yo'q demo yozuvlar qo'shiladi.
+# Mavjud yozuvlar (admin tahrirlari, ko'rishlar soni) har deploy'da saqlanib qoladi.
+# Demo matnlarni seed holatiga majburan qaytarish kerak bo'lsa, qo'lda:
+#   python manage.py seed_data --refresh-demo
+python manage.py seed_data
 
 # Superuser — env'dan (DJANGO_SUPERUSER_*); eski demo parollar bloklanadi
 python manage.py shell <<'PY'
@@ -42,4 +44,17 @@ for name, pwd in (('admin', 'admin123'), ('editor', 'editor123')):
         du.is_active = False
         du.save()
         print(f"{name}: demo parol bilan aktiv edi — bloklandi")
+
+# Avval tasdiqlangan takliflar rasmlarida eskiradigan (imzolangan) S3 havolasi
+# yozilgan bo'lishi mumkin — doimiy API manziliga almashtiriladi
+host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if host:
+    from korpus.models import MonumentSubmission
+    for sub in MonumentSubmission.objects.filter(status='approved', monument__isnull=False).exclude(image_file=''):
+        url = f'https://{host}/api/v2/submission-image/{sub.pk}/'
+        # Faqat hali xotira URL'i turgan bo'lsa (admin qo'lda boshqa rasm qo'ygan bo'lsa — tegilmaydi)
+        if sub.image_file.name.rsplit('/', 1)[-1] in (sub.monument.image or ''):
+            sub.monument.image = url
+            sub.monument.save(update_fields=['image'])
+            print(f"rasm havolasi yangilandi: {sub.monument.title}")
 PY

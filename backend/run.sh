@@ -17,6 +17,8 @@ VENV="${TURKIY_VENV:-$HOME/venvs/turkiy_korpus}"
 
 # Ma'lumotlar bazasi — standart SQLite. PostgreSQL uchun: export USE_POSTGRES=True
 export USE_POSTGRES="${USE_POSTGRES:-False}"
+# Lokal dev — DEBUG yoqiladi (settings'da standart holat — o'chiq, production uchun xavfsiz)
+export DJANGO_DEBUG="${DJANGO_DEBUG:-True}"
 
 echo ""
 echo -e "${BOLD}${BLUE}╔══════════════════════════════════════════════╗${NC}"

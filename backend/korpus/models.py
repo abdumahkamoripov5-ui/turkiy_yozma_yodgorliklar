@@ -10,6 +10,16 @@ def _random_name(folder, filename):
     return f'{folder}/{uuid.uuid4().hex}{ext}'
 
 
+def century_of(year):
+    """Yil qaysi asrga tegishli: 1–100 → 1-asr, 701–800 → 8-asr, 700 → 7-asr.
+
+    Miloddan avvalgi yillar (manfiy) uchun ham asr raqami musbat qaytadi.
+    """
+    if year is None:
+        return None
+    return max(1, (abs(year) - 1) // 100 + 1)
+
+
 def submission_image_path(instance, filename):
     return _random_name('submissions/images', filename)
 
@@ -75,7 +85,7 @@ class Monument(models.Model):
 
     @property
     def century(self):
-        return ((abs(self.year) - 1) // 100) + 1
+        return century_of(self.year)
 
     @property
     def date_str(self):
