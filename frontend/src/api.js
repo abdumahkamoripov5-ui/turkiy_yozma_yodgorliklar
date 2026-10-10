@@ -26,6 +26,8 @@ api.interceptors.response.use(
         try {
           const { data } = await axios.post(`${BASE}/auth/token/refresh/`, { refresh })
           localStorage.setItem('access_token', data.access)
+          // ROTATE_REFRESH_TOKENS: server yangi refresh qaytaradi, eskisi bekor qilinadi
+          if (data.refresh) localStorage.setItem('refresh_token', data.refresh)
           orig.headers.Authorization = `Bearer ${data.access}`
           return api(orig)
         } catch {
@@ -37,9 +39,11 @@ api.interceptors.response.use(
 
     // Render'ning bepul tarifida server uyquda bo'lsa, birinchi so'rov
     // ulanish xatosi bilan tugaydi — qisqa kutib avtomatik qayta uriniladi.
+    // Faqat GET (idempotent): POST (taklif yuborish) qayta yuborilsa, server
+    // so'rovni aslida qabul qilgan bo'lsa, dublikat yozuv yaratilardi.
     const isNetworkError = !err.response
     orig._retryCount = orig._retryCount || 0
-    if (isNetworkError && orig._retryCount < 2) {
+    if (isNetworkError && orig.method === 'get' && orig._retryCount < 2) {
       orig._retryCount += 1
       await new Promise(res => setTimeout(res, 1500 * orig._retryCount))
       return api(orig)

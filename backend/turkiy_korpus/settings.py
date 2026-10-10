@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Third-party
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',  # eski refresh tokenlarni bekor qilish
     'django_filters',
     'corsheaders',
     # Local
@@ -95,7 +96,8 @@ elif _USE_POSTGRES:
             'ENGINE':   'django.db.backends.postgresql',
             'NAME':     os.environ.get('DB_NAME',     'turkiy_korpus'),
             'USER':     os.environ.get('DB_USER',     'turkiy_user'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'turkiy_pass_2024'),
+            # Parol kodda qattiq yozilmaydi — faqat env'dan (DB_PASSWORD)
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
             'HOST':     os.environ.get('DB_HOST',     'localhost'),
             'PORT':     os.environ.get('DB_PORT',     '5432'),
             'OPTIONS':  {'connect_timeout': 10},
@@ -197,6 +199,8 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
+    # ?format=csv (eksport) DRF renderer sifatida qabul qilinib 404 bermasin
+    'URL_FORMAT_OVERRIDE': None,
     # korpus.throttling — IP'ni X-Forwarded-For'dan emas, ishonchli sarlavhadan oladi
     'DEFAULT_THROTTLE_CLASSES': [
         'korpus.throttling.AnonRateThrottle',
@@ -217,6 +221,8 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME':  timedelta(hours=8),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
     'ROTATE_REFRESH_TOKENS':  True,
+    # Rotatsiyadan keyin eski refresh token darhol bekor qilinadi (aks holda 30 kun ishlaydi)
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 # ── CORS (React dev server uchun) ─────────────────────────────────────────────

@@ -8,6 +8,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
+from .csv_utils import safe_cell
 from .models import Monument, SiteSettings, MonumentSubmission, LoginActivity
 
 
@@ -37,9 +38,9 @@ def export_csv(modeladmin, request, queryset):
     writer.writerow(['ID', 'Nomi', 'Yil', 'Joy', 'Yozuv', 'Kategoriya',
                      'Til', "So'zlar", 'Qatorlar', 'Ko\'rishlar', 'Tanlangan'])
     for m in queryset:
-        writer.writerow([m.id, m.title, m.year, m.location, m.script,
-                         m.category, m.language, m.word_count,
-                         m.line_count, m.views, m.featured])
+        writer.writerow([safe_cell(v) for v in [m.id, m.title, m.year, m.location, m.script,
+                                                m.category, m.language, m.word_count,
+                                                m.line_count, m.views, m.featured]])
     return response
 
 
