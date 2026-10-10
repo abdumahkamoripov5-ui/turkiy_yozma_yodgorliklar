@@ -4,6 +4,15 @@ set -o errexit
 
 pip install -r requirements.txt
 
+# ── Frontend (React) — Django shu build'ni /app/ da beradi ────────────────────
+# Render Python image'ida Node kafolatlanmagan: kerak bo'lsa nodeenv bilan o'rnatiladi.
+if ! command -v npm >/dev/null 2>&1; then
+  pip install -q nodeenv
+  nodeenv -n 20.18.0 "$HOME/node-env"
+  export PATH="$HOME/node-env/bin:$PATH"
+fi
+(cd ../frontend && npm ci --no-audit --no-fund && VITE_BASE=/app/ npm run build)
+
 # Statik fayllar (Django admin / DRF) — WhiteNoise uzatadi
 python manage.py collectstatic --no-input
 

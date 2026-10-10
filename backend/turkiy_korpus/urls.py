@@ -36,16 +36,18 @@ urlpatterns = [
     path('api/v2/submission-image/<int:pk>/', korpus_api.SubmissionImageView.as_view(), name='v2-submission-image'),
 
     # ── React SPA ─────────────────────────────────────────────────────────────
-    # /app/assets/* — served by static() below (must be before re_path catch-all)
+    # /app/assets/* — React build fayllari. static() faqat DEBUG'da ishlaydi,
+    # shuning uchun production'da ham doim serve_file orqali uzatiladi.
     # /app/<any-route> — React client-side routing, all return index.html
+    re_path(r'^app/assets/(?P<path>.*)$', serve_file,
+            {'document_root': settings.REACT_BUILD_DIR / 'assets'}),
+    path('app/vite.svg', serve_file, {'document_root': settings.REACT_BUILD_DIR, 'path': 'vite.svg'}),
     re_path(r'^app/(?!assets/).*$', react_index),
 
     # ── Bosh sahifa: saytga yo'naltirish (lokalda /app/, prodda Vercel) ───────
     path('', RedirectView.as_view(url=settings.FRONTEND_URL, permanent=False)),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
-  + static('/app/assets/', document_root=settings.REACT_BUILD_DIR / 'assets') \
-  + static('/app/vite.svg', document_root=settings.REACT_BUILD_DIR)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Yuklangan fayllar lokal diskda bo'lsa (S3/R2 ulanmagan), ularni Django o'zi uzatadi.
 # static() faqat DEBUG=True'da ishlaydi — production'da rasmlar 404 bo'lib qolardi.

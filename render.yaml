@@ -40,9 +40,9 @@ services:
         sync: false
       - key: CSRF_TRUSTED_ORIGINS
         sync: false
-      # API bosh sahifasi (/) saytga yo'naltiradi
+      # Bosh sahifa (/) saytga yo'naltiradi — frontend shu servisda (/app/), bitta domen
       - key: FRONTEND_URL
-        value: "https://turkiy-yozma-yodgorliklar.vercel.app"
+        value: "/app/"
       # Yuklangan fayllar — Render diski vaqtinchalik, shuning uchun tashqi xotira.
       # Cloudflare R2 (10 GB bepul) yoki S3 ma'lumotlarini dashboard'dan to'ldiring.
       # AWS_STORAGE_BUCKET_NAME bo'sh qolsa — fayllar lokal diskka yoziladi (deploy'da o'chadi).
