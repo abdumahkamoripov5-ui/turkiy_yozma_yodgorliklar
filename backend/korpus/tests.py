@@ -80,3 +80,19 @@ class RefreshRotationTests(TestCase):
         # Rotatsiyadan keyin eski refresh token ishlamasligi kerak
         r3 = self.api.post('/api/v2/auth/token/refresh/', {'refresh': old_refresh}, format='json')
         self.assertEqual(r3.status_code, 401)
+
+
+class ConcordanceTests(TestCase):
+    def test_finds_matches_with_context(self):
+        Monument.objects.create(
+            title='Test', year=700, location='x', script='koktürk', category='bitiglar',
+            description='x' * 30, status='Chop etilgan', transliteration='Türk bilge kağan',
+        )
+        Monument.objects.create(
+            title='Draft', year=700, location='x', script='koktürk', category='bitiglar',
+            description='x' * 30, status='Qoralama', transliteration='bilge kağan',
+        )
+        r = APIClient().get('/api/v2/monuments/concordance/?q=bilge')
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.data['count'], 1)
+        self.assertEqual(r.data['results'][0]['match'], 'bilge')

@@ -147,7 +147,11 @@ class MonumentViewSet(viewsets.ModelViewSet):
         # re.IGNORECASE — moslik o'rinlari asl matnda hisoblanadi. text.lower() ba'zi
         # harflarda (masalan 'İ' → 'i̇') qator uzunligini o'zgartirib, o'rinlarni siljitardi.
         pattern = re.compile(re.escape(q), re.IGNORECASE)
-        qs = Monument.objects.filter(status='Chop etilgan')
+        # Faqat kerakli ustunlar, chunk'lab o'qiladi — autentifikatsiyasiz so'rov
+        # butun jadvalni xotiraga yuklamasligi uchun
+        qs = (Monument.objects.filter(status='Chop etilgan')
+              .only('id', 'title', 'full_text', 'transliteration', 'translation')
+              .iterator(chunk_size=100))
         for m in qs:
             if len(results) >= max_results:
                 break
