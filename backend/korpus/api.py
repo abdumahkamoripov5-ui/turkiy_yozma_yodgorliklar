@@ -21,6 +21,7 @@ from .serializers import (
     MonumentListSerializer, MonumentDetailSerializer,
     MonumentSubmissionSerializer, SiteSettingsSerializer,
 )
+from .csv_utils import safe_cell
 from .throttling import ScopedRateThrottle
 from .word_tr import WORD_TR
 
@@ -221,13 +222,16 @@ class SubmissionCreateView(APIView):
 
         submission = serializer.save()
 
+        # Sarlavhadagi yangi qator email subject'ni buzadi (BadHeaderError → 500)
+        subject_title = ' '.join(submission.title.split())
+
         # Email — admin ga
         if django_settings.ADMIN_EMAIL:
             review_url = request.build_absolute_uri(
                 f'/django-admin/korpus/monumentsubmission/{submission.id}/change/'
             )
             send_mail(
-                subject=f'[Turkiy Korpus] Yangi taklif: {submission.title}',
+                subject=f'[Turkiy Korpus] Yangi taklif: {subject_title}',
                 message=(
                     f'Yangi yodgorlik taklifi keldi.\n\n'
                     f'Nomi: {submission.title}\n'
@@ -307,7 +311,8 @@ class ExportView(APIView):
             w = csv.writer(response)
             w.writerow(['ID', 'Nomi', 'Yil', 'Joy', 'Yozuv', 'Kategoriya', 'Til', "So'zlar", 'Ko\'rishlar'])
             for m in qs:
-                w.writerow([m.id, m.title, m.year, m.location, m.script, m.category, m.language, m.word_count, m.views])
+                w.writerow([safe_cell(v) for v in [m.id, m.title, m.year, m.location, m.script,
+                                                   m.category, m.language, m.word_count, m.views]])
             return response
 
         data = MonumentDetailSerializer(qs, many=True).data
