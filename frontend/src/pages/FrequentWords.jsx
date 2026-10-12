@@ -52,9 +52,9 @@ export default function FrequentWords() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {filtered.map((w, i) => (
               <div key={w.word} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', padding: '0.65rem 1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div className="frequency-row" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <span style={{ color: 'var(--text2)', fontSize: '0.8rem', width: '2rem', flexShrink: 0 }}>{i + 1}</span>
-                  <span style={{ fontWeight: 600, color: 'var(--text)', minWidth: '140px' }}>{w.word}</span>
+                  <span className="frequency-word" style={{ fontWeight: 600, color: 'var(--text)', minWidth: '140px' }}>{w.word}</span>
                   <div style={{ flex: 1, background: 'var(--bg3)', borderRadius: '100px', height: '8px', overflow: 'hidden' }}>
                     <div style={{
                       width: `${Math.max(4, (w.count / maxCount) * 100)}%`, height: '100%',

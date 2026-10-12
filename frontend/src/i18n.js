@@ -655,8 +655,8 @@ export function setLang(lang) {
 }
 
 // vars — matndagi {nom} o'rinlarini to'ldiradi: t('scripts_count', { n: 5 })
-export function t(key, vars) {
-  const text = TRANSLATIONS[currentLang]?.[key] ?? TRANSLATIONS.uz[key] ?? key
+export function t(key, vars, lang = currentLang) {
+  const text = TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS.uz[key] ?? key
   if (!vars) return text
   return text.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m))
 }

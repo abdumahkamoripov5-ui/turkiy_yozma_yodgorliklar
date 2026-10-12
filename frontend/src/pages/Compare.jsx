@@ -15,9 +15,11 @@ export default function Compare() {
   const [searchQ, setSearchQ] = useState('')
   const [tab, setTab] = useState('text')
   const [error, setError] = useState(null)
+  const [detailErrors, setDetailErrors] = useState({})
 
   useEffect(() => {
-    api.list({ ordering: 'year', page_size: 200 }).then(r => {
+    setError(null)
+    api.all({ ordering: 'year' }).then(r => {
       setAll(r.data.results || r.data)
     }).catch(() => setError(t('error_load')))
   }, [t])
@@ -27,11 +29,12 @@ export default function Compare() {
   useEffect(() => {
     selected.filter(m => !requested.current.has(m.id)).forEach(m => {
       requested.current.add(m.id)
+      setDetailErrors(d => ({ ...d, [m.id]: false }))
       api.get(m.id, { countView: false })
         .then(r => setDetails(d => ({ ...d, [m.id]: r.data })))
         .catch(() => {
           requested.current.delete(m.id)  // keyingi tanlashda qayta urinib ko'riladi
-          setDetails(d => ({ ...d, [m.id]: m }))
+          setDetailErrors(d => ({ ...d, [m.id]: true }))
         })
     })
   }, [selected])
@@ -41,7 +44,7 @@ export default function Compare() {
     !selected.find(s => s.id === m.id)
   )
 
-  const add = m => { if (selected.length < 3) setSelected(s => [...s, m]) }
+  const add = m => setSelected(s => s.length < 3 && !s.some(item => item.id === m.id) ? [...s, m] : s)
   const remove = id => setSelected(s => s.filter(m => m.id !== id))
 
   const tabs = ['text', 'transliteration', 'translation', 'info']
@@ -64,7 +67,7 @@ export default function Compare() {
             <div style={{ position:'relative', flex:'1 1 300px', maxHeight:'200px', overflowY:'auto' }}
               className="card">
               {filtered.slice(0,10).map(m => (
-                <button key={m.id} onClick={() => { add(m); setSearchQ('') }}
+                <button key={m.id} disabled={selected.length >= 3} onClick={() => { add(m); setSearchQ('') }}
                   style={{ display:'block', width:'100%', textAlign:'left', padding:'0.5rem',
                     borderBottom:'1px solid var(--border)', color:'var(--text)', fontSize:'0.85rem',
                     background:'transparent', cursor:'pointer' }}>
@@ -132,6 +135,10 @@ export default function Compare() {
                           <span>{v}</span>
                         </div>
                       ) : null)}
+                    </div>
+                  ) : detailErrors[sel.id] ? (
+                    <div className="error-msg">{t('error_load')}
+                      <button className="btn btn-outline" onClick={() => setSelected(s => [...s])}>{t('retry')}</button>
                     </div>
                   ) : !ready ? (
                     <div className="spinner" />

@@ -35,11 +35,11 @@ export default function Glossary() {
 
         <div style={{ display:'flex', flexDirection:'column', gap:'0.75rem' }}>
           {filtered.map(g => (
-            <div key={g.term} className="card" style={{ display:'flex', gap:'1rem', alignItems:'flex-start' }}>
+            <div key={g.term} className="card" style={{ display:'flex', gap:'1rem', alignItems:'flex-start', flexWrap:'wrap' }}>
               <div style={{ flex:'0 0 180px', fontWeight:600, color:'var(--accent)', fontSize:'0.95rem' }}>
                 {g.term}
               </div>
-              <div style={{ fontSize:'0.9rem', color:'var(--text)', lineHeight:1.6 }}>{g.def}</div>
+              <div style={{ fontSize:'0.9rem', color:'var(--text)', lineHeight:1.6, flex:'1 1 220px', minWidth:0 }}>{g.def}</div>
             </div>
           ))}
           {filtered.length === 0 && (

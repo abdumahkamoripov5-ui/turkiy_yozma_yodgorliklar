@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 import { buildCitations } from '../utils/citation'
@@ -25,33 +25,52 @@ export default function MonumentModal({ monument, onClose }) {
   const [tab, setTab] = useState('text')
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState('')
+  const [error, setError] = useState(false)
+  const [attempt, setAttempt] = useState(0)
+  const dialogRef = useRef(null)
 
   const copy = (key, text) => {
-    navigator.clipboard?.writeText(text).then(() => {
+    if (!navigator.clipboard) return
+    navigator.clipboard.writeText(text).then(() => {
       setCopied(key)
       setTimeout(() => setCopied(''), 1500)
-    })
+    }).catch(() => setCopied(''))
   }
 
   useEffect(() => {
     let active = true
+    setLoading(true)
+    setError(false)
+    setDetail(null)
     api.get(monument.id, { countView: markViewed(monument.id) }).then(r => {
       if (active) setDetail(r.data)
-    }).catch(() => {}).finally(() => {
+    }).catch(() => { if (active) setError(true) }).finally(() => {
       if (active) setLoading(false)
     })
     return () => { active = false }
-  }, [monument.id])
+  }, [monument.id, attempt])
 
   // Esc bilan yopish va orqa sahifa aylanmasligi
   useEffect(() => {
-    const onKey = e => { if (e.key === 'Escape') onClose() }
+    const previousFocus = document.activeElement
+    const dialog = dialogRef.current
+    dialog?.querySelector('button')?.focus()
+    const onKey = e => {
+      if (e.key === 'Escape') onClose()
+      if (e.key !== 'Tab') return
+      const nodes = dialog?.querySelectorAll('button:not([disabled]), a[href], input, select, textarea, [tabindex="0"]')
+      if (!nodes?.length) return
+      const first = nodes[0], last = nodes[nodes.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
     document.addEventListener('keydown', onKey)
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = prevOverflow
+      previousFocus?.focus()
     }
   }, [onClose])
 
@@ -72,7 +91,7 @@ export default function MonumentModal({ monument, onClose }) {
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="monument-modal-title">
+      <div className="modal" ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="monument-modal-title">
         <div className="modal-header">
           <div>
             <h2 id="monument-modal-title" style={{ fontSize:'1.2rem', marginBottom:'0.2rem' }}>{data.title}</h2>
@@ -94,26 +113,27 @@ export default function MonumentModal({ monument, onClose }) {
 
         <div className="modal-body">
           {loading && <div className="spinner" />}
+          {error && <div className="error-msg" role="alert">{t('error_load')}<div><button className="btn btn-outline" onClick={() => setAttempt(a => a + 1)}>{t('retry')}</button></div></div>}
 
-          {!loading && tab === 'text' && (
+          {!loading && !error && tab === 'text' && (
             <pre style={{ fontFamily:'serif', fontSize:'1rem', lineHeight:1.8, whiteSpace:'pre-wrap', color:'var(--text)' }}>
               {data.full_text || '—'}
             </pre>
           )}
 
-          {!loading && tab === 'transliteration' && (
+          {!loading && !error && tab === 'transliteration' && (
             <pre style={{ fontFamily:'monospace', fontSize:'0.95rem', lineHeight:1.8, whiteSpace:'pre-wrap' }}>
               {data.transliteration || '—'}
             </pre>
           )}
 
-          {!loading && tab === 'translation' && (
+          {!loading && !error && tab === 'translation' && (
             <div style={{ lineHeight:1.8, fontSize:'0.95rem' }}>
               {data.translation || '—'}
             </div>
           )}
 
-          {!loading && tab === 'info' && (
+          {!loading && !error && tab === 'info' && (
             <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'0.9rem' }}>
               <tbody>
                 {[
@@ -124,7 +144,7 @@ export default function MonumentModal({ monument, onClose }) {
                   [t('modal_words'), data.word_count],
                   [t('modal_lines'), data.line_count],
                   [t('modal_researchers'), Array.isArray(data.researchers) ? data.researchers.join(', ') : data.researchers],
-                ].map(([label, value]) => value ? (
+                ].map(([label, value]) => value !== null && value !== undefined && value !== '' ? (
                   <tr key={label} style={{ borderBottom:'1px solid var(--border)' }}>
                     <td style={{ padding:'0.6rem', color:'var(--text2)', width:'40%', fontWeight:500 }}>{label}</td>
                     <td style={{ padding:'0.6rem' }}>{value}</td>
@@ -134,7 +154,7 @@ export default function MonumentModal({ monument, onClose }) {
             </table>
           )}
 
-          {!loading && tab === 'bibliography' && (
+          {!loading && !error && tab === 'bibliography' && (
             <ul style={{ lineHeight:1.7, fontSize:'0.9rem', paddingLeft:'1.2rem',
               display:'flex', flexDirection:'column', gap:'0.6rem' }}>
               {(Array.isArray(data.bibliography) ? data.bibliography : [data.bibliography]).map((b, i) => (
@@ -143,7 +163,7 @@ export default function MonumentModal({ monument, onClose }) {
             </ul>
           )}
 
-          {!loading && tab === 'cite' && (
+          {!loading && !error && tab === 'cite' && (
             <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
               <p style={{ fontSize:'0.85rem', color:'var(--text2)' }}>
                 {t('cite_intro')}

@@ -10,11 +10,22 @@ export default function Home() {
   const [featured, setFeatured] = useState([])
   const [stats, setStats] = useState(null)
   const [selected, setSelected] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
-    api.featured().then(r => setFeatured(r.data.slice(0, 6))).catch(() => {})
-    api.stats().then(r => setStats(r.data)).catch(() => {})
-  }, [])
+    let active = true
+    setLoading(true)
+    setError(false)
+    Promise.all([api.featured(), api.stats()]).then(([featuredResponse, statsResponse]) => {
+      if (!active) return
+      setFeatured(featuredResponse.data.slice(0, 6))
+      setStats(statsResponse.data)
+    }).catch(() => { if (active) setError(true) })
+      .finally(() => { if (active) setLoading(false) })
+    return () => { active = false }
+  }, [attempt])
 
   return (
     <div>
@@ -64,6 +75,24 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      <section className="container research-tools" aria-label={t('nav_concordance')}>
+        {[
+          ['/concordance', '⌕', 'nav_concordance', 'concordance_placeholder'],
+          ['/compare', '⇄', 'nav_compare', 'compare_select'],
+          ['/map', '◎', 'nav_map', 'map_desc'],
+        ].map(([to, icon, title, description]) => (
+          <Link key={to} to={to} className="card tool-card">
+            <span className="tool-icon" aria-hidden="true">{icon}</span>
+            <div><h2>{t(title)}</h2><p>{t(description)}</p></div>
+            <span className="tool-arrow" aria-hidden="true">↗</span>
+          </Link>
+        ))}
+      </section>
+      {loading && <div className="container home-loading" aria-busy="true"><div className="spinner" /></div>}
+      {error && <div className="container error-msg" role="alert">{t('error_load')}
+        <div><button className="btn btn-outline" onClick={() => setAttempt(a => a + 1)}>{t('retry')}</button></div>
+      </div>}
 
       {/* Featured monuments */}
       {featured.length > 0 && (

@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { formatYear } from '../utils/format'
 
 export default function MonumentCard({ monument, onClick }) {
   const { t } = useApp()
+  const [failedImage, setFailedImage] = useState(null)
 
   const yearLabel = formatYear(monument.year, t)
   const open = () => onClick(monument)
@@ -18,9 +20,9 @@ export default function MonumentCard({ monument, onClick }) {
       flexDirection: 'column',
       gap: '0.75rem',
     }}>
-      {monument.image ? (
+      {monument.image && failedImage !== monument.image ? (
         <div style={{ borderRadius:'var(--radius)', overflow:'hidden', height:'140px' }}>
-          <img src={monument.image} alt={monument.title} loading="lazy"
+          <img src={monument.image} alt={monument.title} loading="lazy" onError={() => setFailedImage(monument.image)}
             style={{ width:'100%', height:'100%', objectFit:'cover' }} />
         </div>
       ) : (

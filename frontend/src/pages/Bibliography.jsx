@@ -11,7 +11,9 @@ export default function Bibliography() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    api.list({ ordering: 'year', page_size: 200 }).then(r => {
+    setLoading(true)
+    setError(null)
+    api.all({ ordering: 'year' }).then(r => {
       const data = (r.data.results || r.data)
         .map(m => ({
           ...m,

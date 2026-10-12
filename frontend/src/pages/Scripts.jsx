@@ -34,7 +34,9 @@ export default function Scripts() {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
-    api.list({ ordering: 'year', page_size: 200 }).then(r => {
+    setLoading(true)
+    setError(null)
+    api.all({ ordering: 'year' }).then(r => {
       const items = r.data.results || r.data
       const grouped = {}
       items.forEach(m => {

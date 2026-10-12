@@ -12,7 +12,9 @@ export default function Timeline() {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
-    api.list({ ordering: 'year', page_size: 200 }).then(r => {
+    setLoading(true)
+    setError(null)
+    api.all({ ordering: 'year' }).then(r => {
       setData(r.data.results || r.data)
     }).catch(() => setError(t('error_load'))).finally(() => setLoading(false))
   }, [t])

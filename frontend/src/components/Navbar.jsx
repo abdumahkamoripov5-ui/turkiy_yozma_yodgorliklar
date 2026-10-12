@@ -16,6 +16,8 @@ export default function Navbar() {
     { to: '/stats', label: t('nav_stats') },
     { to: '/concordance', label: t('nav_concordance') },
     { to: '/compare', label: t('nav_compare') },
+    { to: '/bibliography', label: t('bibliography_title') },
+    { to: '/glossary', label: t('glossary_title') },
     { to: '/recommended-words', label: t('nav_recommended') },
     { to: '/frequent-words', label: t('nav_frequent') },
     { to: '/submit', label: t('nav_submit') },
@@ -76,7 +78,7 @@ export default function Navbar() {
            style={{ display:'flex', gap:'0.25rem', flexWrap:'wrap', justifyContent:'center',
                      padding:'0.5rem 1rem 0.6rem', borderTop:'1px solid var(--border)' }}>
         {links.map(l => (
-          <Link key={l.to} to={l.to}
+          <Link key={l.to} to={l.to} aria-current={loc.pathname === l.to ? 'page' : undefined}
             className={`nav-link${loc.pathname === l.to ? ' active' : ''}`}
             style={{
               color: loc.pathname === l.to ? 'var(--accent)' : 'var(--text2)',
@@ -95,7 +97,7 @@ export default function Navbar() {
           padding:'0.5rem 1rem',
         }}>
           {links.map(l => (
-            <Link key={l.to} to={l.to}
+            <Link key={l.to} to={l.to} aria-current={loc.pathname === l.to ? 'page' : undefined}
               onClick={() => setOpen(false)}
               style={{
                 display:'block',

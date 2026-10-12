@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
 import Navbar from './components/Navbar'
@@ -21,6 +21,12 @@ const Submit = lazy(() => import('./pages/Submit'))
 const About = lazy(() => import('./pages/About'))
 const Login = lazy(() => import('./pages/Login'))
 
+function RouteScroll() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
+  return null
+}
+
 function Layout() {
   const { theme, lang } = useApp()
 
@@ -34,6 +40,7 @@ function Layout() {
 
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
+      <RouteScroll />
       <Navbar />
       <main>
         <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>

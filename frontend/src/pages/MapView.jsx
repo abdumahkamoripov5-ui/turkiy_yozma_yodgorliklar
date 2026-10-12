@@ -19,18 +19,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 })
 
-async function fetchAll() {
-  let all = []
-  let page = 1
-  while (page <= 50) {
-    const r = await api.list({ page, page_size: 100 })
-    all = all.concat(r.data.results || r.data)
-    if (!r.data.next) break
-    page++
-  }
-  return all
-}
-
 export default function MapView() {
   const { t } = useApp()
   const [items, setItems] = useState([])
@@ -39,8 +27,10 @@ export default function MapView() {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
-    fetchAll()
-      .then(list => {
+    setLoading(true)
+    setError(null)
+    api.all()
+      .then(({ data: list }) => {
         const withCoords = list
           .map(m => ({ m, coord: geocode(m) }))
           .filter(x => x.coord)

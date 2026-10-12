@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 
@@ -8,17 +8,21 @@ export default function Concordance() {
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const searching = useRef(false)
 
   const search = async () => {
-    if (query.trim().length < 2) return
+    if (searching.current || query.trim().length < 2) return
+    searching.current = true
     setLoading(true)
     setError(null)
+    setResults(null)
     try {
       const r = await api.concordance(query.trim())
       setResults(r.data)
     } catch {
       setError(t('error_load'))
     } finally {
+      searching.current = false
       setLoading(false)
     }
   }
@@ -37,7 +41,7 @@ export default function Concordance() {
             onKeyDown={e => e.key === 'Enter' && search()}
             style={{ flex:1 }}
           />
-          <button onClick={search} className="btn btn-primary">
+          <button onClick={search} disabled={loading || query.trim().length < 2} className="btn btn-primary">
             {t('concordance_search')}
           </button>
         </div>

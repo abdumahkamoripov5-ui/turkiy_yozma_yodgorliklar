@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { getLang, setLang as setI18nLang, t } from '../i18n'
 
 const AppContext = createContext(null)
@@ -41,8 +41,15 @@ export function AppProvider({ children }) {
     setUser(null)
   }, [])
 
+  useEffect(() => {
+    window.addEventListener('auth-expired', logout)
+    return () => window.removeEventListener('auth-expired', logout)
+  }, [logout])
+
+  const translate = useCallback((key, vars) => t(key, vars, lang), [lang])
+
   return (
-    <AppContext.Provider value={{ theme, toggleTheme, lang, changeLang, user, login, logout, t }}>
+    <AppContext.Provider value={{ theme, toggleTheme, lang, changeLang, user, login, logout, t: translate }}>
       {children}
     </AppContext.Provider>
   )
