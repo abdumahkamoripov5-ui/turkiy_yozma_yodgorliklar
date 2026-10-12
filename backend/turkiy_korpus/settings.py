@@ -154,6 +154,12 @@ if AWS_STORAGE_BUCKET_NAME:
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL       = None
 
+# Production'da yuklangan fayllar tashqi xotiraga (S3/R2) yozilishi kerak. Aks holda
+# ular Render diskiga tushadi va har deploy'da yo'qoladi.
+if not DEBUG and not AWS_STORAGE_BUCKET_NAME:
+    import warnings
+    warnings.warn("AWS_STORAGE_BUCKET_NAME berilmagan: yuklangan fayllar vaqtinchalik diskka yoziladi.")
+
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -178,6 +184,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL          = '/django-admin/login/'
 LOGIN_REDIRECT_URL = '/django-admin/'
+
+# ── Kesh — konkordans va so'z chastotasi hisobini saqlaydi ───────────────────
+# Bitta jarayon (gunicorn --workers 1) uchun yetarli. Ko'p jarayonli deploy'da Redis kerak.
+CACHES = {
+    'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 'LOCATION': 'korpus'},
+}
 
 # ── Django REST Framework ─────────────────────────────────────────────────────
 REST_FRAMEWORK = {
@@ -210,7 +222,9 @@ REST_FRAMEWORK = {
         # SPA bir sahifada bir necha so'rov yuboradi — 100/hour oddiy foydalanuvchiga ham yetmasdi
         'anon':   '1000/hour',
         'user':   '5000/hour',
-        'submit': '10/hour',   # taklif yuborish (SubmissionCreateView)
+        'submit': '5/hour',    # taklif yuborish (SubmissionCreateView)
+        'search': '120/hour',  # konkordans, so'z chastotasi (og'ir hisob-kitob)
+        'export': '30/hour',   # butun korpusni eksport qilish
         'login':  '10/minute', # parol tanlab ko'rishdan himoya (token olish)
     },
 }
@@ -218,7 +232,8 @@ REST_FRAMEWORK = {
 # ── JWT ───────────────────────────────────────────────────────────────────────
 from datetime import timedelta
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME':  timedelta(hours=8),
+    # Qisqa umr: token o'g'irlansa ham oynasi kichik. Frontend 401 da refresh qiladi.
+    'ACCESS_TOKEN_LIFETIME':  timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
     'ROTATE_REFRESH_TOKENS':  True,
     # Rotatsiyadan keyin eski refresh token darhol bekor qilinadi (aks holda 30 kun ishlaydi)
@@ -241,6 +256,15 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS              = 'DENY'
 REFERRER_POLICY              = 'strict-origin-when-cross-origin'
+# React SPA (/app/) uchun Content-Security-Policy — XSS bo'lsa ham tokenlarni begona domenga
+# yuborishni cheklaydi. Vercel'dagi nusxa frontend/vercel.json da.
+CONTENT_SECURITY_POLICY = (
+    "default-src 'self'; script-src 'self'; "
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+    "font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; "
+    "connect-src 'self' https://*.onrender.com; object-src 'none'; base-uri 'self'; "
+    "form-action 'self'; frame-ancestors 'none'"
+)
 
 SESSION_COOKIE_HTTPONLY      = True
 SESSION_COOKIE_SAMESITE      = 'Lax'

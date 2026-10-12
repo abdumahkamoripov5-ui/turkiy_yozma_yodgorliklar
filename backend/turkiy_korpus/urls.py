@@ -18,7 +18,9 @@ def react_index(request):
     """Serve React SPA index.html. Assets (/app/assets/*) are handled by static()."""
     index = settings.REACT_BUILD_DIR / 'index.html'
     if index.exists():
-        return FileResponse(open(index, 'rb'), content_type='text/html')
+        response = FileResponse(open(index, 'rb'), content_type='text/html')
+        response['Content-Security-Policy'] = settings.CONTENT_SECURITY_POLICY
+        return response
     raise Http404("React build topilmadi. cd frontend && npm run build")
 
 

@@ -1,23 +1,25 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
-import Monuments from './pages/Monuments'
-import Timeline from './pages/Timeline'
-import MapView from './pages/MapView'
-import Scripts from './pages/Scripts'
-import Stats from './pages/Stats'
-import Concordance from './pages/Concordance'
-import Compare from './pages/Compare'
-import Bibliography from './pages/Bibliography'
-import Glossary from './pages/Glossary'
-import RecommendedWords from './pages/RecommendedWords'
-import FrequentWords from './pages/FrequentWords'
-import Submit from './pages/Submit'
-import About from './pages/About'
-import Login from './pages/Login'
+
+// Sahifalar lazy yuklanadi — leaflet (xarita) va boshqa og'ir kodlar faqat kerak bo'lganda olinadi.
+const Monuments = lazy(() => import('./pages/Monuments'))
+const Timeline = lazy(() => import('./pages/Timeline'))
+const MapView = lazy(() => import('./pages/MapView'))
+const Scripts = lazy(() => import('./pages/Scripts'))
+const Stats = lazy(() => import('./pages/Stats'))
+const Concordance = lazy(() => import('./pages/Concordance'))
+const Compare = lazy(() => import('./pages/Compare'))
+const Bibliography = lazy(() => import('./pages/Bibliography'))
+const Glossary = lazy(() => import('./pages/Glossary'))
+const RecommendedWords = lazy(() => import('./pages/RecommendedWords'))
+const FrequentWords = lazy(() => import('./pages/FrequentWords'))
+const Submit = lazy(() => import('./pages/Submit'))
+const About = lazy(() => import('./pages/About'))
+const Login = lazy(() => import('./pages/Login'))
 
 function Layout() {
   const { theme, lang } = useApp()
@@ -34,6 +36,7 @@ function Layout() {
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
       <Navbar />
       <main>
+        <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/monuments" element={<Monuments />} />
@@ -52,6 +55,7 @@ function Layout() {
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </main>
       <Footer />
     </BrowserRouter>

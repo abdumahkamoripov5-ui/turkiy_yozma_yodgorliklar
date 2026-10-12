@@ -36,6 +36,53 @@ class MonumentDetailSerializer(MonumentListSerializer):
         ]
 
 
+# Hujjat turlarining fayl belgisi (magic bytes). Kengaytma o'zgartirilishi mumkin,
+# shuning uchun mazmun ham tekshiriladi.
+_OLE = b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1'   # doc, xls, ppt (eski Office)
+_ZIP = b'PK\x03\x04'                        # docx, xlsx, pptx, odt, ods
+_DOC_SIGNATURES = {
+    'pdf': (b'%PDF-',),
+    'doc': (_OLE,), 'xls': (_OLE,), 'ppt': (_OLE,),
+    'docx': (_ZIP,), 'xlsx': (_ZIP,), 'pptx': (_ZIP,), 'odt': (_ZIP,), 'ods': (_ZIP,),
+    'rtf': (b'{\rtf',),
+}
+
+
+def _looks_like_text(file):
+    head = file.read(4096)
+    file.seek(0)
+    if b'\x00' in head:
+        return False
+    try:
+        head.decode('utf-8')
+    except UnicodeDecodeError:
+        return False
+    return True
+
+
+def _check_content(file, ext, kind):
+    """Fayl mazmuni kengaytmasiga mos kelishini tekshiradi."""
+    from PIL import Image, UnidentifiedImageError
+    try:
+        if kind == 'Rasm':
+            file.seek(0)
+            with Image.open(file) as img:
+                img.verify()  # buzilgan yoki soxta rasmni rad etadi
+            file.seek(0)
+            return
+        if ext == 'txt':
+            ok = _looks_like_text(file)
+        else:
+            file.seek(0)
+            head = file.read(8)
+            file.seek(0)
+            ok = any(head.startswith(sig) for sig in _DOC_SIGNATURES.get(ext, ()))
+    except (UnidentifiedImageError, OSError, SyntaxError, ValueError):
+        ok = False
+    if not ok:
+        raise serializers.ValidationError(f"{kind} fayli mazmuni turiga mos kelmaydi.")
+
+
 def _check_upload(file, allowed_exts, max_mb, kind):
     ext = file.name.rsplit('.', 1)[-1].lower() if '.' in file.name else ''
     if ext not in allowed_exts:
@@ -44,6 +91,7 @@ def _check_upload(file, allowed_exts, max_mb, kind):
         )
     if file.size > max_mb * 1024 * 1024:
         raise serializers.ValidationError(f"{kind} hajmi {max_mb} MB dan oshmasligi kerak.")
+    _check_content(file, ext, kind)
     return file
 
 

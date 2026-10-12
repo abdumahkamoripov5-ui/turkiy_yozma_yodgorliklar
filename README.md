@@ -68,8 +68,10 @@ npm run dev   # http://localhost:5173 — /api so'rovlari 127.0.0.1:8000 ga prox
 | Taklif yuborish | `POST` http://127.0.0.1:8000/api/v2/submit/ |
 | Eksport | http://127.0.0.1:8000/api/v2/export/?format=json\|csv |
 
-`run.sh` lokal dev uchun `admin` / `admin123` akkauntini yaratadi.
-Render'da (`build.sh`) parol `DJANGO_SUPERUSER_PASSWORD` dan olinadi, demo parolli akkauntlar esa bloklanadi.
+`run.sh` birinchi ishga tushirishda `admin` akkauntini yaratadi. Parol `DJANGO_SUPERUSER_PASSWORD` env'dan olinadi, berilmasa tasodifiy yaratiladi va terminalda bir marta ko'rsatiladi.
+Render'da (`build.sh`) parol `DJANGO_SUPERUSER_PASSWORD` dan olinadi, eski demo parolli akkauntlar esa bloklanadi.
+
+**Deploy:** `render.yaml` bo'yicha frontend ham Render'da (`/app/`) beriladi — asosiy manzil shu. Vercel ixtiyoriy: u uchun `frontend/vercel.json` da CSP sarlavhalari bor.
 
 ## Konfiguratsiya
 

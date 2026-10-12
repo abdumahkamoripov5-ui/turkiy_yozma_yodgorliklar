@@ -64,7 +64,12 @@ class Monument(models.Model):
     tags = models.JSONField(default=list, verbose_name="Teglar")
     word_count = models.IntegerField(default=0, verbose_name="So'zlar soni")
     line_count = models.IntegerField(default=0, verbose_name="Qatorlar soni")
-    status = models.CharField(max_length=100, default="Chop etilgan", verbose_name="Holat")
+    STATUS_CHOICES = [
+        ('Chop etilgan', "Chop etilgan"),
+        ('Qoralama', "Qoralama"),
+    ]
+    status = models.CharField(max_length=100, default="Chop etilgan", choices=STATUS_CHOICES,
+                              verbose_name="Holat")
     importance = models.IntegerField(default=3, verbose_name="Ahamiyat (1-5)")
     views = models.IntegerField(default=0, verbose_name="Ko'rishlar soni")
     featured = models.BooleanField(default=False, verbose_name="Tanlangan")

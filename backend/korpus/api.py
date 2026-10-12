@@ -1,3 +1,4 @@
+import hashlib
 import re
 from collections import Counter
 from datetime import timedelta
@@ -9,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, NumberFilter, CharFilter
+from django.core.cache import cache
 from django.db.models import F, Q, Sum, Count
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
@@ -22,8 +24,13 @@ from .serializers import (
     MonumentSubmissionSerializer, SiteSettingsSerializer,
 )
 from .csv_utils import safe_cell
-from .throttling import ScopedRateThrottle
+from .throttling import ScopedRateThrottle, SearchRateThrottle, ExportRateThrottle
+from .signals import content_version
 from .word_tr import WORD_TR
+
+# Kesh muddati (soniya). Yodgorlik o'zgarganda content_version oshadi va kesh eskiradi.
+SEARCH_CACHE_TIMEOUT = 600
+WORDFREQ_CACHE_TIMEOUT = 3600
 
 
 # ── Filters ───────────────────────────────────────────────────────────────────
@@ -77,6 +84,16 @@ class MonumentViewSet(viewsets.ModelViewSet):
         if self.action in ('list', 'featured'):
             return MonumentListSerializer
         return MonumentDetailSerializer
+
+    def get_queryset(self):
+        # Qoralamalar faqat admin uchun, ?include_drafts=1 bilan. Oddiy foydalanuvchi
+        # va saytning o'zi faqat chop etilgan yodgorliklarni ko'radi.
+        qs = Monument.objects.all().order_by('year')
+        user = self.request.user
+        if (self.request.query_params.get('include_drafts') == '1'
+                and user.is_authenticated and user.is_staff):
+            return qs
+        return qs.filter(status='Chop etilgan')
 
     def get_permissions(self):
         if self.action in ('list', 'retrieve', 'featured', 'stats', 'concordance', 'word_frequency'):
@@ -137,11 +154,21 @@ class MonumentViewSet(viewsets.ModelViewSet):
             ],
         })
 
-    @action(detail=False, methods=['get'], url_path='concordance')
+    @action(detail=False, methods=['get'], url_path='concordance',
+            throttle_classes=[SearchRateThrottle])
     def concordance(self, request):
         q = request.query_params.get('q', '').strip()
         if not q or len(q) < 2:
             return Response({'error': "Kamida 2 ta belgi kiriting"}, status=400)
+        cache_key = f'concordance:{content_version()}:{hashlib.sha256(q.encode()).hexdigest()}'
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return Response(cached)
+        data = self._concordance(q)
+        cache.set(cache_key, data, SEARCH_CACHE_TIMEOUT)
+        return Response(data)
+
+    def _concordance(self, q):
         max_results = 200
         results = []
         # re.IGNORECASE — moslik o'rinlari asl matnda hisoblanadi. text.lower() ba'zi
@@ -168,11 +195,30 @@ class MonumentViewSet(viewsets.ModelViewSet):
                         'match':  text[idx:idx_end],
                         'right':  text[idx_end:min(len(text), idx_end + 40)],
                     })
-        return Response({'query': q, 'count': len(results), 'results': results})
+        return {'query': q, 'count': len(results), 'results': results}
 
-    @action(detail=False, methods=['get'], url_path='word-frequency')
+    @action(detail=False, methods=['get'], url_path='word-frequency',
+            throttle_classes=[SearchRateThrottle])
     def word_frequency(self, request):
         """Korpus matnlarida (transliteratsiya) ko'p uchraydigan so'zlar chastotasi."""
+        try:
+            limit = int(request.query_params.get('limit', 100))
+        except (TypeError, ValueError):
+            return Response({'error': "limit butun son bo'lishi kerak"}, status=400)
+        limit = max(1, min(limit, 300))
+
+        cache_key = f'word-frequency:{content_version()}'
+        top = cache.get(cache_key)
+        if top is None:
+            top = self._word_counts().most_common(300)
+            cache.set(cache_key, top, WORDFREQ_CACHE_TIMEOUT)
+        top = top[:limit]
+        return Response({
+            'count': len(top),
+            'results': [{'word': w, 'count': c, 'tr': WORD_TR.get(w)} for w, c in top],
+        })
+
+    def _word_counts(self):
         word_re = re.compile(r"[^\W\d_]+(?:['’ʼʻ][^\W\d_]+)*", re.UNICODE)
         counter = Counter()
         qs = Monument.objects.filter(status='Chop etilgan').exclude(transliteration='')
@@ -181,17 +227,7 @@ class MonumentViewSet(viewsets.ModelViewSet):
                 word = word.lower()
                 if len(word) >= 3:
                     counter[word] += 1
-
-        try:
-            limit = int(request.query_params.get('limit', 100))
-        except (TypeError, ValueError):
-            return Response({'error': "limit butun son bo'lishi kerak"}, status=400)
-        limit = max(1, min(limit, 300))
-        top = counter.most_common(limit)
-        return Response({
-            'count': len(top),
-            'results': [{'word': w, 'count': c, 'tr': WORD_TR.get(w)} for w, c in top],
-        })
+        return counter
 
 
 # ── MonumentSubmission API ────────────────────────────────────────────────────
@@ -242,19 +278,8 @@ class SubmissionCreateView(APIView):
                 recipient_list=[django_settings.ADMIN_EMAIL],
                 fail_silently=True,
             )
-        # Email — foydalanuvchiga
-        send_mail(
-            subject='Taklifingiz qabul qilindi — Turkiy Korpus',
-            message=(
-                f'Assalomu alaykum, {submission.author_name}!\n\n'
-                f'"{submission.title}" nomli taklifingiz qabul qilindi.\n'
-                f'Admin ko\'rib chiqqandan so\'ng saytda ko\'rinadi.\n\n'
-                f'Turkiy Yozma Yodgorliklar Elektron Korpusi'
-            ),
-            from_email=django_settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[submission.author_email],
-            fail_silently=True,
-        )
+        # Muallifga tasdiqlash xati yuborilmaydi: aks holda forma ixtiyoriy manzilga
+        # xat yuboradigan "relay" bo'lib qolardi. Javob sahifada darhol ko'rsatiladi.
 
         return Response({
             'success': True,
@@ -297,6 +322,7 @@ class SiteSettingsView(APIView):
 
 class ExportView(APIView):
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ExportRateThrottle]
 
     def get(self, request):
         import csv

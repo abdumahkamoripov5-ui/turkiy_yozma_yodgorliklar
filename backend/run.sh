@@ -67,12 +67,16 @@ else
 fi
 
 # ── 6. Superuser ──────────────────────────────────────────────────────────────
-"$PY" manage.py shell -c "
+# Parol: DJANGO_SUPERUSER_PASSWORD (env) yoki tasodifiy — kodda hech qachon qattiq yozilmaydi.
+ADMIN_USER="${DJANGO_SUPERUSER_USERNAME:-admin}"
+if ! "$PY" manage.py shell -c "from django.contrib.auth.models import User; import sys; sys.exit(0 if User.objects.filter(is_superuser=True).exists() else 1)" 2>/dev/null; then
+    ADMIN_PASS="${DJANGO_SUPERUSER_PASSWORD:-$("$PY" -c "import secrets; print(secrets.token_urlsafe(12))")}"
+    ADMIN_USER="$ADMIN_USER" ADMIN_PASS="$ADMIN_PASS" "$PY" manage.py shell -c "
+import os
 from django.contrib.auth.models import User
-if not User.objects.filter(is_superuser=True).exists():
-    User.objects.create_superuser('admin', 'admin@korpus.uz', 'admin123')
-    print('CREATED')
-" 2>/dev/null | grep -q "CREATED" && echo -e "${GREEN}✓  Admin yaratildi: admin / admin123${NC}" || true
+User.objects.create_superuser(os.environ['ADMIN_USER'], 'admin@korpus.uz', os.environ['ADMIN_PASS'])
+" && echo -e "${GREEN}✓  Admin yaratildi: ${ADMIN_USER} / ${ADMIN_PASS}${NC}  (parolni saqlang)"
+fi
 
 # ── 7. Port ───────────────────────────────────────────────────────────────────
 PORT="${PORT:-8000}"
@@ -91,7 +95,7 @@ echo -e "  ${YELLOW}⚙️   Admin panel     →  ${BOLD}http://127.0.0.1:${PORT
 echo -e "  ${BLUE}📡  API (barcha)    →  ${BOLD}http://127.0.0.1:${PORT}/api/v2/monuments/${NC}"
 echo -e "  ${BLUE}📊  Statistika API  →  ${BOLD}http://127.0.0.1:${PORT}/api/v2/monuments/stats/${NC}"
 echo ""
-echo -e "  ${YELLOW}👤  Admin login: ${BOLD}admin${NC} / ${BOLD}admin123${NC}  (faqat lokal dev uchun!)"
+echo -e "  ${YELLOW}👤  Admin login: ${BOLD}${ADMIN_USER}${NC}  (parol: DJANGO_SUPERUSER_PASSWORD yoki birinchi ishga tushirishdagi chiqish)"
 echo -e "  ${CYAN}🗄   Baza: ${BOLD}SQLite${NC} (PostgreSQL uchun: export USE_POSTGRES=True)"
 echo ""
 echo -e "${BOLD}${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

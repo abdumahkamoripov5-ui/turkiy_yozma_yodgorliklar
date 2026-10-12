@@ -23,3 +23,21 @@ class UserRateThrottle(ClientIPMixin, throttling.UserRateThrottle):
 
 class ScopedRateThrottle(ClientIPMixin, throttling.ScopedRateThrottle):
     pass
+
+
+class _FixedScopeThrottle(ClientIPMixin, throttling.SimpleRateThrottle):
+    """Tayinlangan scope bo'yicha cheklov. Scope'ni view emas, klassning o'zi belgilaydi."""
+    scope = None
+
+    def get_cache_key(self, request, view):
+        return self.cache_format % {'scope': self.scope, 'ident': self.get_ident(request)}
+
+
+class SearchRateThrottle(_FixedScopeThrottle):
+    """Og'ir qidiruv (konkordans, so'z chastotasi) — settings: 'search'."""
+    scope = 'search'
+
+
+class ExportRateThrottle(_FixedScopeThrottle):
+    """Butun korpusni yuklab olish (eksport) — settings: 'export'."""
+    scope = 'export'
