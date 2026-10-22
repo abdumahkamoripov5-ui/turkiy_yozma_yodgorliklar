@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from .csv_utils import safe_cell
 from .models import Monument, SiteSettings, MonumentSubmission, LoginActivity
+from . import mvp_admin  # noqa: F401
 
 
 # ── Custom actions ─────────────────────────────────────────────────────────────

@@ -10,18 +10,14 @@ export default function Navbar() {
   const links = [
     { to: '/', label: t('nav_home') },
     { to: '/monuments', label: t('nav_monuments') },
-    { to: '/timeline', label: t('nav_timeline') },
-    { to: '/map', label: t('nav_map') },
-    { to: '/scripts', label: t('nav_scripts') },
-    { to: '/stats', label: t('nav_stats') },
-    { to: '/concordance', label: t('nav_concordance') },
-    { to: '/compare', label: t('nav_compare') },
-    { to: '/bibliography', label: t('bibliography_title') },
-    { to: '/glossary', label: t('glossary_title') },
-    { to: '/recommended-words', label: t('nav_recommended') },
-    { to: '/frequent-words', label: t('nav_frequent') },
-    { to: '/submit', label: t('nav_submit') },
-    { to: '/about', label: t('nav_about') },
+    { to: '/library', label: 'Kitobxona' },
+    { to: '/learn', label: 'Bolalar va o‘smirlar' },
+    { to: '/words', label: 'So‘zlar xazinasi' },
+    { to: '/polls', label: 'Ovoz berish' },
+    { to: '/research', label: 'Ilmiy hamkorlik' },
+    { to: '/saved', label: 'Saqlanganlar' },
+    { to: '/sources', label: 'Manbalar' },
+    { to: '/tools', label: 'Tadqiqot vositalari' },
   ]
 
   return (
@@ -33,7 +29,7 @@ export default function Navbar() {
     }}>
       <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', minHeight:'52px', padding:'0.55rem 1rem' }}>
         <Link to="/" style={{ fontWeight:700, fontSize:'1rem', color:'var(--accent)', letterSpacing:'0.02em' }}>
-          𐰴 Turkiy Korpus
+          𐰴 Turkiy Meros
         </Link>
 
         <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
@@ -54,6 +50,7 @@ export default function Navbar() {
           </button>
 
           {/* Auth */}
+          {user?.is_staff && <a href="/django-admin/" className="btn btn-ghost" style={{ fontSize:'0.8rem' }}>Boshqaruv ↗</a>}
           {user ? (
             <button onClick={logout} className="btn btn-outline" style={{ fontSize:'0.8rem', padding:'0.35rem 0.75rem' }}>
               {t('nav_logout')}

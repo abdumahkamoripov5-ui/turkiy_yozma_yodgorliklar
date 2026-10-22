@@ -8,10 +8,17 @@ from django.views.static import serve as serve_file
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from korpus import api as korpus_api
+from korpus import mvp_api
 
 # ── DRF Router ────────────────────────────────────────────────────────────────
 router = DefaultRouter()
 router.register(r'monuments', korpus_api.MonumentViewSet, basename='monument')
+router.register(r'books', mvp_api.BookViewSet, basename='book')
+router.register(r'words', mvp_api.WordViewSet, basename='word')
+router.register(r'lessons', mvp_api.LessonViewSet, basename='lesson')
+router.register(r'polls', mvp_api.PollViewSet, basename='poll')
+router.register(r'research', mvp_api.ResearchViewSet, basename='research')
+router.register(r'sources', mvp_api.SourceViewSet, basename='source')
 
 
 def react_index(request):
@@ -31,6 +38,8 @@ urlpatterns = [
     # ── REST API v2 ───────────────────────────────────────────────────────────
     path('api/v2/', include(router.urls)),
     path('api/v2/auth/token/',         korpus_api.CustomTokenObtainPairView.as_view(), name='token-obtain'),
+    path('api/v2/auth/register/', mvp_api.RegisterView.as_view(), name='register'),
+    path('api/v2/health/', mvp_api.HealthView.as_view(), name='mvp-health'),
     path('api/v2/auth/token/refresh/', TokenRefreshView.as_view(),                     name='token-refresh'),
     path('api/v2/submit/',             korpus_api.SubmissionCreateView.as_view(),       name='v2-submit'),
     path('api/v2/settings/',           korpus_api.SiteSettingsView.as_view(),           name='v2-settings'),
@@ -44,6 +53,7 @@ urlpatterns = [
     re_path(r'^app/assets/(?P<path>.*)$', serve_file,
             {'document_root': settings.REACT_BUILD_DIR / 'assets'}),
     path('app/vite.svg', serve_file, {'document_root': settings.REACT_BUILD_DIR, 'path': 'vite.svg'}),
+    path('app/meros.svg', serve_file, {'document_root': settings.REACT_BUILD_DIR, 'path': 'meros.svg'}),
     re_path(r'^app/(?!assets/).*$', react_index),
 
     # ── Bosh sahifa: saytga yo'naltirish (lokalda /app/, prodda Vercel) ───────

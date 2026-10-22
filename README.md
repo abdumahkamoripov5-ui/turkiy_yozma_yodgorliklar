@@ -1,10 +1,16 @@
 # Turkiy Yozma Yodgorliklar Korpusi
 
+## Turkiy Meros MVP — Windowsda ochish
+
+`MVPni_ochish.cmd` faylini ikki marta bosing. Sayt: `http://127.0.0.1:8000/app/`.
+Yangi kitobxona, yoshga mos darslar, sayt ichidagi video pleyer, ovoz berish va ilmiy ish moderatsiyasi qo‘shildi.
+Ishlatish, administrator kirishi va MVP chegaralari: [MVP qo‘llanmasi](documents/MVP_QOLLANMA.md).
+
 VII–XI asrlardagi turkiy yozma yodgorliklarning elektron korpusi. Orxun, Yenisey, uyg'ur va dastlabki islom davri matnlari — asl yozuv, transliteratsiya va tarjima bilan.
 
 ## Texnologiyalar
 
-- **Backend:** Python · Django 4.2 · Django REST Framework · SimpleJWT
+- **Backend:** Python · Django 5.2 LTS · Django REST Framework · SimpleJWT
 - **Frontend:** React 18 + Vite (Vercel'da yoki Django ostida `/app/`)
 - **Baza:** SQLite (standart) yoki PostgreSQL
 - **Tillar:** o'zbek · rus · ingliz

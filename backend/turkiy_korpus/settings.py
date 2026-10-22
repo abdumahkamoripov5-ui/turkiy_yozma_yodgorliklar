@@ -143,6 +143,8 @@ STORAGES = {
 # AWS_STORAGE_BUCKET_NAME berilsa, fayllar bucket'ga yoziladi.
 # Kalitlar: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY (boto3 env'dan o'zi o'qiydi).
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', '')
+AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL') or None
+AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME') or None
 if AWS_STORAGE_BUCKET_NAME:
     STORAGES['default'] = {'BACKEND': 'storages.backends.s3.S3Storage'}
     AWS_S3_ENDPOINT_URL   = os.environ.get('AWS_S3_ENDPOINT_URL') or None   # R2: https://<id>.r2.cloudflarestorage.com
@@ -161,7 +163,18 @@ if not DEBUG and not AWS_STORAGE_BUCKET_NAME:
     warnings.warn("AWS_STORAGE_BUCKET_NAME berilmagan: yuklangan fayllar vaqtinchalik diskka yoziladi.")
 
 MEDIA_URL  = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = Path(os.environ.get('MEDIA_ROOT', str(BASE_DIR / 'media')))
+MEDIA_UPLOADS_PERSISTENT = bool(os.environ.get('MEDIA_ROOT'))
+# Private research uses a separate non-public bucket or explicitly mounted disk.
+PRIVATE_AWS_STORAGE_BUCKET_NAME = os.environ.get('PRIVATE_AWS_STORAGE_BUCKET_NAME', '')
+PRIVATE_UPLOADS_ROOT = Path(os.environ.get('PRIVATE_UPLOADS_ROOT', str(BASE_DIR / 'private_uploads')))
+PRIVATE_UPLOADS_PERSISTENT = bool(os.environ.get('PRIVATE_UPLOADS_ROOT'))
+if PRIVATE_AWS_STORAGE_BUCKET_NAME and PRIVATE_AWS_STORAGE_BUCKET_NAME == AWS_STORAGE_BUCKET_NAME:
+    raise ImproperlyConfigured('Ilmiy PDF uchun ochiq media bucketidan alohida yopiq bucket kerak.')
+if PRIVATE_UPLOADS_PERSISTENT:
+    _private_path, _public_path = PRIVATE_UPLOADS_ROOT.resolve(), MEDIA_ROOT.resolve()
+    if _private_path == _public_path or _public_path in _private_path.parents:
+        raise ImproperlyConfigured('Yopiq PDF papkasi ommaviy media papkasi ichida bo‘lmasin.')
 
 REACT_BUILD_DIR = BASE_DIR.parent / 'frontend' / 'dist'
 

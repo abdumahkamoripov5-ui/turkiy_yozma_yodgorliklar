@@ -3,7 +3,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import Home from './pages/Home'
+import Home from './pages/MerosHome'
 
 // Sahifalar lazy yuklanadi — leaflet (xarita) va boshqa og'ir kodlar faqat kerak bo'lganda olinadi.
 const Monuments = lazy(() => import('./pages/Monuments'))
@@ -20,6 +20,16 @@ const FrequentWords = lazy(() => import('./pages/FrequentWords'))
 const Submit = lazy(() => import('./pages/Submit'))
 const About = lazy(() => import('./pages/About'))
 const Login = lazy(() => import('./pages/Login'))
+const Library = lazy(() => import('./pages/Library'))
+const Reader = lazy(() => import('./pages/Reader'))
+const Learn = lazy(() => import('./pages/Learn'))
+const Lesson = lazy(() => import('./pages/Lesson'))
+const Polls = lazy(() => import('./pages/Polls'))
+const Words = lazy(() => import('./pages/Words'))
+const Research = lazy(() => import('./pages/Research'))
+const PersonalLibrary = lazy(() => import('./pages/PersonalLibrary'))
+const Sources = lazy(() => import('./pages/Sources'))
+const ResearchTools = lazy(() => import('./pages/ResearchTools'))
 
 function RouteScroll() {
   const { pathname } = useLocation()
@@ -46,6 +56,16 @@ function Layout() {
         <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/library" element={<Library />} />
+          <Route path="/library/:id" element={<Reader />} />
+          <Route path="/learn" element={<Learn />} />
+          <Route path="/learn/:id" element={<Lesson />} />
+          <Route path="/polls" element={<Polls />} />
+          <Route path="/words" element={<Words />} />
+          <Route path="/research" element={<Research />} />
+          <Route path="/saved" element={<PersonalLibrary />} />
+          <Route path="/sources" element={<Sources />} />
+          <Route path="/tools" element={<ResearchTools />} />
           <Route path="/monuments" element={<Monuments />} />
           <Route path="/timeline" element={<Timeline />} />
           <Route path="/map" element={<MapView />} />

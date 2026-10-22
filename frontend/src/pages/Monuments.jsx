@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 import MonumentCard from '../components/MonumentCard'
@@ -22,6 +23,7 @@ const CATEGORIES = [
 
 export default function Monuments() {
   const { t } = useApp()
+  const [searchParams] = useSearchParams()
   const [data, setData] = useState([])
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(1)
@@ -29,7 +31,7 @@ export default function Monuments() {
   const [error, setError] = useState(null)
   const [selected, setSelected] = useState(null)
   const [filters, setFilters] = useState({
-    search: '', script: '', category: '', ordering: 'year', year_min: '', year_max: '',
+    search: searchParams.get('search') || '', script: '', category: '', ordering: 'year', year_min: '', year_max: '',
   })
 
   // Eng so'nggi so'rov raqami — eski (kechikkan) javob yangisining ustidan yozmasin

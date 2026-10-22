@@ -24,6 +24,7 @@ python manage.py migrate
 # Demo matnlarni seed holatiga majburan qaytarish kerak bo'lsa, qo'lda:
 #   python manage.py seed_data --refresh-demo
 python manage.py seed_data
+python manage.py seed_mvp
 
 # Superuser — env'dan (DJANGO_SUPERUSER_*); eski demo parollar bloklanadi
 python manage.py shell <<'PY'

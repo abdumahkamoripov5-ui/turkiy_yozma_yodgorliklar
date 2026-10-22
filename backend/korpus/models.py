@@ -236,3 +236,8 @@ class SiteSettings(models.Model):
 
     def __str__(self):
         return self.site_title
+
+
+from .mvp_models import (  # noqa: E402,F401
+    Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork, SourceLink,
+)

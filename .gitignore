@@ -18,6 +18,8 @@ staticfiles/
 # Yuklangan media fayllar (papka saqlanadi, ichidagilar emas)
 backend/media/*
 !backend/media/.gitkeep
+backend/private_uploads/
+.local/
 
 # ── Maxfiy ma'lumotlar ───────────────────
 .env
