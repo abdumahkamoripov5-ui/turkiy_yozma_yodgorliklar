@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from .csv_utils import safe_cell
-from .models import Monument, SiteSettings, MonumentSubmission, LoginActivity
+from .models import Monument, MonumentLine, SiteSettings, MonumentSubmission, LoginActivity
 from . import mvp_admin  # noqa: F401
 
 
@@ -47,8 +47,15 @@ def export_csv(modeladmin, request, queryset):
 
 # ── Monument Admin ─────────────────────────────────────────────────────────────
 
+class MonumentLineInline(admin.StackedInline):
+    model = MonumentLine
+    extra = 0
+    fields = ['position', 'label', 'original', 'transliteration', 'translation', 'source', 'published']
+
+
 @admin.register(Monument)
 class MonumentAdmin(admin.ModelAdmin):
+    inlines = [MonumentLineInline]
     list_display = [
         'image_preview', 'title', 'year', 'script_badge',
         'category', 'location', 'word_count', 'views_count', 'featured'

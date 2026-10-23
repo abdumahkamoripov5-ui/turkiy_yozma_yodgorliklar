@@ -1,0 +1,38 @@
+export const READING_TRANSLATIONS = {
+  uz: {
+    reading_title: 'Parallel o‘qish', reading_line: 'Satr', reading_source: 'Manba',
+    reading_editorial: 'Ushbu satrlar muharrir tomonidan moslashtirilgan. Har bir satr ostida nashr manbasi berilgan.',
+    reading_automatic: 'Satrlar matndagi qatorlar bo‘yicha avtomatik moslashtirilgan. Bu moslik hali ilmiy tekshiruvdan o‘tmagan; raqamlar asl bitikdagi satr raqamlari emas.',
+    reading_unavailable: 'Satrlar hali moslashtirilmagan. Matnlar alohida ko‘rsatilmoqda; satrlar orasida tasdiqlangan moslik yo‘q.',
+    reading_word_title: 'So‘z izohi', reading_word_hint: 'Transliteratsiya yoki tarjimadagi so‘zni bosing. Lug‘atda mavjud bo‘lsa, izohi va manbasi shu yerda ochiladi.',
+    reading_word_missing: 'Bu so‘z shakli uchun lug‘atda hali izoh yo‘q. O‘zak va qo‘shimchalar avtomatik taxmin qilinmaydi.',
+    reading_dictionary: 'Lug‘atdan qidirish',
+  },
+  ru: {
+    reading_title: 'Параллельное чтение', reading_line: 'Строка', reading_source: 'Источник',
+    reading_editorial: 'Строки сопоставлены редактором. Источник издания указан под каждой строкой.',
+    reading_automatic: 'Строки сопоставлены автоматически по переносам. Соответствие не проверено специалистом; номера не относятся к строкам оригинального памятника.',
+    reading_unavailable: 'Строки ещё не сопоставлены. Тексты показаны отдельно, без подтверждённого соответствия.',
+    reading_word_title: 'Значение слова', reading_word_hint: 'Нажмите на слово в транслитерации или переводе, чтобы увидеть доступное значение и источник.',
+    reading_word_missing: 'Для этой формы слова пока нет словарной статьи. Основа и суффиксы автоматически не определяются.',
+    reading_dictionary: 'Искать в словаре',
+  },
+  en: {
+    reading_title: 'Parallel reading', reading_line: 'Line', reading_source: 'Source',
+    reading_editorial: 'These lines were aligned by an editor. The edition source appears below each line.',
+    reading_automatic: 'Lines are paired automatically by line breaks. This alignment has not been reviewed; numbers are not original inscription line numbers.',
+    reading_unavailable: 'Lines have not been aligned. Texts are shown separately without a verified correspondence.',
+    reading_word_title: 'Word meaning', reading_word_hint: 'Select a word in the transliteration or translation to see its available dictionary meaning and source.',
+    reading_word_missing: 'No dictionary entry is available for this word form yet. Roots and suffixes are not inferred automatically.',
+    reading_dictionary: 'Search the dictionary',
+  },
+  tr: {
+    reading_title: 'Paralel okuma', reading_line: 'Satır', reading_source: 'Kaynak',
+    reading_editorial: 'Bu satırlar editör tarafından eşleştirilmiştir. Her satırın altında yayın kaynağı bulunur.',
+    reading_automatic: 'Satırlar satır sonlarına göre otomatik eşleştirilmiştir. Eşleştirme uzman tarafından doğrulanmamıştır; numaralar özgün yazıtın satır numaraları değildir.',
+    reading_unavailable: 'Satırlar henüz eşleştirilmemiştir. Metinler doğrulanmış bir eşleştirme olmadan ayrı gösterilir.',
+    reading_word_title: 'Sözcük anlamı', reading_word_hint: 'Mevcut sözlük anlamını ve kaynağını görmek için çevriyazıdaki veya çevirideki sözcüğe tıklayın.',
+    reading_word_missing: 'Bu sözcük biçimi için henüz sözlük maddesi yoktur. Kök ve ekler otomatik tahmin edilmez.',
+    reading_dictionary: 'Sözlükte ara',
+  },
+}

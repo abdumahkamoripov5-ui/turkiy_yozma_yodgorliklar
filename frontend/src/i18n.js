@@ -1,3 +1,5 @@
+import { READING_TRANSLATIONS } from './reading-translations'
+
 const TRANSLATIONS = {
   uz: {
     // Nav
@@ -644,6 +646,8 @@ const TRANSLATIONS = {
     not_found_home: "Ana sayfaya",
   },
 }
+
+for (const [lang, labels] of Object.entries(READING_TRANSLATIONS)) Object.assign(TRANSLATIONS[lang], labels)
 
 let currentLang = localStorage.getItem('lang') || 'uz'
 

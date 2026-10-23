@@ -29,10 +29,16 @@ class MonumentDetailSerializer(MonumentListSerializer):
 
     author_email ataylab chiqarilmagan — API ochiq, muallif emaili maxfiy qolishi kerak.
     """
+    reading = serializers.SerializerMethodField()
+
+    def get_reading(self, obj):
+        from .reading import reading_data
+        return reading_data(obj)
+
     class Meta(MonumentListSerializer.Meta):
         fields = MonumentListSerializer.Meta.fields + [
             'significance', 'full_text', 'transliteration', 'translation',
-            'tags', 'created_at', 'updated_at',
+            'tags', 'created_at', 'updated_at', 'reading',
         ]
 
 

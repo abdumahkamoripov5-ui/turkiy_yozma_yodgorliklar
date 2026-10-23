@@ -137,6 +137,33 @@ class Monument(models.Model):
         }
 
 
+class MonumentLine(models.Model):
+    monument = models.ForeignKey(Monument, on_delete=models.CASCADE, related_name='reading_lines')
+    position = models.PositiveIntegerField('Tartib', default=1)
+    label = models.CharField('Satr belgisi', max_length=80, blank=True)
+    original = models.TextField('Asl yozuv', blank=True)
+    transliteration = models.TextField('Transliteratsiya', blank=True)
+    translation = models.TextField('Tarjima', blank=True)
+    source = models.CharField('Nashr / manba va sahifa', max_length=1000, blank=True)
+    published = models.BooleanField('Tekshirilgan va nashr qilingan', default=False)
+
+    class Meta:
+        ordering = ['position', 'id']
+        verbose_name = 'Parallel satr'
+        verbose_name_plural = 'Parallel satrlar'
+        constraints = [models.UniqueConstraint(fields=['monument', 'position'], name='unique_monument_line_position')]
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if not any(value.strip() for value in [self.original, self.transliteration, self.translation]):
+            raise ValidationError('Satrga kamida bitta matn kiriting.')
+        if self.published and not self.source.strip():
+            raise ValidationError({'source': 'Tekshirilgan satr uchun nashr va sahifani ko‘rsating.'})
+
+    def __str__(self):
+        return f'{self.monument}: {self.label or self.position}'
+
+
 class MonumentSubmission(models.Model):
     STATUS_CHOICES = [
         ('pending',  'Kutilmoqda'),

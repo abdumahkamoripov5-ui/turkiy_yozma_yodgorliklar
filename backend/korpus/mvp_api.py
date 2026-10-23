@@ -100,6 +100,22 @@ class WordViewSet(PublicReadOnlyViewSet):
     queryset = WordEntry.objects.filter(published=True)
     serializer_class = WordSerializer
     search_fields = ['word', 'meaning', 'example']
+    throttle_scope = 'search'
+
+    @action(detail=False, methods=['get'], throttle_classes=[ScopedRateThrottle])
+    def lookup(self, request):
+        from .reading import normalize_word
+        query = request.query_params.get('q', '').strip()
+        if not query or len(query) > 100:
+            raise ValidationError({'q': '1–100 belgili so‘z kiriting.'})
+        key = normalize_word(query)
+        matches = []
+        for entry in self.get_queryset().iterator():
+            if normalize_word(entry.word) == key:
+                matches.append(entry)
+                if len(matches) == 20:
+                    break
+        return Response({'query': query, 'results': self.get_serializer(matches, many=True).data})
 
 
 class LessonViewSet(PublicReadOnlyViewSet):

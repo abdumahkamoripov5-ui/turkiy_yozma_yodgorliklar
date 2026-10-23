@@ -3,6 +3,7 @@ import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 import { buildCitations } from '../utils/citation'
 import { formatYear } from '../utils/format'
+import ParallelReading from './ParallelReading'
 
 // Shu sessiyada ochilgan yodgorliklar — ko'rishlar soni har ochilishda emas,
 // bir marta oshsin (StrictMode'dagi ikki marta chaqiruv ham hisoblanmaydi)
@@ -22,7 +23,7 @@ function markViewed(id) {
 export default function MonumentModal({ monument, onClose }) {
   const { t } = useApp()
   const [detail, setDetail] = useState(null)
-  const [tab, setTab] = useState('text')
+  const [tab, setTab] = useState('parallel')
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState('')
   const [error, setError] = useState(false)
@@ -77,6 +78,7 @@ export default function MonumentModal({ monument, onClose }) {
   const data = detail || monument
 
   const tabs = [
+    { key: 'parallel', label: t('reading_title') },
     { key: 'text', label: t('modal_text') },
     { key: 'transliteration', label: t('modal_transliteration') },
     { key: 'translation', label: t('modal_translation') },
@@ -91,7 +93,7 @@ export default function MonumentModal({ monument, onClose }) {
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal" ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="monument-modal-title">
+      <div className={`modal${tab === 'parallel' ? ' modal-reading' : ''}`} ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="monument-modal-title">
         <div className="modal-header">
           <div>
             <h2 id="monument-modal-title" style={{ fontSize:'1.2rem', marginBottom:'0.2rem' }}>{data.title}</h2>
@@ -114,6 +116,8 @@ export default function MonumentModal({ monument, onClose }) {
         <div className="modal-body">
           {loading && <div className="spinner" />}
           {error && <div className="error-msg" role="alert">{t('error_load')}<div><button className="btn btn-outline" onClick={() => setAttempt(a => a + 1)}>{t('retry')}</button></div></div>}
+
+          {!loading && !error && tab === 'parallel' && <ParallelReading key={data.id} monument={data} />}
 
           {!loading && !error && tab === 'text' && (
             <pre style={{ fontFamily:'serif', fontSize:'1rem', lineHeight:1.8, whiteSpace:'pre-wrap', color:'var(--text)' }}>
