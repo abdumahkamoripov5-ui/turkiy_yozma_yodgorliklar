@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/MerosHome'
 import MotionEffects from './components/MotionEffects'
+import { translateMvp } from './mvp/locale'
 
 // Sahifalar lazy yuklanadi — leaflet (xarita) va boshqa og'ir kodlar faqat kerak bo'lganda olinadi.
 const Monuments = lazy(() => import('./pages/Monuments'))
@@ -47,6 +48,8 @@ function Layout() {
 
   useEffect(() => {
     document.documentElement.lang = lang
+    document.title = translateMvp('Turkiy Meros — o‘qing, o‘rganing, kashf eting', lang)
+    document.querySelector('meta[name="description"]')?.setAttribute('content', translateMvp('Turkiy Meros — yozma yodgorliklar, ochiq kitobxona, yoshlar uchun darslar va so‘zlar xazinasi.', lang))
   }, [lang])
 
   return (

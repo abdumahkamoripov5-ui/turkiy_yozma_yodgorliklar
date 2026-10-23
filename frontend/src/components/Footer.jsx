@@ -1,7 +1,10 @@
+import { translateMvp as tr } from '../mvp/locale'
+import { useMerosLocale } from '../mvp/useLocale'
 import { Link } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
 export default function Footer() {
+  useMerosLocale()
   const { t } = useApp()
   return (
     <footer className="site-footer">
@@ -10,18 +13,16 @@ export default function Footer() {
           <div style={{ fontSize:'1.1rem', fontWeight:700, color:'var(--accent)', marginBottom:'0.75rem' }}>
             𐰴 Turkiy Meros
           </div>
-          <p style={{ fontSize:'0.85rem', color:'var(--text2)', lineHeight:1.5 }}>
-            Yozma meros, ochiq kitobxona va o‘rganish makoni. MVPdagi namuna materiallar ilmiy tekshiruvni talab qiladi.
-          </p>
+          <p style={{ fontSize:'0.85rem', color:'var(--text2)', lineHeight:1.5 }}>{tr("Yozma meros, ochiq kitobxona va o‘rganish makoni. MVPdagi namuna materiallar ilmiy tekshiruvni talab qiladi.")}{' '}</p>
         </div>
         <div>
           <div style={{ fontWeight:600, marginBottom:'0.75rem', fontSize:'0.9rem' }}>{t('footer_pages')}</div>
           <div style={{ display:'flex', flexDirection:'column', gap:'0.4rem' }}>
             {[
               ['/monuments', t('nav_monuments')],
-              ['/library', 'Kitobxona'],
-              ['/learn', 'Bolalar va o‘smirlar'],
-              ['/polls', 'Ovoz berish'],
+              ['/library', tr("Kitobxona")],
+              ['/learn', tr("Bolalar va o‘smirlar")],
+              ['/polls', tr("Ovoz berish")],
               ['/timeline', t('nav_timeline')],
               ['/stats', t('nav_stats')],
               ['/about', t('nav_about')],
@@ -46,7 +47,7 @@ export default function Footer() {
         </div>
         <div>
           <div style={{ fontWeight:600, marginBottom:'0.75rem', fontSize:'0.9rem' }}>{t('footer_contact')}</div>
-          <Link to="/research" style={{ fontSize:'0.85rem', color:'var(--text2)' }}>Ilmiy ish yuborish →</Link>
+          <Link to="/research" style={{ fontSize:'0.85rem', color:'var(--text2)' }}>{tr("Ilmiy ish yuborish →")}</Link>
         </div>
       </div>
       <div className="container" style={{ marginTop:'1.5rem', paddingTop:'1rem', borderTop:'1px solid var(--border)', textAlign:'center', fontSize:'0.8rem', color:'var(--text2)' }}>

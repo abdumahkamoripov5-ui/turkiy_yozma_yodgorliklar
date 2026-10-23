@@ -1,8 +1,11 @@
+import { translateMvp as tr } from '../mvp/locale'
+import { useMerosLocale } from '../mvp/useLocale'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
 export default function Navbar() {
+  useMerosLocale()
   const { theme, toggleTheme, lang, changeLang, user, logout, t } = useApp()
   const [open, setOpen] = useState(false)
   const loc = useLocation()
@@ -10,14 +13,14 @@ export default function Navbar() {
   const links = [
     { to: '/', label: t('nav_home') },
     { to: '/monuments', label: t('nav_monuments') },
-    { to: '/library', label: 'Kitobxona' },
-    { to: '/learn', label: 'Bolalar va o‘smirlar' },
-    { to: '/words', label: 'So‘zlar xazinasi' },
-    { to: '/polls', label: 'Ovoz berish' },
-    { to: '/research', label: 'Ilmiy hamkorlik' },
-    { to: '/saved', label: 'Saqlanganlar' },
-    { to: '/sources', label: 'Manbalar' },
-    { to: '/tools', label: 'Tadqiqot vositalari' },
+    { to: '/library', label: tr("Kitobxona") },
+    { to: '/learn', label: tr("Bolalar va o‘smirlar") },
+    { to: '/words', label: tr("So‘zlar xazinasi") },
+    { to: '/polls', label: tr("Ovoz berish") },
+    { to: '/research', label: tr("Ilmiy hamkorlik") },
+    { to: '/saved', label: tr("Saqlanganlar") },
+    { to: '/sources', label: tr("Manbalar") },
+    { to: '/tools', label: tr("Tadqiqot vositalari") },
   ]
 
   return (
@@ -28,29 +31,29 @@ export default function Navbar() {
       zIndex: 100,
     }}>
       <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', minHeight:'52px', padding:'0.55rem 1rem' }}>
-        <Link to="/" className="meros-brand" aria-label="Turkiy Meros — bosh sahifa">
-          <span className="brand-symbol" aria-hidden="true">𐰴</span><span>Turkiy Meros<small>RAQAMLI XAZINA</small></span>
+        <Link to="/" className="meros-brand" aria-label={tr("Turkiy Meros — bosh sahifa")}>
+          <span className="brand-symbol" aria-hidden="true">𐰴</span><span>Turkiy Meros<small>{tr("RAQAMLI XAZINA")}</small></span>
         </Link>
 
         <div className="nav-controls" style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
           {/* Language switcher */}
-          <select value={lang} onChange={e => changeLang(e.target.value)} aria-label="Til / Language"
+          <select data-language-select value={lang} onChange={e => changeLang(e.target.value)} aria-label={tr("Til / Language")}
             style={{ fontSize:'0.8rem', padding:'0.25rem 0.5rem', minHeight:'32px' }}>
             <option value="uz">UZ</option>
             <option value="ru">RU</option>
             <option value="en">EN</option>
-            <option value="tr">TR</option>
+            <option value="tr">TR · Türkçe</option>
           </select>
 
           {/* Theme toggle */}
           <button onClick={toggleTheme} className="btn btn-ghost" style={{ padding:'0.35rem 0.5rem', fontSize:'1.1rem' }}
-            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-            aria-label={theme === 'dark' ? 'Light mode' : 'Dark mode'}>
+            title={theme === 'dark' ? tr("Light mode") : tr("Dark mode")}
+            aria-label={theme === 'dark' ? tr("Light mode") : tr("Dark mode")}>
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
 
           {/* Auth */}
-          {user?.is_staff && <a href="/django-admin/" className="btn btn-ghost nav-staff" style={{ fontSize:'0.8rem' }}>Boshqaruv ↗</a>}
+          {user?.is_staff && <a href="/django-admin/" className="btn btn-ghost nav-staff" style={{ fontSize:'0.8rem' }}>{tr("Boshqaruv ↗")}</a>}
           {user ? (
             <button onClick={logout} className="btn btn-outline" style={{ fontSize:'0.8rem', padding:'0.35rem 0.75rem' }}>
               {t('nav_logout')}
@@ -63,7 +66,7 @@ export default function Navbar() {
 
           {/* Hamburger */}
           <button onClick={() => setOpen(o => !o)} className="btn btn-ghost hamburger"
-            aria-label="Menu" aria-expanded={open}
+            aria-label={tr("Menu")} aria-expanded={open}
             style={{ fontSize:'1.3rem', padding:'0.25rem 0.5rem' }}>
             {open ? '✕' : '☰'}
           </button>

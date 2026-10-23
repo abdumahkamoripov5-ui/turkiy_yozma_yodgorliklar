@@ -1,3 +1,5 @@
+import { translateMvp as tr } from '../mvp/locale'
+import { useMerosLocale } from '../mvp/useLocale'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -5,6 +7,7 @@ const clamp = value => Math.min(1, Math.max(0, value))
 const symbols = ['𐱅𐰇𐰼𐰚', '𐰋𐰃𐰠𐰏𐰀', '𐰉𐰃𐱅𐰃𐰏', '𐰚𐰇𐰠']
 
 export default function StoneJourney({ monuments, onSelect }) {
+  useMerosLocale()
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const section = useRef(null)
@@ -108,12 +111,12 @@ export default function StoneJourney({ monuments, onSelect }) {
   return <section id="stone-journey" ref={section} className={`stone-journey${reduced ? ' journey-reduced' : ''}`} aria-labelledby="journey-title">
     <div className="journey-stage" ref={stage}>
       <div className="journey-sky" aria-hidden="true" /><div className="journey-mountains" aria-hidden="true" />
-      <div className="journey-topbar container"><span><span className="journey-compass" aria-hidden="true">✳</span> TURKIY MEROS / RAQAMLI MUZEY</span><a href="#discover">Bo‘limlarga o‘tish <span aria-hidden="true">↘</span></a></div>
-      <span className="journey-side-label" aria-hidden="true">TOSHGA BITILGAN XOTIRA</span>
-      <div className="journey-intro"><span className="journey-edition"><i /> O‘TMISHGA OCHILGAN ESHIK</span><h1 id="journey-title">Ming yillik meros.<br /><em>Bir qadam yaqinroq.</em></h1><p>Bitiktoshlar orasidan yuring. So‘zlar ortidagi tarixni kashf eting.</p>
-        <form className="journey-search" onSubmit={event => { event.preventDefault(); navigate(`/monuments?search=${encodeURIComponent(query)}`) }}><span aria-hidden="true">⌕</span><input aria-label="Yodgorliklarni qidirish" placeholder="Qaysi bitikni izlayapsiz?" value={query} onChange={event => setQuery(event.target.value)} /><button type="submit">Izlash <span aria-hidden="true">↗</span></button></form>
-        <div className="journey-entry-links"><Link to="/monuments">Yodgorliklar <span aria-hidden="true">↗</span></Link><span aria-hidden="true">/</span><Link to="/library">Kitobxona <span aria-hidden="true">↗</span></Link></div>
-        {!reduced && <div className="journey-scroll-prompt"><span className="journey-scroll-mark" aria-hidden="true">↓</span><span>SCROLL QILING. SAYOHAT BOSHLANADI.</span></div>}
+      <div className="journey-topbar container"><span><span className="journey-compass" aria-hidden="true">✳</span>{' '}{tr("TURKIY MEROS / RAQAMLI MUZEY")}</span><a href="#discover">{tr("Bo‘limlarga o‘tish")}{' '}<span aria-hidden="true">↘</span></a></div>
+      <span className="journey-side-label" aria-hidden="true">{tr("TOSHGA BITILGAN XOTIRA")}</span>
+      <div className="journey-intro"><span className="journey-edition"><i />{' '}{tr("O‘TMISHGA OCHILGAN ESHIK")}</span><h1 id="journey-title">{tr("Ming yillik meros.")}<br /><em>{tr("Bir qadam yaqinroq.")}</em></h1><p>{tr("Bitiktoshlar orasidan yuring. So‘zlar ortidagi tarixni kashf eting.")}</p>
+        <form className="journey-search" onSubmit={event => { event.preventDefault(); navigate(`/monuments?search=${encodeURIComponent(query)}`) }}><span aria-hidden="true">⌕</span><input aria-label={tr("Yodgorliklarni qidirish")} placeholder={tr("Qaysi bitikni izlayapsiz?")} value={query} onChange={event => setQuery(event.target.value)} /><button type="submit">{tr("Izlash")}{' '}<span aria-hidden="true">↗</span></button></form>
+        <div className="journey-entry-links"><Link to="/monuments">{tr("Yodgorliklar")}{' '}<span aria-hidden="true">↗</span></Link><span aria-hidden="true">/</span><Link to="/library">{tr("Kitobxona")}{' '}<span aria-hidden="true">↗</span></Link></div>
+        {!reduced && <div className="journey-scroll-prompt"><span className="journey-scroll-mark" aria-hidden="true">↓</span><span>{tr("SCROLL QILING. SAYOHAT BOSHLANADI.")}</span></div>}
       </div>
       <div className="journey-atmosphere" aria-hidden="true" />
       {!reduced && <div className="journey-viewport" aria-hidden="true"><div className="journey-world" ref={world}>
@@ -128,9 +131,9 @@ export default function StoneJourney({ monuments, onSelect }) {
           <div className="journey-stone-edge edge-left" /><div className="journey-stone-edge edge-right" /><div className="journey-stone-foot" />
         </div>)}
       </div></div>}
-      {!reduced && <div className="journey-end"><span>BU — FAQAT BOSHLANISHI</span><h3>Har bir bitikda<br />yangi bir olam.</h3><Link to="/monuments">Korpusni ochish <span aria-hidden="true">↗</span></Link></div>}
-      {reduced && <div className="journey-static-list">{stones.map(monument => <button type="button" key={monument.id} onClick={() => onSelect(monument)}><span aria-hidden="true">𐰃</span><strong>{monument.title}</strong><span>O‘qish ↗</span></button>)}</div>}
-      <div className="journey-bottom container"><div className="journey-current"><span>YAQINROQ TANISHING</span>{active ? <button type="button" onClick={() => onSelect(active)}>{active.title} <span aria-hidden="true">↗</span></button> : <Link to="/monuments">Yodgorliklar korpusi ↗</Link>}</div><div className="journey-distance"><span>{stones.length ? `${String(current + 1).padStart(2, '0')} / ${String(stones.length).padStart(2, '0')}` : 'SAYOHAT'}<small>Badiiy 3D sayohat</small></span><div><span ref={progressBar} /></div></div></div>
+      {!reduced && <div className="journey-end"><span>{tr("BU — FAQAT BOSHLANISHI")}</span><h3>{tr("Har bir bitikda")}<br />{tr("yangi bir olam.")}</h3><Link to="/monuments">{tr("Korpusni ochish")}{' '}<span aria-hidden="true">↗</span></Link></div>}
+      {reduced && <div className="journey-static-list">{stones.map(monument => <button type="button" key={monument.id} onClick={() => onSelect(monument)}><span aria-hidden="true">𐰃</span><strong>{monument.title}</strong><span>{tr("O‘qish ↗")}</span></button>)}</div>}
+      <div className="journey-bottom container"><div className="journey-current"><span>{tr("YAQINROQ TANISHING")}</span>{active ? <button type="button" onClick={() => onSelect(active)}>{active.title} <span aria-hidden="true">↗</span></button> : <Link to="/monuments">{tr("Yodgorliklar korpusi ↗")}</Link>}</div><div className="journey-distance"><span>{stones.length ? `${String(current + 1).padStart(2, '0')} / ${String(stones.length).padStart(2, '0')}` : tr("SAYOHAT")}<small>{tr("Badiiy 3D sayohat")}</small></span><div><span ref={progressBar} /></div></div></div>
     </div>
   </section>
 }

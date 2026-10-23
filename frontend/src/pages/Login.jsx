@@ -1,3 +1,5 @@
+import { translateMvp as tr } from '../mvp/locale'
+import { useMerosLocale } from '../mvp/useLocale'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { auth } from '../api'
@@ -5,6 +7,7 @@ import { api, errorMessage } from '../mvp/api'
 import { useApp } from '../context/AppContext'
 
 export default function Login() {
+  useMerosLocale()
   const { t, login } = useApp()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -36,7 +39,7 @@ export default function Login() {
     <div className="page" style={{ display:'flex', alignItems:'center', justifyContent:'center' }}>
       <div className="card" style={{ width:'100%', maxWidth:'380px' }}>
         <h2 style={{ marginBottom:'1.5rem', color:'var(--accent)', textAlign:'center' }}>
-          {register ? 'Ro‘yxatdan o‘tish' : t('login_title')}
+          {register ? tr("Ro‘yxatdan o‘tish") : t('login_title')}
         </h2>
         <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
           <div>
@@ -60,10 +63,10 @@ export default function Login() {
           )}
           <button type="submit" className="btn btn-primary" disabled={loading}
             style={{ width:'100%', justifyContent:'center', fontSize:'1rem' }}>
-            {loading ? t('loading') : register ? 'Akkaunt yaratish' : t('login_submit')}
+            {loading ? t('loading') : register ? tr("Akkaunt yaratish") : t('login_submit')}
           </button>
         </form>
-        <button className="meros-text-link" style={{ marginTop: '1rem', width: '100%' }} onClick={() => { setRegister(value => !value); setError(null) }}>{register ? 'Akkauntingiz bormi? Kirish' : 'Akkaunt yo‘qmi? Ro‘yxatdan o‘tish'}</button>
+        <button className="meros-text-link" style={{ marginTop: '1rem', width: '100%' }} onClick={() => { setRegister(value => !value); setError(null) }}>{register ? tr("Akkauntingiz bormi? Kirish") : tr("Akkaunt yo‘qmi? Ro‘yxatdan o‘tish")}</button>
       </div>
     </div>
   )

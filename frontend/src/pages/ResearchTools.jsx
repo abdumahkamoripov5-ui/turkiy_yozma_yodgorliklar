@@ -1,3 +1,5 @@
+import { translateMvp as tr } from '../mvp/locale'
+import { useMerosLocale } from '../mvp/useLocale'
 import { Link } from 'react-router-dom'
 import { PageHeading } from '../mvp/components'
 
@@ -13,5 +15,6 @@ const tools = [
   ['/submit', '＋', 'Yodgorlik taklif qilish', 'Yangi materialni admin tekshiruviga yuboring.'],
 ]
 export default function ResearchTools() {
-  return <div className="container meros-page"><PageHeading eyebrow="ILMIY IZLANISH UCHUN" title="Tadqiqot vositalari">Demodagi foydali korpus imkoniyatlari bir joyda.</PageHeading><div className="meros-paths">{tools.map(([to, icon, title, text]) => <Link className="meros-path" to={to} key={to}><span className="path-symbol" aria-hidden="true">{icon}</span><h2>{title}</h2><p>{text}</p></Link>)}</div></div>
+  useMerosLocale()
+  return <div className="container meros-page"><PageHeading eyebrow={tr("ILMIY IZLANISH UCHUN")} title={tr("Tadqiqot vositalari")}>{tr("Demodagi foydali korpus imkoniyatlari bir joyda.")}</PageHeading><div className="meros-paths">{tools.map(([to, icon, title, text]) => <Link className="meros-path" to={to} key={to}><span className="path-symbol" aria-hidden="true">{icon}</span><h2>{tr(title)}</h2><p>{tr(text)}</p></Link>)}</div></div>
 }
