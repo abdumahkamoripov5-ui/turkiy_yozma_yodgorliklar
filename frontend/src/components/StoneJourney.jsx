@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const clamp = value => Math.min(1, Math.max(0, value))
 const symbols = ['𐱅𐰇𐰼𐰚', '𐰋𐰃𐰠𐰏𐰀', '𐰉𐰃𐱅𐰃𐰏', '𐰚𐰇𐰠']
 
 export default function StoneJourney({ monuments, onSelect }) {
+  const navigate = useNavigate()
+  const [query, setQuery] = useState('')
   const section = useRef(null)
   const world = useRef(null)
   const stage = useRef(null)
@@ -14,6 +16,11 @@ export default function StoneJourney({ monuments, onSelect }) {
   const stones = monuments.slice(0, 8)
   const rows = Math.max(1, Math.ceil(stones.length / 2))
   const travel = rows * 540 + 100
+
+  useEffect(() => {
+    document.documentElement.classList.add('immersive-home')
+    return () => document.documentElement.classList.remove('immersive-home')
+  }, [])
 
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -30,7 +37,8 @@ export default function StoneJourney({ monuments, onSelect }) {
       frame = 0
       if (!section.current || !world.current) return
       const bounds = section.current.getBoundingClientRect()
-      const ratio = clamp(-bounds.top / Math.max(1, bounds.height - innerHeight))
+      const pinTop = parseFloat(getComputedStyle(stage.current).top) || 0
+      const ratio = clamp((pinTop - bounds.top) / Math.max(1, bounds.height - stage.current.offsetHeight))
       if (ratio === previous) return
       previous = ratio
       // Only the camera transform changes per frame; there is no scroll hijacking.
@@ -42,11 +50,20 @@ export default function StoneJourney({ monuments, onSelect }) {
       setCurrent(Math.min(Math.max(0, stones.length - 1), Math.floor(ratio * stones.length)))
     }
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
+    const navbar = document.querySelector('.navbar-blur')
+    const measureNavbar = () => {
+      if (navbar && section.current) section.current.style.setProperty('--museum-nav-height', `${navbar.offsetHeight}px`)
+      schedule()
+    }
+    const resize = 'ResizeObserver' in window ? new ResizeObserver(measureNavbar) : null
+    if (navbar) resize?.observe(navbar)
+    measureNavbar()
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
     update()
     return () => {
       cancelAnimationFrame(frame)
+      resize?.disconnect()
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
     }
@@ -56,8 +73,14 @@ export default function StoneJourney({ monuments, onSelect }) {
   return <section id="stone-journey" ref={section} className={`stone-journey${reduced ? ' journey-reduced' : ''}`} aria-labelledby="journey-title">
     <div className="journey-stage" ref={stage}>
       <div className="journey-sky" aria-hidden="true" /><div className="journey-mountains" aria-hidden="true" />
-      <div className="journey-topbar container"><span><span className="journey-compass" aria-hidden="true">✳</span> BITIKTOSHLAR VODIYSI</span><a href="#discover">Sayohatni o‘tkazish <span aria-hidden="true">↘</span></a></div>
-      <div className="journey-intro"><span>QADAMLARINGIZ — SAHIFALAR ORASIDA</span><h2 id="journey-title">Tarix orasidan<br /><em>yurib o‘ting.</em></h2><p>Pastga aylantiring. Har bir tosh sizga yaqinlashadi.</p><span className="journey-scroll-mark" aria-hidden="true">↓</span></div>
+      <div className="journey-topbar container"><span><span className="journey-compass" aria-hidden="true">✳</span> TURKIY MEROS / RAQAMLI MUZEY</span><a href="#discover">Bo‘limlarga o‘tish <span aria-hidden="true">↘</span></a></div>
+      <span className="journey-side-label" aria-hidden="true">TOSHGA BITILGAN XOTIRA</span>
+      <div className="journey-intro"><span className="journey-edition"><i /> O‘TMISHGA OCHILGAN ESHIK</span><h1 id="journey-title">Ming yillik meros.<br /><em>Bir qadam yaqinroq.</em></h1><p>Bitiktoshlar orasidan yuring. So‘zlar ortidagi tarixni kashf eting.</p>
+        <form className="journey-search" onSubmit={event => { event.preventDefault(); navigate(`/monuments?search=${encodeURIComponent(query)}`) }}><span aria-hidden="true">⌕</span><input aria-label="Yodgorliklarni qidirish" placeholder="Qaysi bitikni izlayapsiz?" value={query} onChange={event => setQuery(event.target.value)} /><button type="submit">Izlash <span aria-hidden="true">↗</span></button></form>
+        <div className="journey-entry-links"><Link to="/monuments">Yodgorliklar <span aria-hidden="true">↗</span></Link><span aria-hidden="true">/</span><Link to="/library">Kitobxona <span aria-hidden="true">↗</span></Link></div>
+        {!reduced && <div className="journey-scroll-prompt"><span className="journey-scroll-mark" aria-hidden="true">↓</span><span>SCROLL QILING. SAYOHAT BOSHLANADI.</span></div>}
+      </div>
+      <div className="journey-atmosphere" aria-hidden="true" />
       {!reduced && <div className="journey-viewport" aria-hidden="true"><div className="journey-world" ref={world}>
         <div className="journey-floor"><div className="journey-trail" /></div>
         {stones.map((monument, index) => <div className={`journey-monument stone-tone-${index % 3}`} key={monument.id} style={{

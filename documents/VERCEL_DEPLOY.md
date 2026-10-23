@@ -19,6 +19,8 @@
 
 Bosh sahifadagi “Bitiktoshlar vodiysi”: scroll kamera chuqurligini boshqaradi, yodgorliklar ikki tomondan yaqinlashib o‘tadi. Boshlanish, o‘rta, yakun va orqaga yurish holatlari desktop/mobilda tekshiriladi. Sayohatni o‘tkazish havolasi bor; kamaytirilgan harakat rejimida yodgorliklar oddiy ro‘yxatga almashadi. Bu badiiy sahna, arxeologik joyning aniq rekonstruksiyasi emas.
 
+Sayohat bosh sahifaning birinchi ekrani sifatida joylashtirildi: bronza/qum rangli yangi kirish, yagona H1, qidiruv va katalog/kitobxona havolalari sahna ichida. Oldingi alohida hero olib tashlandi. Sticky sahna menyuning haqiqiy balandligiga moslashadi; qidiruvning filtrli katalogga o‘tishi ham tekshiriladi.
+
 Brauzer QA: `node frontend/tests/design-browser.mjs`. Desktop, 360/390 px mobil, menyu, 3D boshqaruvi, asinxron kartalarning ochilishi, progress, mavzu almashtirish, sahifalararo o‘tish va kamaytirilgan harakat tekshirildi. Natija `.local/design-qa-report.json`, tasvirlar `.local/design-*.png` ichida. Production tekshiruvi uchun `DESIGN_TEST_URL=https://turkiy-meros.vercel.app/app/` beriladi.
 
 Bir martalik baza tayyorlash: `vercel deploy --prod --build-env VERCEL_INITIALIZE_DATABASE=1`. `bootstrap_vercel` migratsiyalar va cache jadvalini yaratadi; `deploy-data/corpus.json` mavjud va kontent bazasi bo‘sh bo‘lsa import qiladi. Mavjud kontent ustiga yozmaydi. `DJANGO_SUPERUSER_PASSWORD` berilgan va faol superadmin yo‘q bo‘lsa boshlang‘ich admin yaratiladi. Oddiy deploy uchun inicializatsiya flagi berilmaydi.

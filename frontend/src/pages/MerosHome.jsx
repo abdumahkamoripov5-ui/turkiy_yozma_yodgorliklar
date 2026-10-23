@@ -1,10 +1,9 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useRemote, items } from '../mvp/api'
 import { BookCard, LessonCard, RemoteState } from '../mvp/components'
 import MonumentCard from '../components/MonumentCard'
 import MonumentModal from '../components/MonumentModal'
-import RelicScene from '../components/RelicScene'
 import AnimatedNumber from '../components/AnimatedNumber'
 import StoneJourney from '../components/StoneJourney'
 
@@ -15,21 +14,14 @@ const paths = [
 ]
 
 export default function MerosHome() {
-  const navigate = useNavigate()
-  const [query, setQuery] = useState('')
   const [selected, setSelected] = useState(null)
   const featured = useRemote('/monuments/featured/')
   const books = useRemote('/books/?page_size=3')
   const lessons = useRemote('/lessons/?page_size=2')
   const stats = useRemote('/monuments/stats/')
   return <div className="meros-home">
-    <section className="meros-hero"><div className="hero-grid-pattern" aria-hidden="true" /><div className="container meros-hero-grid"><div className="meros-hero-copy"><span className="hero-edition"><span /> O‘TMISHGA YANGI NIGOH</span><h1>Ming yillik so‘z.<br /><em>Cheksiz<br className="hero-title-break" /> kashfiyot.</em></h1><p>Toshga bitilgan tarixdan siz o‘qiydigan ilk sahifagacha. Turkiy xalqlarning merosini birga kashf etamiz.</p>
-      <form className="meros-search" onSubmit={event => { event.preventDefault(); navigate(`/monuments?search=${encodeURIComponent(query)}`) }}><span aria-hidden="true">⌕</span><input aria-label="Yodgorliklarni qidirish" placeholder="Yodgorlik nomini qidiring…" value={query} onChange={event => setQuery(event.target.value)} /><button className="btn btn-primary">Izlash →</button></form>
-      <div className="meros-hero-links"><Link to="/monuments">Merosni kashf etish <span>↗</span></Link><Link to="/library">Kitobni ochish <span>→</span></Link></div>
-      <a className="hero-scroll-hint" href="#stone-journey"><span aria-hidden="true">↓</span> BITIKTOSHLAR ORASIGA KIRING</a>
-    </div><RelicScene /></div><div className="hero-bottom-note container"><span>ASL MATN · TRANSLITERATSIYA · TARJIMA</span><span>Kecha. Bugun. Kelajak.</span></div></section>
-    <div className="meros-stats-strip"><div className="container">{stats.data && <div className="meros-stat"><AnimatedNumber value={stats.data.total} /><span>demo yodgorlik</span></div>}{books.data && <div className="meros-stat"><AnimatedNumber value={books.data.count} /><span>o‘quv kitobi</span></div>}<div className="meros-stat"><strong>∞</strong><span>o‘rganish imkoniyati</span></div><div className="stat-mission"><span className="stat-mission-symbol" aria-hidden="true">✳</span><p>Bir meros.<br /><strong>Minglab yangi hikoyalar.</strong></p></div></div></div>
     <StoneJourney monuments={items(featured.data)} onSelect={setSelected} />
+    <div className="meros-stats-strip"><div className="container">{stats.data && <div className="meros-stat"><AnimatedNumber value={stats.data.total} /><span>demo yodgorlik</span></div>}{books.data && <div className="meros-stat"><AnimatedNumber value={books.data.count} /><span>o‘quv kitobi</span></div>}<div className="meros-stat"><strong>∞</strong><span>o‘rganish imkoniyati</span></div><div className="stat-mission"><span className="stat-mission-symbol" aria-hidden="true">✳</span><p>Bir meros.<br /><strong>Minglab yangi hikoyalar.</strong></p></div></div></div>
     <section id="discover" className="container meros-section"><div className="meros-section-heading"><div><span className="meros-eyebrow">01 / O‘Z YO‘LINGIZNI TANLANG</span><h2>Qiziqishdan boshlanadi.</h2></div><p>O‘qing. O‘rganing. O‘z izingizni qoldiring.</p></div><div className="meros-paths">{paths.map(path => <Link className={`meros-path ${path.color}`} to={path.to} key={path.to}><div className="path-top"><span>YO‘NALISH / {path.number}</span><span className="path-arrow" aria-hidden="true">↗</span></div><span className="path-symbol" aria-hidden="true">{path.icon}</span><h3>{path.title}</h3><p>{path.text}</p><span className="path-cta">Kashf etish <span aria-hidden="true">→</span></span></Link>)}</div></section>
     <section className="meros-library-band"><div className="container meros-section"><div className="meros-section-heading"><div><span className="meros-eyebrow">BIR VAROQDAN BOSHLANADI</span><h2>Bugun nimani o‘qiymiz?</h2></div><Link className="meros-text-link" to="/library">Barcha kitoblar →</Link></div><RemoteState remote={books} empty={!items(books.data).length}><div className="meros-books-grid">{items(books.data).map(book => <BookCard key={book.id} book={book} />)}</div></RemoteState></div></section>
     <section className="container meros-section"><div className="meros-section-heading"><div><span className="meros-eyebrow">QIZIQISH BILIMGA AYLANADI</span><h2>Yosh kashfiyotchilar uchun</h2></div><Link className="meros-text-link" to="/learn">O‘rganish bo‘limi →</Link></div><RemoteState remote={lessons} empty={!items(lessons.data).length}><div className="meros-lessons-grid">{items(lessons.data).map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)}</div></RemoteState></section>

@@ -1,28 +1,50 @@
-.stone-journey { position:relative; height:380vh; background:#111f1b; --journey-lane:300px; }
-.journey-stage { position:sticky; top:0; height:100vh; height:100svh; min-height:600px; overflow:hidden; isolation:isolate; color:#eee8d6; background:#122b24; --journey-progress:0; }
-.journey-sky { position:absolute; inset:0; z-index:-3; background:radial-gradient(ellipse at 50% 42%,#c0a87432,transparent 42%),linear-gradient(#102820 10%,#354333 54%,#16281e 85%); }
-.journey-sky::before { content:''; width:86px; height:86px; background:#d6c997; opacity:.28; position:absolute; left:50%; top:35%; translate:-50% -50%; border-radius:50%; box-shadow:0 0 90px 55px #d6c9971c; }
+.immersive-home { --accent:#89683c; --accent2:#ae8950; --accent3:#6d502b; --accent-rgb:137,104,60; --accent-grad:linear-gradient(110deg,#987744,#6f522f); }
+.immersive-home[data-theme="dark"] { --accent:#dbbd84; --accent2:#ebd5ae; --accent3:#d4b57c; --accent-rgb:219,189,132; }
+.immersive-home .navbar-blur { --accent:#ddc18d; --text:#efe7d4; --text2:#bdb9ab; --border:#ffffff16; --border-strong:#68634b; --bg2:#242720; --bg3:#30352b; background:#151b17f5; }
+.immersive-home .navbar-blur .btn-outline { color:#d9c496; border-color:#a38d5f70; }
+.stone-journey { position:relative; height:380vh; background:#181b15; --journey-lane:340px; --museum-nav-height:110px; }
+.journey-stage { position:sticky; top:var(--museum-nav-height); height:calc(100vh - var(--museum-nav-height)); height:calc(100svh - var(--museum-nav-height)); min-height:480px; overflow:hidden; isolation:isolate; color:#eee8d6; background:#1f241c; --journey-progress:0; }
+.journey-sky { position:absolute; inset:0; z-index:-3; background:radial-gradient(ellipse at 50% 45%,#b48a5147,transparent 50%),linear-gradient(#151c17 0%,#333b2a 45%,#4c4931 65%,#1f271c 100%); }
+.journey-sky::before { content:''; width:120px; height:120px; background:#ebc581; opacity:.32; position:absolute; left:50%; top:41%; translate:-50% -50%; border-radius:50%; box-shadow:0 0 100px 60px #e2b36b24; }
 .journey-sky::after { content:''; position:absolute; inset:0; background-image:radial-gradient(circle,#d7d0b35c .7px,transparent 1px); background-size:93px 79px; mask-image:linear-gradient(#0008,transparent 45%); }
-.journey-mountains { position:absolute; inset:34% -5% 20%; z-index:-2; background:linear-gradient(#1a3028,#1c3228); clip-path:polygon(0 54%,8% 38%,13% 45%,22% 16%,29% 37%,35% 26%,43% 48%,49% 38%,57% 51%,66% 21%,72% 29%,81% 8%,90% 37%,100% 18%,100% 100%,0 100%); opacity:.8; }
-.journey-stage::after { content:''; position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(180deg,#0c201b45,transparent 23%,transparent 65%,#0b1b16 100%),linear-gradient(90deg,#0a1a1528,transparent 30%,transparent 70%,#0a1a1528); }
-.journey-topbar { position:absolute; top:145px; inset-inline:0; display:flex; justify-content:space-between; align-items:center; gap:15px; z-index:5; font-size:.58rem; letter-spacing:.16em; }
+.journey-mountains { position:absolute; inset:39% -5% 15%; z-index:-2; background:linear-gradient(#272f22,#2c3426); clip-path:polygon(0 54%,8% 38%,13% 45%,22% 16%,29% 37%,35% 26%,43% 48%,49% 38%,57% 51%,66% 21%,72% 29%,81% 8%,90% 37%,100% 18%,100% 100%,0 100%); opacity:.75; }
+.journey-stage::after { content:''; position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(180deg,#0f19154d,transparent 28%,transparent 65%,#111a14 100%),linear-gradient(90deg,#0d17174f,transparent 30%,transparent 70%,#0d17174f); }
+.journey-topbar { position:absolute; top:28px; inset-inline:0; display:flex; justify-content:space-between; align-items:center; gap:15px; z-index:5; font-size:.54rem; letter-spacing:.16em; }
 .journey-topbar > span { display:flex; align-items:center; gap:12px; color:#c7b880; }
 .journey-compass { font-size:1.6rem; }
 .journey-topbar a { font-size:.65rem; letter-spacing:0; color:#bec9b7; padding:.5rem 0; }
 .journey-topbar a span { display:inline-block; margin-left:10px; }
 .journey-topbar a:hover { color:#ead6a0; }
-.journey-intro { position:absolute; top:23%; left:50%; width:90%; max-width:660px; translate:-50% 0; text-align:center; z-index:4; transition:opacity .5s,translate .6s; pointer-events:none; }
+.journey-intro { position:absolute; top:17%; left:50%; width:90%; max-width:850px; translate:-50% 0; text-align:center; z-index:4; transition:opacity .5s,translate .6s,visibility .5s; }
 .journey-intro > span:first-child,.journey-end > span { font-size:.54rem; letter-spacing:.22em; color:#cebc8a; }
-.journey-intro h2 { font:400 clamp(2.8rem,5.6vw,5rem)/1.06 var(--font-display); color:#f5f0de; margin:1rem 0; letter-spacing:-.05em; text-shadow:0 6px 30px #0a201a80; }
-.journey-intro h2 em { color:#d3bd88; font-weight:400; }
-.journey-intro p { color:#c0c9b5; font-size:.76rem; line-height:1.8; }
+.journey-intro h1 { font:400 clamp(3rem,5.9vw,5.5rem)/1.06 var(--font-display); color:#f5eedc; margin:1.25rem 0 1.1rem; letter-spacing:-.055em; text-shadow:0 6px 30px #111a1680; }
+.journey-intro h1 em { color:#dbb977; font-weight:400; }
+.journey-intro p { color:#c8c9b6; font-size:.81rem; line-height:1.8; max-width:420px; margin-inline:auto; }
 .journey-scroll-mark { display:grid; place-items:center; margin:1.1rem auto; width:26px; height:37px; border:1px solid #cebc8a50; border-radius:20px; color:#d2c18e; animation:scroll-nudge 2.5s ease-in-out infinite; }
-.journey-stage[data-started="true"] .journey-intro { opacity:0; translate:-50% -25px; }
+.journey-stage[data-started="true"] .journey-intro { opacity:0; visibility:hidden; translate:-50% -25px; pointer-events:none; }
+.journey-edition { display:inline-flex; align-items:center; gap:10px; }
+.journey-edition i { width:5px; height:5px; border-radius:50%; background:#dcbd7c; box-shadow:0 0 0 5px #dcbd7c10; }
+.journey-search { display:flex; align-items:center; gap:13px; width:min(100%,470px); margin:1.4rem auto 0; border:1px solid #bca87a5c; border-radius:6px; background:#16231bd9; padding:6px 6px 6px 17px; backdrop-filter:blur(16px); box-shadow:0 14px 35px #050d1329; }
+.journey-search:focus-within { border-color:#ddbc7d; box-shadow:0 0 0 3px #ddbc7d18; }
+.journey-search > span { color:#d8bb7e; font-size:1.6rem; }
+.journey-search input { border:0; background:transparent; color:#f2ead2; box-shadow:none; min-width:0; width:100%; padding:.6rem 0; font-size:.78rem; }
+.journey-search input::placeholder { color:#b7bdab; }
+.journey-search button { flex-shrink:0; display:flex; gap:18px; align-items:center; border:0; background:#d2b47b; color:#253023; padding:.85rem 1.2rem; border-radius:3px; font-size:.74rem; font-weight:600; cursor:pointer; }
+.journey-search button:hover { background:#e8c88a; }
+.journey-entry-links { display:flex; justify-content:center; align-items:center; gap:18px; margin-top:1rem; color:#7d816a; font-size:.64rem; }
+.journey-entry-links a { color:#d8d5bc; display:inline-flex; gap:12px; }
+.journey-entry-links a:hover { color:#efd399; }
+.journey-entry-links a > span { color:#d1b57d; }
+.journey-scroll-prompt { display:flex; flex-direction:column; align-items:center; margin-top:1.3rem; }
+.journey-scroll-prompt .journey-scroll-mark { margin:0 0 .6rem; }
+.journey-scroll-prompt > span:last-child { font-size:.42rem; letter-spacing:.18em; color:#b8bba5; }
+.journey-side-label { position:absolute; z-index:3; left:30px; top:45%; writing-mode:vertical-rl; font-size:.43rem; letter-spacing:.3em; color:#8a917b; }
+.journey-atmosphere { position:absolute; inset:30% 0 0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at 50% 22%,#d0b27c14,transparent 55%); }
 .journey-viewport { position:absolute; inset:0; perspective:850px; perspective-origin:50% 48%; overflow:hidden; z-index:1; }
 .journey-world { position:absolute; inset:0; transform-style:preserve-3d; will-change:transform; }
-.journey-floor { position:absolute; width:1800px; height:5000px; left:50%; top:calc(50% + 170px); margin-left:-900px; transform-origin:50% 0; transform:translateZ(1400px) rotateX(-90deg); background:repeating-radial-gradient(ellipse at 20% 30%,#7a785028 0 2px,transparent 3px 23px),linear-gradient(90deg,#162a20,#40503a 27%,#5a5a3c 43%,#56573b 57%,#344932 73%,#152c22); border-inline:1px solid #adb08d30; }
-.journey-trail { position:absolute; inset:0 40%; background:repeating-linear-gradient(180deg,transparent 0 130px,#a1a27e14 130px 132px),linear-gradient(90deg,transparent,#c2b68a0d 10% 90%,transparent); border-inline:1px solid #c8bb8a22; }
-.journey-trail::before,.journey-trail::after { content:''; position:absolute; width:1px; top:0; bottom:0; background:#e0c98b1c; }
+.journey-floor { position:absolute; width:1800px; height:5000px; left:50%; top:calc(50% + 170px); margin-left:-900px; transform-origin:50% 0; transform:translateZ(1400px) rotateX(-90deg); background-image:radial-gradient(ellipse at 17% 22%,#c2b28a33 0 2px,transparent 3px),radial-gradient(ellipse at 61% 70%,#141c163d 0 3px,transparent 5px),linear-gradient(90deg,#253022,#4c5136 27%,#716345 43%,#6a6044 57%,#4b5138 73%,#252f22); background-size:47px 65px,83px 71px,100% 100%; border-inline:1px solid #adb08d30; }
+.journey-trail { position:absolute; inset:0 40%; background:linear-gradient(90deg,transparent,#c2b68a14 10% 90%,transparent); border-inline:1px solid #c8bb8a15; }
+.journey-trail::before,.journey-trail::after { content:''; position:absolute; width:1px; top:0; bottom:0; background:#e0c98b0b; }
 .journey-trail::before { left:25%; }.journey-trail::after { right:25%; }
 .journey-monument { position:absolute; width:160px; height:var(--stone-height); left:50%; top:calc(50% + 165px); margin-left:-80px; transform:translate3d(calc(var(--side) * var(--journey-lane)), -100%, var(--depth)) rotateY(var(--stone-yaw)); transform-style:preserve-3d; }
 .journey-stone-front { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 15px 17px; gap:10px; background:radial-gradient(ellipse at 25% 10%,#deceaa66,transparent 65%),repeating-linear-gradient(94deg,#b9a37d0a 0 2px,transparent 2px 6px),linear-gradient(120deg,#b4a17b,#857550); color:#343b2b; border:1px solid #b4a37b; border-radius:65px 65px 8px 8px; transform:translateZ(14px); backface-visibility:hidden; box-shadow:inset 7px 0 12px #f0e0b52b,inset -8px 0 18px #292c2030; }
@@ -40,7 +62,7 @@
 .stone-tone-2 .journey-stone-front { background:radial-gradient(ellipse at 15% 10%,#c4ac8455,transparent 65%),linear-gradient(115deg,#b09a73,#7b6948); }
 .journey-end { position:absolute; inset:30% 5% auto; text-align:center; z-index:4; opacity:0; visibility:hidden; translate:0 20px; pointer-events:none; transition:opacity .7s,translate .7s,visibility .7s; }
 .journey-end h3 { font:400 clamp(2.4rem,4.8vw,4rem)/1.15 var(--font-display); letter-spacing:-.04em; margin:1rem 0 1.7rem; color:#f2ecd7; }
-.journey-end a { display:inline-flex; align-items:center; gap:2rem; padding:.9rem 1.4rem; border:1px solid #d7c58f80; border-radius:30px; color:#e5d29e; background:#203b2a; font-size:.76rem; }
+.journey-end a { display:inline-flex; align-items:center; gap:2rem; padding:.9rem 1.4rem; border:1px solid #d7c58f80; border-radius:4px; color:#e5d29e; background:#2b3423; font-size:.76rem; }
 .journey-stage[data-finished="true"] .journey-end { opacity:1; visibility:visible; translate:0 0; pointer-events:auto; }
 .journey-stage[data-finished="true"] .journey-viewport { opacity:.4; transition:opacity .6s; }
 .journey-bottom { position:absolute; bottom:35px; inset-inline:0; z-index:5; display:flex; justify-content:space-between; align-items:end; gap:1.5rem; }
@@ -60,25 +82,34 @@
 .journey-reduced { height:auto; }
 .journey-reduced .journey-stage { height:auto; min-height:0; padding:2rem 0; position:relative; }
 .journey-reduced .journey-topbar { position:relative; top:auto; }
-.journey-reduced .journey-intro { position:relative; left:auto; top:auto; translate:none; margin:2rem auto; }
+.journey-reduced .journey-stage .journey-intro { position:relative; left:auto; top:auto; translate:none; margin:2rem auto; opacity:1; visibility:visible; pointer-events:auto; }
 .journey-reduced .journey-intro p,.journey-reduced .journey-scroll-mark { display:none; }
 .journey-reduced .journey-bottom { position:relative; bottom:auto; margin-top:2rem; }
 .journey-reduced .journey-distance { display:none; }
+.journey-reduced .journey-side-label { display:none; }
+.journey-reduced .journey-intro p { display:block; }
 @media (max-width:900px) {
-  .journey-topbar { top:95px; }
+  .journey-topbar { top:24px; }
   .stone-journey { --journey-lane:245px; }
 }
 @media (max-width:600px) {
-  .stone-journey { height:330vh; --journey-lane:170px; }
-  .journey-stage { min-height:540px; }
-  .journey-topbar { top:83px; font-size:.46rem; letter-spacing:.1em; }
+  .stone-journey { height:330vh; --journey-lane:205px; --museum-nav-height:60px; }
+  .journey-stage { min-height:500px; }
+  .journey-topbar { top:20px; font-size:.43rem; letter-spacing:.08em; }
   .journey-topbar a { font-size:.54rem; }
   .journey-topbar a span { margin-left:3px; }
   .journey-compass { font-size:1.2rem; }
-  .journey-intro { top:25%; }
-  .journey-intro h2 { font-size:3rem; }
+  .journey-intro { top:18%; }
+  .journey-intro h1 { font-size:clamp(2.5rem,9vw,3.5rem); margin:1.1rem 0; }
   .journey-intro > span:first-child { font-size:.43rem; }
   .journey-intro p { font-size:.68rem; max-width:250px; margin:auto; }
+  .journey-search { gap:9px; padding-left:12px; margin-top:1.2rem; }
+  .journey-search input { font-size:.71rem; }
+  .journey-search button { font-size:.67rem; gap:10px; padding:.8rem .9rem; }
+  .journey-entry-links { font-size:.59rem; }
+  .journey-scroll-prompt { margin-top:1.3rem; }
+  .journey-scroll-prompt > span:last-child { font-size:.36rem; }
+  .journey-side-label { display:none; }
   .journey-viewport { perspective:600px; perspective-origin:50% 48%; }
   .journey-monument { width:125px; height:calc(var(--stone-height) * .85); margin-left:-62.5px; top:calc(50% + 135px); }
   .journey-stone-front { gap:7px; padding:27px 10px 13px; border-radius:54px 54px 6px 6px; }
