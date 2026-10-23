@@ -14,6 +14,9 @@ export default function MotionEffects() {
     let observer
     let mutation
     let frame = 0
+    let scrollDistance = 1
+    let wasScrolled = null
+    let previousProgress = -1
     const observed = new WeakSet()
     const revealAll = () => main.querySelectorAll('.motion-reveal').forEach(node => node.classList.add('is-visible'))
     const connect = () => {
@@ -47,18 +50,24 @@ export default function MotionEffects() {
     }
     const updateProgress = () => {
       frame = 0
-      const distance = document.documentElement.scrollHeight - window.innerHeight
-      const ratio = distance > 0 ? Math.min(1, Math.max(0, window.scrollY / distance)) : 0
-      if (progress.current) progress.current.style.transform = `scaleX(${ratio})`
-      document.documentElement.classList.toggle('page-scrolled', window.scrollY > 24)
+      const ratio = scrollDistance > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollDistance)) : 0
+      if (progress.current && previousProgress !== ratio) progress.current.style.transform = `scaleX(${ratio})`
+      previousProgress = ratio
+      const scrolled = window.scrollY > 24
+      if (scrolled !== wasScrolled) document.documentElement.classList.toggle('page-scrolled', scrolled)
+      wasScrolled = scrolled
     }
     const schedule = () => { if (!frame) frame = requestAnimationFrame(updateProgress) }
+    const measure = () => {
+      scrollDistance = document.documentElement.scrollHeight - window.innerHeight
+      schedule()
+    }
     connect()
-    updateProgress()
+    measure()
     preference.addEventListener('change', connect)
     window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
-    const resize = 'ResizeObserver' in window ? new ResizeObserver(schedule) : null
+    window.addEventListener('resize', measure)
+    const resize = 'ResizeObserver' in window ? new ResizeObserver(measure) : null
     resize?.observe(main)
     return () => {
       observer?.disconnect()
@@ -67,7 +76,7 @@ export default function MotionEffects() {
       cancelAnimationFrame(frame)
       preference.removeEventListener('change', connect)
       window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
+      window.removeEventListener('resize', measure)
       revealAll()
     }
   }, [pathname])

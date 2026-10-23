@@ -33,39 +33,74 @@ export default function StoneJourney({ monuments, onSelect }) {
     if (reduced) return undefined
     let frame = 0
     let previous = -1
-    const update = () => {
+    let previousIndex = -1
+    let previousStarted = null
+    let previousFinished = null
+    let visualProgress = -1
+    let lastTime = 0
+    let needsMeasure = true
+    let navbarHeight = -1
+    const geometry = { start: 0, range: 1 }
+    const navbar = document.querySelector('.navbar-blur')
+    const update = (time = performance.now()) => {
       frame = 0
       if (!section.current || !world.current) return
-      const bounds = section.current.getBoundingClientRect()
-      const pinTop = parseFloat(getComputedStyle(stage.current).top) || 0
-      const ratio = clamp((pinTop - bounds.top) / Math.max(1, bounds.height - stage.current.offsetHeight))
+      // Geometry is measured only on resize/content changes, never on ordinary scroll frames.
+      if (needsMeasure) {
+        const height = navbar?.offsetHeight || 0
+        if (height !== navbarHeight) {
+          section.current.style.setProperty('--museum-nav-height', `${height}px`)
+          navbarHeight = height
+        }
+        geometry.start = section.current.getBoundingClientRect().top + window.scrollY - height
+        geometry.range = Math.max(1, section.current.offsetHeight - stage.current.offsetHeight)
+        needsMeasure = false
+      }
+      const target = clamp((window.scrollY - geometry.start) / geometry.range)
+      const delta = lastTime && time - lastTime < 100 ? time - lastTime : 16.67
+      lastTime = time
+      visualProgress = visualProgress < 0 ? target : visualProgress + (target - visualProgress) * (1 - Math.exp(-delta / 55))
+      if (Math.abs(target - visualProgress) < 0.0001) visualProgress = target
+      const ratio = visualProgress
+      if (ratio !== target) frame = requestAnimationFrame(update)
       if (ratio === previous) return
       previous = ratio
-      // Only the camera transform changes per frame; there is no scroll hijacking.
+      // Two compositor transforms per frame; React and scene attributes change at boundaries only.
       world.current.style.transform = `translateZ(${(ratio * travel).toFixed(2)}px)`
-      stage.current.style.setProperty('--journey-progress', ratio)
-      stage.current.dataset.finished = ratio > 0.94 ? 'true' : 'false'
-      stage.current.dataset.started = ratio > 0.07 ? 'true' : 'false'
+      const finished = ratio > 0.94
+      const started = ratio > 0.07
+      if (finished !== previousFinished) {
+        stage.current.dataset.finished = String(finished)
+        previousFinished = finished
+      }
+      if (started !== previousStarted) {
+        stage.current.dataset.started = String(started)
+        previousStarted = started
+      }
       if (progressBar.current) progressBar.current.style.transform = `scaleX(${ratio})`
-      setCurrent(Math.min(Math.max(0, stones.length - 1), Math.floor(ratio * stones.length)))
+      const index = Math.min(Math.max(0, stones.length - 1), Math.floor(ratio * stones.length))
+      if (index !== previousIndex) {
+        previousIndex = index
+        setCurrent(index)
+      }
     }
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
-    const navbar = document.querySelector('.navbar-blur')
-    const measureNavbar = () => {
-      if (navbar && section.current) section.current.style.setProperty('--museum-nav-height', `${navbar.offsetHeight}px`)
+    const invalidate = () => {
+      needsMeasure = true
       schedule()
     }
-    const resize = 'ResizeObserver' in window ? new ResizeObserver(measureNavbar) : null
+    const resize = 'ResizeObserver' in window ? new ResizeObserver(invalidate) : null
     if (navbar) resize?.observe(navbar)
-    measureNavbar()
+    resize?.observe(section.current)
+    resize?.observe(stage.current)
     window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
+    window.addEventListener('resize', invalidate)
     update()
     return () => {
       cancelAnimationFrame(frame)
       resize?.disconnect()
       window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
+      window.removeEventListener('resize', invalidate)
     }
   }, [reduced, stones.length, travel])
 

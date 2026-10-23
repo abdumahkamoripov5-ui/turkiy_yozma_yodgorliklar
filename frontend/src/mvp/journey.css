@@ -1,6 +1,6 @@
 .immersive-home { --accent:#89683c; --accent2:#ae8950; --accent3:#6d502b; --accent-rgb:137,104,60; --accent-grad:linear-gradient(110deg,#987744,#6f522f); }
 .immersive-home[data-theme="dark"] { --accent:#dbbd84; --accent2:#ebd5ae; --accent3:#d4b57c; --accent-rgb:219,189,132; }
-.immersive-home .navbar-blur { --accent:#ddc18d; --text:#efe7d4; --text2:#bdb9ab; --border:#ffffff16; --border-strong:#68634b; --bg2:#242720; --bg3:#30352b; background:#151b17f5; }
+.immersive-home .navbar-blur { --accent:#ddc18d; --text:#efe7d4; --text2:#bdb9ab; --border:#ffffff16; --border-strong:#68634b; --bg2:#242720; --bg3:#30352b; background:#151b17; backdrop-filter:none; -webkit-backdrop-filter:none; }
 .immersive-home .navbar-blur .btn-outline { color:#d9c496; border-color:#a38d5f70; }
 .stone-journey { position:relative; height:380vh; background:#181b15; --journey-lane:340px; --museum-nav-height:110px; }
 .journey-stage { position:sticky; top:var(--museum-nav-height); height:calc(100vh - var(--museum-nav-height)); height:calc(100svh - var(--museum-nav-height)); min-height:480px; overflow:hidden; isolation:isolate; color:#eee8d6; background:#1f241c; --journey-progress:0; }
@@ -24,7 +24,7 @@
 .journey-stage[data-started="true"] .journey-intro { opacity:0; visibility:hidden; translate:-50% -25px; pointer-events:none; }
 .journey-edition { display:inline-flex; align-items:center; gap:10px; }
 .journey-edition i { width:5px; height:5px; border-radius:50%; background:#dcbd7c; box-shadow:0 0 0 5px #dcbd7c10; }
-.journey-search { display:flex; align-items:center; gap:13px; width:min(100%,470px); margin:1.4rem auto 0; border:1px solid #bca87a5c; border-radius:6px; background:#16231bd9; padding:6px 6px 6px 17px; backdrop-filter:blur(16px); box-shadow:0 14px 35px #050d1329; }
+.journey-search { display:flex; align-items:center; gap:13px; width:min(100%,470px); margin:1.4rem auto 0; border:1px solid #bca87a5c; border-radius:6px; background:#16231bf5; padding:6px 6px 6px 17px; box-shadow:0 14px 35px #050d1329; }
 .journey-search:focus-within { border-color:#ddbc7d; box-shadow:0 0 0 3px #ddbc7d18; }
 .journey-search > span { color:#d8bb7e; font-size:1.6rem; }
 .journey-search input { border:0; background:transparent; color:#f2ead2; box-shadow:none; min-width:0; width:100%; padding:.6rem 0; font-size:.78rem; }
@@ -42,7 +42,7 @@
 .journey-atmosphere { position:absolute; inset:30% 0 0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at 50% 22%,#d0b27c14,transparent 55%); }
 .journey-viewport { position:absolute; inset:0; perspective:850px; perspective-origin:50% 48%; overflow:hidden; z-index:1; }
 .journey-world { position:absolute; inset:0; transform-style:preserve-3d; will-change:transform; }
-.journey-floor { position:absolute; width:1800px; height:5000px; left:50%; top:calc(50% + 170px); margin-left:-900px; transform-origin:50% 0; transform:translateZ(1400px) rotateX(-90deg); background-image:radial-gradient(ellipse at 17% 22%,#c2b28a33 0 2px,transparent 3px),radial-gradient(ellipse at 61% 70%,#141c163d 0 3px,transparent 5px),linear-gradient(90deg,#253022,#4c5136 27%,#716345 43%,#6a6044 57%,#4b5138 73%,#252f22); background-size:47px 65px,83px 71px,100% 100%; border-inline:1px solid #adb08d30; }
+.journey-floor { position:absolute; width:1400px; height:4200px; left:50%; top:calc(50% + 170px); margin-left:-700px; transform-origin:50% 0; transform:translateZ(1400px) rotateX(-90deg); background-image:radial-gradient(ellipse at 17% 22%,#c2b28a33 0 2px,transparent 3px),radial-gradient(ellipse at 61% 70%,#141c163d 0 3px,transparent 5px),linear-gradient(90deg,#253022,#4c5136 27%,#716345 43%,#6a6044 57%,#4b5138 73%,#252f22); background-size:47px 65px,83px 71px,100% 100%; border-inline:1px solid #adb08d30; }
 .journey-trail { position:absolute; inset:0 40%; background:linear-gradient(90deg,transparent,#c2b68a14 10% 90%,transparent); border-inline:1px solid #c8bb8a15; }
 .journey-trail::before,.journey-trail::after { content:''; position:absolute; width:1px; top:0; bottom:0; background:#e0c98b0b; }
 .journey-trail::before { left:25%; }.journey-trail::after { right:25%; }

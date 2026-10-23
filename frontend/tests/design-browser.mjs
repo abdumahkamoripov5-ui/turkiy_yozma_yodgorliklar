@@ -73,6 +73,42 @@ try {
   await evaluate(`scrollTo({top:window.journeyTop + window.journeyRange * .2,behavior:'instant'})`)
   await waitFor(`document.querySelector('.journey-stage').dataset.finished === 'false'`)
   report.push('Scroll drives the pinned 3D camera forward and backward; end state passed')
+  if (process.env.DESIGN_PERF === '1') {
+    await command('Performance.enable')
+    await command('Emulation.setCPUThrottlingRate', { rate: 4 })
+    await evaluate(`scrollTo({top:window.journeyTop + window.journeyRange * .02,behavior:'instant'})`)
+    await new Promise(resolve => setTimeout(resolve, 300))
+    const before = await command('Performance.getMetrics')
+    const sample = await evaluate(`(async () => {
+      const section = document.querySelector('#stone-journey'), stage = document.querySelector('.journey-stage');
+      const originalBounds = Element.prototype.getBoundingClientRect, originalStyle = window.getComputedStyle;
+      const sample = {geometryReads:0,stageAttributeWrites:0,frames:[]};
+      Element.prototype.getBoundingClientRect = function(...args) { if (this === section) sample.geometryReads++; return originalBounds.apply(this,args); };
+      window.getComputedStyle = function(node,...args) { if (node === stage) sample.geometryReads++; return originalStyle.call(this,node,...args); };
+      const observer = new MutationObserver(records => { sample.stageAttributeWrites += records.length });
+      observer.observe(stage,{attributes:true});
+      let last;
+      try {
+        for (let index=0;index<100;index++) {
+          await new Promise(resolve => requestAnimationFrame(time => { if(last) sample.frames.push(time-last); last=time; resolve(); }));
+          scrollTo({top:window.journeyTop + window.journeyRange*(.03 + index/100*.85),behavior:'instant'});
+        }
+        await new Promise(resolve => requestAnimationFrame(resolve));
+      } finally { Element.prototype.getBoundingClientRect = originalBounds; window.getComputedStyle = originalStyle; observer.disconnect(); }
+      const sorted = [...sample.frames].sort((a,b)=>a-b);
+      return {geometryReads:sample.geometryReads,stageAttributeWrites:sample.stageAttributeWrites,p95FrameMs:Math.round(sorted[Math.floor(sorted.length*.95)]*100)/100,frames:sample.frames.length};
+    })()`)
+    const after = await command('Performance.getMetrics')
+    const metric = (result,name) => result.metrics.find(item => item.name === name)?.value || 0
+    for (const name of ['LayoutCount','RecalcStyleCount','ScriptDuration','TaskDuration']) sample[name] = metric(after,name)-metric(before,name)
+    await command('Emulation.setCPUThrottlingRate', { rate: 1 })
+    if (process.env.DESIGN_PERF_LABEL !== 'before') {
+      assert.equal(sample.geometryReads, 0, 'Scroll frames must use cached scene geometry')
+      assert.ok(sample.stageAttributeWrites < 10, 'Scene attributes should change only at section boundaries')
+    }
+    await writeFile(new URL(`../../.local/journey-performance-${process.env.DESIGN_PERF_LABEL || 'latest'}.json`, import.meta.url), JSON.stringify(sample,null,2))
+    console.log('Scroll performance (4x CPU throttle):',JSON.stringify(sample))
+  }
   await evaluate(`document.querySelector('.meros-library-band').scrollIntoView({behavior:'instant',block:'center'})`)
   await waitFor(`Array.from(document.querySelectorAll('.meros-book-card')).every(node => node.classList.contains('is-visible'))`)
   await new Promise(resolve => setTimeout(resolve, 1100))
