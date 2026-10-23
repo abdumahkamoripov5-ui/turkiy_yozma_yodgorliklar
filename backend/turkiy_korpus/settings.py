@@ -298,6 +298,7 @@ CONTENT_SECURITY_POLICY = (
     "default-src 'self'; script-src 'self'; "
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
     "font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; "
+    "media-src 'self' https: blob:; "
     "connect-src 'self' https://*.onrender.com; object-src 'none'; base-uri 'self'; "
     "form-action 'self'; frame-ancestors 'none'"
 )

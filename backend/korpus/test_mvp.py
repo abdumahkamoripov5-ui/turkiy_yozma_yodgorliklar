@@ -160,6 +160,10 @@ class MvpTests(TestCase):
         self.assertTrue(response.data['mvp'])
         self.assertIn('release', response.data)
 
+    def test_spa_policy_allows_videos_from_external_media_storage(self):
+        from django.conf import settings
+        self.assertIn("media-src 'self' https: blob:;", settings.CONTENT_SECURITY_POLICY)
+
     @override_settings(DEBUG=False, PRIVATE_AWS_STORAGE_BUCKET_NAME='', PRIVATE_UPLOADS_PERSISTENT=False)
     def test_production_pdf_requires_persistent_private_storage(self):
         self.api.force_authenticate(self.user)

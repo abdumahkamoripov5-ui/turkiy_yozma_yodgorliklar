@@ -55,7 +55,7 @@ test('failed refresh clears user state and announces session expiry', async () =
   storage.set('is_staff', 'true')
   let expired = false
   window.addEventListener('auth-expired', () => { expired = true }, { once: true })
-  axios.defaults.adapter = async () => { throw new Error('Invalid refresh') }
+  axios.defaults.adapter = async () => { throw { response: { status: 401 } } }
   api.defaults.adapter = async config => { throw { config, response: { status: 401 } } }
   await assert.rejects(api.get('/private'))
   assert.equal(storage.size, 0)
@@ -66,4 +66,29 @@ test('transport errors without request config preserve the original error', asyn
   const original = new Error('Transport setup failed')
   api.defaults.adapter = async () => { throw original }
   await assert.rejects(api.get('/broken'), error => error === original)
+})
+
+test('temporary refresh outage preserves the session and allows a later retry', async () => {
+  storage.set('access_token', 'expired')
+  storage.set('refresh_token', 'valid-refresh')
+  storage.set('username', 'reader')
+  axios.defaults.adapter = async () => { throw new Error('Network unavailable') }
+  api.defaults.adapter = async config => {
+    if (config.headers.Authorization === 'Bearer expired') throw { config, response: { status: 401 } }
+    return reply(config, 'recovered')
+  }
+  await assert.rejects(api.get('/private'))
+  assert.equal(storage.get('refresh_token'), 'valid-refresh')
+  assert.equal(storage.get('username'), 'reader')
+  axios.defaults.adapter = async config => reply(config, { access: 'recovered-access' })
+  assert.equal((await api.get('/private')).data, 'recovered')
+  storage.clear()
+})
+
+test('expired access token without refresh clears stale login state', async () => {
+  storage.set('access_token', 'expired')
+  storage.set('username', 'reader')
+  api.defaults.adapter = async config => { throw { config, response: { status: 401 } } }
+  await assert.rejects(api.get('/private'))
+  assert.equal(storage.size, 0)
 })

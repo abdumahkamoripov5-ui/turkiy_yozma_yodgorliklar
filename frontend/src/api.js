@@ -16,6 +16,13 @@ api.interceptors.request.use(cfg => {
 
 let refreshRequest = null
 
+function expireSession() {
+  for (const key of ['access_token', 'refresh_token', 'username', 'is_staff']) {
+    localStorage.removeItem(key)
+  }
+  window.dispatchEvent(new Event('auth-expired'))
+}
+
 // Concurrent 401 responses share one refresh so token rotation cannot race.
 // Auto-refresh on 401
 api.interceptors.response.use(
@@ -39,13 +46,12 @@ api.interceptors.response.use(
           const access = await refreshRequest
           orig.headers.Authorization = `Bearer ${access}`
           return api(orig)
-        } catch {
-          localStorage.removeItem('access_token')
-          localStorage.removeItem('refresh_token')
-          localStorage.removeItem('username')
-          localStorage.removeItem('is_staff')
-          window.dispatchEvent(new Event('auth-expired'))
+        } catch (refreshError) {
+          // A temporary outage does not invalidate a refresh token.
+          if ([400, 401, 403].includes(refreshError.response?.status)) expireSession()
         }
+      } else if (localStorage.getItem('access_token')) {
+        expireSession()
       }
     }
 
