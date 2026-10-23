@@ -101,7 +101,7 @@ if _DATABASE_URL:
     # Render avtomatik beradigan DATABASE_URL
     import dj_database_url
     DATABASES = {
-        'default': dj_database_url.parse(_DATABASE_URL, conn_max_age=0 if IS_VERCEL else 600, ssl_require=True)
+        'default': dj_database_url.parse(_DATABASE_URL, conn_max_age=60 if IS_VERCEL else 600, conn_health_checks=True, ssl_require=True)
     }
 elif _USE_POSTGRES:
     DATABASES = {

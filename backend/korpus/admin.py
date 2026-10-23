@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.db.models import Sum
+from django.db.models import Sum, Count, Q
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
@@ -150,13 +150,14 @@ class MonumentAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         qs = self.get_queryset(request)
-        agg = qs.aggregate(total_views=Sum('views'), total_words=Sum('word_count'))
+        agg = qs.aggregate(total_views=Sum('views'), total_words=Sum('word_count'),
+                           total=Count('pk'), featured_count=Count('pk', filter=Q(featured=True)))
         extra_context['summary_html'] = mark_safe(
             f'<div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap">'
             f'<div style="background:#161b22;border:1px solid #30363d;border-radius:10px;'
             f'padding:12px 20px;min-width:120px">'
             f'<div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:1px">Jami</div>'
-            f'<div style="font-size:24px;font-weight:800;color:#d4a944">{qs.count()}</div></div>'
+            f'<div style="font-size:24px;font-weight:800;color:#d4a944">{agg["total"]}</div></div>'
             f'<div style="background:#161b22;border:1px solid #30363d;border-radius:10px;'
             f'padding:12px 20px;min-width:120px">'
             f'<div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:1px">Ko\'rishlar</div>'
@@ -169,7 +170,7 @@ class MonumentAdmin(admin.ModelAdmin):
             f'padding:12px 20px;min-width:120px">'
             f'<div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:1px">Tanlangan</div>'
             f'<div style="font-size:24px;font-weight:800;color:#f85149">'
-            f'{qs.filter(featured=True).count()}</div></div>'
+            f'{agg["featured_count"]}</div></div>'
             f'</div>'
         )
         return super().changelist_view(request, extra_context=extra_context)

@@ -64,6 +64,7 @@ try {
  await capture('admin-form-desktop');
  await command('Page.navigate',{url:origin+'/django-admin/'});
  await waitFor("document.querySelector('.studio-metric')");
+ await waitFor("document.readyState === 'complete' && document.querySelector('#toggle-nav-sidebar').hasAttribute('aria-expanded')");
  await command('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true,'Admin mobile overflow');
  await capture('admin-dashboard-mobile');

@@ -49,9 +49,12 @@ def dashboard_data(request):
         if not model_admin.has_view_or_change_permission(request):
             continue
         queryset = model_admin.get_queryset(request).filter(status='pending')
-        result['pending'] += queryset.count()
+        pending = queryset.count()
+        result['pending'] += pending
+        if not pending:
+            continue
         opts = model._meta
-        for item in queryset.order_by(date_field)[:4]:
+        for item in queryset.only('pk', 'title', date_field).order_by(date_field)[:4]:
             result['queue'].append({'title': item.title, 'kind': kind, 'date': getattr(item, date_field),
                 'url': reverse(f'admin:{opts.app_label}_{opts.model_name}_change', args=[item.pk])})
     result['queue'] = sorted(result['queue'], key=lambda row: row['date'])[:5]

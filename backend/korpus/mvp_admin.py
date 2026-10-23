@@ -61,6 +61,7 @@ class PollAdmin(admin.ModelAdmin):
 
 @admin.register(PollVote)
 class VoteAdmin(admin.ModelAdmin):
+    list_select_related = ['poll', 'option', 'user']
     list_display = ['poll', 'option', 'user', 'created_at']
     readonly_fields = ['poll', 'option', 'user', 'created_at']
 

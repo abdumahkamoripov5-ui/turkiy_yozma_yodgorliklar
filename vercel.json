@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["fra1"],
   "services": {
     "web": {
       "root": ".",
@@ -8,6 +9,7 @@
       "buildCommand": "python scripts/build_vercel.py",
       "functions": {
         "app.py": {
+          "regions": ["fra1"],
           "maxDuration": 60,
           "includeFiles": "{frontend/dist/**,backend/templates/**}",
           "excludeFiles": "{.local/**,documents/**,deploy-data/**,frontend/node_modules/**,backend/media/**,backend/private_uploads/**,backend/db.sqlite3}"
