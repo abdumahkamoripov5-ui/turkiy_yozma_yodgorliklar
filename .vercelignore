@@ -1,0 +1,13 @@
+.git
+.local
+.venv
+**/__pycache__
+**/node_modules
+frontend/dist
+backend/staticfiles
+backend/media
+backend/private_uploads
+**/db.sqlite3
+documents
+.env*
+**/.env*

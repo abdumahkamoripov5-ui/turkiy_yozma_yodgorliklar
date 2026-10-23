@@ -278,4 +278,5 @@ class HealthView(APIView):
                 cursor.fetchone()
         except Exception:
             return Response({'status': 'unavailable'}, status=503)
-        return Response({'status': 'ok', 'mvp': True, 'release': os.environ.get('RENDER_GIT_COMMIT', 'local')})
+        return Response({'status': 'ok', 'mvp': True, 'release': (
+            os.environ.get('VERCEL_GIT_COMMIT_SHA') or os.environ.get('RENDER_GIT_COMMIT', 'local'))})

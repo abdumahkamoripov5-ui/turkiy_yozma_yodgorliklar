@@ -4,6 +4,7 @@ import { AppProvider, useApp } from './context/AppContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/MerosHome'
+import MotionEffects from './components/MotionEffects'
 
 // Sahifalar lazy yuklanadi — leaflet (xarita) va boshqa og'ir kodlar faqat kerak bo'lganda olinadi.
 const Monuments = lazy(() => import('./pages/Monuments'))
@@ -51,6 +52,7 @@ function Layout() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
       <RouteScroll />
+      <MotionEffects />
       <Navbar />
       <main>
         <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>

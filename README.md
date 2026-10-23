@@ -1,10 +1,14 @@
 # Turkiy Yozma Yodgorliklar Korpusi
 
+Frontend va backendni bitta Vercel loyihasiga joylash: [Vercel yo‘riqnomasi](documents/VERCEL_DEPLOY.md).
+
 ## Turkiy Meros MVP — Windowsda ochish
 
 `MVPni_ochish.cmd` faylini ikki marta bosing. Sayt: `http://127.0.0.1:8000/app/`.
 Yangi kitobxona, yoshga mos darslar, sayt ichidagi video pleyer, ovoz berish va ilmiy ish moderatsiyasi qo‘shildi.
 Ishlatish, administrator kirishi va MVP chegaralari: [MVP qo‘llanmasi](documents/MVP_QOLLANMA.md).
+
+MVP qamrovi va domen/serverning oylik-yillik smetasi (23.10.2026): [hujjat](documents/MVP_va_xarajatlar_2026-10-23.md), [Word nusxasi](documents/MVP_va_xarajatlar_2026-10-23.docx).
 
 VII–XI asrlardagi turkiy yozma yodgorliklarning elektron korpusi. Orxun, Yenisey, uyg'ur va dastlabki islom davri matnlari — asl yozuv, transliteratsiya va tarjima bilan.
 

@@ -7,6 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Standart — xavfsiz (DEBUG o'chiq). Lokal dev'da run.sh DJANGO_DEBUG=True qo'yadi.
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+IS_VERCEL = os.environ.get('VERCEL') == '1'
 
 # Production'da DJANGO_SECRET_KEY env'dan beriladi; dev kaliti faqat DEBUG rejimida.
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
@@ -23,6 +24,11 @@ ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1 localhost').sp
 _render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if _render_host and _render_host not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(_render_host)
+
+_vercel_hosts = [os.environ.get(key, '') for key in (
+    'VERCEL_URL', 'VERCEL_PROJECT_PRODUCTION_URL', 'VERCEL_BRANCH_URL'
+)] if IS_VERCEL else []
+ALLOWED_HOSTS.extend(host for host in _vercel_hosts if host and host not in ALLOWED_HOSTS)
 
 # Mijoz IP'si qaysi sarlavhadan olinadi (korpus/ip.py). Bo'sh — REMOTE_ADDR.
 # Render Cloudflare ortida: True-Client-IP'ni Cloudflare doim qayta yozadi (soxtalashtirib bo'lmaydi).
@@ -78,17 +84,24 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'turkiy_korpus.wsgi.application'
+WSGI_APPLICATION = 'app.application' if IS_VERCEL else 'turkiy_korpus.wsgi.application'
 
 # ── Database — Render DATABASE_URL > PostgreSQL > SQLite ─────────────────────
-_DATABASE_URL = os.environ.get('DATABASE_URL')
+_DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 _USE_POSTGRES = os.environ.get('USE_POSTGRES', 'False') == 'True'
+if IS_VERCEL and not _DATABASE_URL:
+    raise ImproperlyConfigured('Vercel uchun tashqi PostgreSQL DATABASE_URL kerak; SQLite doimiy emas.')
+if IS_VERCEL and not _DATABASE_URL.startswith(('postgres://', 'postgresql://')):
+    raise ImproperlyConfigured(
+        'DATABASE_URL qiymati Render External Database URL bo‘lishi kerak '
+        '(postgres:// yoki postgresql:// bilan boshlanadi). Qiymat xavfsizlik uchun chiqarilmadi.'
+    )
 
 if _DATABASE_URL:
     # Render avtomatik beradigan DATABASE_URL
     import dj_database_url
     DATABASES = {
-        'default': dj_database_url.parse(_DATABASE_URL, conn_max_age=600, ssl_require=True)
+        'default': dj_database_url.parse(_DATABASE_URL, conn_max_age=0 if IS_VERCEL else 600, ssl_require=True)
     }
 elif _USE_POSTGRES:
     DATABASES = {
@@ -203,6 +216,16 @@ LOGIN_REDIRECT_URL = '/django-admin/'
 CACHES = {
     'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 'LOCATION': 'korpus'},
 }
+if IS_VERCEL:
+    CACHES['default'] = {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'korpus_cache',
+    }
+    # Serverless filesystem is read-only outside /tmp; this is temporary, not media storage.
+    FILE_UPLOAD_TEMP_DIR = '/tmp'
+    MEDIA_UPLOADS_PERSISTENT = False
+    PRIVATE_UPLOADS_PERSISTENT = False
+    STORAGES['staticfiles'] = {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'}
 
 # ── Django REST Framework ─────────────────────────────────────────────────────
 REST_FRAMEWORK = {
@@ -291,6 +314,7 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [o for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split() if o]
 if _render_host:
     CSRF_TRUSTED_ORIGINS.append(f'https://{_render_host}')
+CSRF_TRUSTED_ORIGINS.extend(f'https://{host}' for host in _vercel_hosts if host)
 
 # ── Production xavfsizlik (faqat DEBUG=False bo'lganda) ───────────────────────
 if not DEBUG:

@@ -28,11 +28,11 @@ export default function Navbar() {
       zIndex: 100,
     }}>
       <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', minHeight:'52px', padding:'0.55rem 1rem' }}>
-        <Link to="/" style={{ fontWeight:700, fontSize:'1rem', color:'var(--accent)', letterSpacing:'0.02em' }}>
-          𐰴 Turkiy Meros
+        <Link to="/" className="meros-brand" aria-label="Turkiy Meros — bosh sahifa">
+          <span className="brand-symbol" aria-hidden="true">𐰴</span><span>Turkiy Meros<small>RAQAMLI XAZINA</small></span>
         </Link>
 
-        <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
+        <div className="nav-controls" style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
           {/* Language switcher */}
           <select value={lang} onChange={e => changeLang(e.target.value)} aria-label="Til / Language"
             style={{ fontSize:'0.8rem', padding:'0.25rem 0.5rem', minHeight:'32px' }}>
@@ -50,7 +50,7 @@ export default function Navbar() {
           </button>
 
           {/* Auth */}
-          {user?.is_staff && <a href="/django-admin/" className="btn btn-ghost" style={{ fontSize:'0.8rem' }}>Boshqaruv ↗</a>}
+          {user?.is_staff && <a href="/django-admin/" className="btn btn-ghost nav-staff" style={{ fontSize:'0.8rem' }}>Boshqaruv ↗</a>}
           {user ? (
             <button onClick={logout} className="btn btn-outline" style={{ fontSize:'0.8rem', padding:'0.35rem 0.75rem' }}>
               {t('nav_logout')}

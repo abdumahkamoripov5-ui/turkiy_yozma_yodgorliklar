@@ -25,6 +25,7 @@ backend/private_uploads/
 .env
 .env.local
 .env.*.local
+.vercel/
 
 # ── Node / frontend ──────────────────────
 node_modules/
@@ -39,3 +40,7 @@ Thumbs.db
 .vscode/
 *.swp
 *~
+
+.vercel
+.env*
+deploy-data/

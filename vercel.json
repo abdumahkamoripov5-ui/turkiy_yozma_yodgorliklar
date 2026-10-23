@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "web": {
+      "root": ".",
+      "framework": "django",
+      "entrypoint": "app:application",
+      "buildCommand": "python scripts/build_vercel.py",
+      "functions": {
+        "app.py": {
+          "maxDuration": 60,
+          "includeFiles": "{frontend/dist/**,backend/templates/**}",
+          "excludeFiles": "{.local/**,documents/**,deploy-data/**,frontend/node_modules/**,backend/media/**,backend/private_uploads/**,backend/db.sqlite3}"
+        }
+      }
+    }
+  },
+  "rewrites": [{ "source": "/(.*)", "destination": { "service": "web" } }]
+}
