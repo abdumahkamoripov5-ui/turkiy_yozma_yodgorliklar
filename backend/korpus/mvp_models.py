@@ -79,6 +79,11 @@ class Book(models.Model):
 
 class WordEntry(models.Model):
     word = models.CharField('So‘z', max_length=100)
+    pronunciation = models.CharField('Talaffuz', max_length=200, blank=True)
+    equivalents = models.JSONField('Turkiy muqobillar (til: so‘z)', default=dict, blank=True)
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                                    on_delete=models.SET_NULL, related_name='reviewed_words')
+    reviewed_at = models.DateTimeField('Ekspert tekshirgan vaqt', null=True, blank=True)
     meaning = models.TextField('Ma’nosi')
     example = models.TextField('Misol', blank=True)
     source = models.CharField('Manba', max_length=500)
@@ -96,6 +101,13 @@ class WordEntry(models.Model):
 
     def __str__(self):
         return self.word
+
+    def clean(self):
+        super().clean()
+        if not isinstance(self.equivalents, dict) or any(
+                not isinstance(k, str) or not isinstance(v, str)
+                for k, v in self.equivalents.items()):
+            raise ValidationError({'equivalents': 'Til va so‘z juftliklarini kiriting: {"uz": "...", "tr": "..."}.'})
 
 
 class MediaLesson(models.Model):
@@ -169,7 +181,8 @@ class WordPoll(models.Model):
             winner = ranked[0]
             word = WordEntry.objects.create(
                 word=winner.word, meaning=winner.explanation, source=f'Jamoatchilik tanlovi: {poll.title}',
-                status='community', campaign=poll, published=True)
+                status='community', campaign=poll, published=True,
+                reviewed_by=user, reviewed_at=timezone.now())
             poll.approved_by, poll.approved_at = user, timezone.now()
             poll.save(update_fields=['approved_by', 'approved_at'])
             return word

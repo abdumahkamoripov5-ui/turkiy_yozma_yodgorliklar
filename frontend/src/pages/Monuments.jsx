@@ -30,6 +30,10 @@ export default function Monuments() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selected, setSelected] = useState(null)
+  useEffect(() => {
+    const id = searchParams.get('monument')
+    if (id && /^\d+$/.test(id)) setSelected({ id: Number(id) })
+  }, [searchParams])
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '', script: '', category: '', ordering: 'year', year_min: '', year_max: '',
   })

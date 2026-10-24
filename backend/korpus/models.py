@@ -250,6 +250,19 @@ class LoginActivity(models.Model):
         return f"{who} — {self.get_event_display()} ({self.timestamp:%d.%m.%Y %H:%M})"
 
 
+class UserActivity(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True)
+    method = models.CharField(max_length=10)
+    path = models.CharField(max_length=250)
+    status = models.PositiveSmallIntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        verbose_name = 'Foydalanuvchi faoliyati'
+        verbose_name_plural = 'Foydalanuvchi faoliyati'
+
+
 class SiteSettings(models.Model):
     site_title = models.CharField(max_length=255, default="Turkiy Yozma Yodgorliklar Korpusi")
     site_subtitle = models.CharField(max_length=500, default="VII–XI asrlardagi turkiy yozma merosning elektron to'plami")

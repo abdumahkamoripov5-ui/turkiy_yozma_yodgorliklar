@@ -9,7 +9,7 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(() => {
     const u = localStorage.getItem('username')
     const s = localStorage.getItem('is_staff')
-    return u ? { username: u, is_staff: s === 'true' } : null
+    return u && localStorage.getItem('access_token') ? { username: u, is_staff: s === 'true' } : null
   })
 
   const toggleTheme = useCallback(() => {

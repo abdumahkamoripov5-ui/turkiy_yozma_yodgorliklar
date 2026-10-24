@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'korpus.middleware.ActivityMiddleware',
     'corsheaders.middleware.CorsMiddleware',          # CORS — birinchi bo'lishi shart
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',     # statik fayllar (production)

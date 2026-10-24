@@ -20,9 +20,15 @@ from .throttling import ScopedRateThrottle
 
 
 class WordSerializer(serializers.ModelSerializer):
+    reviewed = serializers.SerializerMethodField()
+
+    def get_reviewed(self, obj):
+        return obj.reviewed_at is not None
+
     class Meta:
         model = WordEntry
-        fields = ['id', 'word', 'meaning', 'example', 'source', 'status', 'monument', 'campaign']
+        fields = ['id', 'word', 'pronunciation', 'meaning', 'example', 'source', 'status',
+                  'monument', 'campaign', 'equivalents', 'reviewed']
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -79,7 +85,7 @@ class PollSerializer(serializers.ModelSerializer):
 
 
 class PublicReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     search_fields = ['title', 'description']
 
 
@@ -101,6 +107,24 @@ class WordViewSet(PublicReadOnlyViewSet):
     serializer_class = WordSerializer
     search_fields = ['word', 'meaning', 'example']
     throttle_scope = 'search'
+
+    @action(detail=True, methods=['get'])
+    def occurrences(self, request, pk=None):
+        from .models import Monument
+        from .reading import reading_data, normalize_word
+        import re
+        entry = self.get_object()
+        key = normalize_word(entry.word)
+        results = []
+        monuments = Monument.objects.filter(status='Chop etilgan').prefetch_related('reading_lines')
+        for monument in monuments:
+            for line in reading_data(monument)['lines']:
+                words = re.findall(r"[^\W\d_]+(?:['’‘ʻʼʹ-][^\W\d_]+)*", line['transliteration'], re.UNICODE)
+                if key in [normalize_word(word) for word in words]:
+                    results.append({'monument': monument.pk, 'title': monument.title, **line})
+                    if len(results) >= 100:
+                        return Response({'results': results, 'truncated': True})
+        return Response({'results': results, 'truncated': False})
 
     @action(detail=False, methods=['get'], throttle_classes=[ScopedRateThrottle])
     def lookup(self, request):
@@ -279,6 +303,8 @@ class RegisterView(APIView):
         except IntegrityError:
             raise ValidationError({'username': 'Bu foydalanuvchi nomi band.'})
         token = RefreshToken.for_user(user)
+        from .signals import record
+        record(request, 'login', user=user)
         return Response({'username': user.username, 'is_staff': False,
                          'access': str(token.access_token), 'refresh': str(token)}, status=201)
 

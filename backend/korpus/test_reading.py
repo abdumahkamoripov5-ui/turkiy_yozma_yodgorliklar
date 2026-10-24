@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from rest_framework.test import APIClient
@@ -10,6 +11,7 @@ class ParallelReadingTests(TestCase):
     def setUp(self):
         cache.clear()
         self.api = APIClient()
+        self.api.force_authenticate(get_user_model().objects.create_user('reader'))
         self.monument = Monument.objects.create(
             title='Reading fixture', year=732, location='Test', script='koktürk', category='bitiglar',
             description='Test', full_text='original one\noriginal two',
@@ -51,6 +53,7 @@ class ParallelReadingTests(TestCase):
             line.full_clean()
 
     def test_public_api_cannot_write_editorial_lines(self):
+        self.api.force_authenticate(None)
         response = self.api.patch(f'/api/v2/monuments/{self.monument.pk}/',
             {'reading': {'lines': []}}, format='json')
         self.assertEqual(response.status_code, 401)

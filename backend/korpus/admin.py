@@ -435,6 +435,23 @@ class LoginActivityAdmin(admin.ModelAdmin):
 
 # ── Admin site customization ───────────────────────────────────────────────────
 
+from .models import UserActivity
+
+
+@admin.register(UserActivity)
+class UserActivityAdmin(admin.ModelAdmin):
+    list_display = ['user', 'method', 'path', 'status', 'timestamp']
+    list_filter = ['method', 'status', 'timestamp']
+    search_fields = ['user__username', 'path']
+    date_hierarchy = 'timestamp'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
 admin.site.site_header  = "Turkiy Korpus — Boshqaruv Paneli"
 admin.site.site_title   = "Turkiy Korpus Admin"
 admin.site.index_title  = "Yodgorliklar boshqaruvi"

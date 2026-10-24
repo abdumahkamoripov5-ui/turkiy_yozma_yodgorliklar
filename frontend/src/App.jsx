@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import Home from './pages/MerosHome'
+import Home from './pages/Landing'
+import './mvp/landing.css'
 import MotionEffects from './components/MotionEffects'
-import { translateMvp } from './mvp/locale'
 
 // Sahifalar lazy yuklanadi — leaflet (xarita) va boshqa og'ir kodlar faqat kerak bo'lganda olinadi.
 const Monuments = lazy(() => import('./pages/Monuments'))
@@ -22,14 +22,9 @@ const FrequentWords = lazy(() => import('./pages/FrequentWords'))
 const Submit = lazy(() => import('./pages/Submit'))
 const About = lazy(() => import('./pages/About'))
 const Login = lazy(() => import('./pages/Login'))
-const Library = lazy(() => import('./pages/Library'))
-const Reader = lazy(() => import('./pages/Reader'))
-const Learn = lazy(() => import('./pages/Learn'))
-const Lesson = lazy(() => import('./pages/Lesson'))
 const Polls = lazy(() => import('./pages/Polls'))
 const Words = lazy(() => import('./pages/Words'))
-const Research = lazy(() => import('./pages/Research'))
-const PersonalLibrary = lazy(() => import('./pages/PersonalLibrary'))
+const WordArticle = lazy(() => import('./pages/WordArticle'))
 const Sources = lazy(() => import('./pages/Sources'))
 const ResearchTools = lazy(() => import('./pages/ResearchTools'))
 
@@ -48,8 +43,8 @@ function Layout() {
 
   useEffect(() => {
     document.documentElement.lang = lang
-    document.title = translateMvp('Turkiy Meros — o‘qing, o‘rganing, kashf eting', lang)
-    document.querySelector('meta[name="description"]')?.setAttribute('content', translateMvp('Turkiy Meros — yozma yodgorliklar, ochiq kitobxona, yoshlar uchun darslar va so‘zlar xazinasi.', lang))
+    document.title = { uz: 'Turkiy Meros — matnlar va so‘zlar', ru: 'Turkiy Meros — тексты и слова', en: 'Turkiy Meros — texts and words' }[lang] || 'Turkiy Meros'
+    document.querySelector('meta[name="description"]')?.setAttribute('content', { uz: 'Tarixiy matnlar, lug‘at va tadqiqot hamjamiyati. Bepul ro‘yxatdan o‘ting.', ru: 'Исторические тексты, словарь и исследовательское сообщество. Бесплатная регистрация.', en: 'Historical texts, a dictionary and a research community. Join for free.' }[lang] || 'Turkiy Meros')
   }, [lang])
 
   return (
@@ -61,14 +56,10 @@ function Layout() {
         <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/library" element={<Library />} />
-          <Route path="/library/:id" element={<Reader />} />
-          <Route path="/learn" element={<Learn />} />
-          <Route path="/learn/:id" element={<Lesson />} />
+          <Route element={<RequireAuth />}>
           <Route path="/polls" element={<Polls />} />
           <Route path="/words" element={<Words />} />
-          <Route path="/research" element={<Research />} />
-          <Route path="/saved" element={<PersonalLibrary />} />
+          <Route path="/words/:id" element={<WordArticle />} />
           <Route path="/sources" element={<Sources />} />
           <Route path="/tools" element={<ResearchTools />} />
           <Route path="/monuments" element={<Monuments />} />
@@ -84,6 +75,7 @@ function Layout() {
           <Route path="/frequent-words" element={<FrequentWords />} />
           <Route path="/submit" element={<Submit />} />
           <Route path="/about" element={<About />} />
+          </Route>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -92,6 +84,12 @@ function Layout() {
       <Footer />
     </BrowserRouter>
   )
+}
+
+function RequireAuth() {
+  const { user } = useApp()
+  const location = useLocation()
+  return user ? <Outlet /> : <Navigate replace to={`/login?next=${encodeURIComponent(location.pathname + location.search + location.hash)}`} />
 }
 
 function NotFound() {

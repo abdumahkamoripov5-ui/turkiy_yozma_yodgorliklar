@@ -13,11 +13,8 @@ from korpus import mvp_api
 # ── DRF Router ────────────────────────────────────────────────────────────────
 router = DefaultRouter()
 router.register(r'monuments', korpus_api.MonumentViewSet, basename='monument')
-router.register(r'books', mvp_api.BookViewSet, basename='book')
 router.register(r'words', mvp_api.WordViewSet, basename='word')
-router.register(r'lessons', mvp_api.LessonViewSet, basename='lesson')
 router.register(r'polls', mvp_api.PollViewSet, basename='poll')
-router.register(r'research', mvp_api.ResearchViewSet, basename='research')
 router.register(r'sources', mvp_api.SourceViewSet, basename='source')
 
 

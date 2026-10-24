@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useRemote, items } from '../mvp/api'
 import './parallel-reading.css'
+import { useCopy } from '../mvp/copy'
 
 const WORDS = /([\p{L}\p{M}]+(?:['’‘ʻʼʹ-][\p{L}\p{M}]+)*)/gu
 
@@ -31,8 +32,29 @@ function WordExplanation({ word }) {
 
 export default function ParallelReading({ monument }) {
   const { t } = useApp()
+  const c = useCopy()
   const [active, setActive] = useState(null)
   const [selection, setSelection] = useState(null)
+  const [copied, setCopied] = useState(null)
+  const [copyError, setCopyError] = useState(false)
+  useEffect(() => {
+    const position = Number(window.location.hash.replace('#line-', ''))
+    if (position > 0) {
+      setActive(position)
+      document.getElementById(`line-${position}`)?.scrollIntoView({ block: 'center' })
+    }
+  }, [monument.id])
+  const copyLine = async line => {
+    const url = new URL(window.location.href)
+    url.pathname = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/monuments`
+    url.search = new URLSearchParams({ monument: monument.id }).toString()
+    url.hash = `line-${line.position}`
+    try {
+      await navigator.clipboard.writeText(`${monument.title}, ${line.label || line.position}: ${line.transliteration}\n${line.source || monument.source_info || ''}\n${url.href}`)
+      setCopied(line.position)
+      setCopyError(false)
+    } catch { setCopyError(true) }
+  }
   const reading = monument.reading || { alignment: 'unavailable', lines: [] }
   const select = (word, position) => { setActive(position); setSelection({ word, position }) }
   const columns = [
@@ -48,7 +70,7 @@ export default function ParallelReading({ monument }) {
         {selection ? <WordExplanation key={selection.word} word={selection.word} /> : <p>{t('reading_word_hint')}</p>}
       </aside>
       <div className="reading-lines">
-        {reading.lines.length ? reading.lines.map(line => <article key={line.id || `auto-${line.position}`}
+        {reading.lines.length ? reading.lines.map(line => <article id={`line-${line.position}`} key={line.id || `auto-${line.position}`}
           className={`reading-line${active === line.position ? ' is-active' : ''}`}>
           <button type="button" className="reading-line-label" aria-pressed={active === line.position}
             onClick={() => setActive(line.position)}>{t('reading_line')} {line.label || line.position}</button>
@@ -57,11 +79,13 @@ export default function ParallelReading({ monument }) {
               : <WordText text={line[field]} selected={selection?.position === line.position ? selection.word : null} onSelect={word => select(word, line.position)} />}</div>
           </div>)}</div>
           {line.source && <p className="reading-line-source">{t('reading_source')}: {line.source}</p>}
+          <button className="btn btn-ghost" onClick={() => copyLine(line)}>{copied === line.position ? c('✓ Nusxalandi', '✓ Скопировано', '✓ Copied') : c('Satr havolasi va iqtibosni nusxalash', 'Копировать ссылку и цитату строки', 'Copy line link and citation')}</button>
         </article>) : <div className="reading-columns reading-unaligned">{columns.map(([field, label]) => <div key={field} className="reading-cell">
           <h4>{label}</h4><div dir="auto">{field === 'original' ? monument.full_text || '—'
             : <WordText text={monument[field]} selected={selection?.word} onSelect={word => select(word, null)} />}</div>
         </div>)}</div>}
       </div>
     </div>
+    {copyError && <p role="alert">{c('Nusxalab bo‘lmadi. Brauzer ruxsatini tekshiring.', 'Не удалось скопировать. Проверьте разрешения браузера.', 'Could not copy. Check browser permissions.')}</p>}
   </section>
 }

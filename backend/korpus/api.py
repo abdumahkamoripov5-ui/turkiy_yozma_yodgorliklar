@@ -97,7 +97,7 @@ class MonumentViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ('list', 'retrieve', 'featured', 'stats', 'concordance', 'word_frequency'):
-            return [permissions.AllowAny()]
+            return [permissions.IsAuthenticated()]
         return [permissions.IsAdminUser()]
 
     def retrieve(self, request, *args, **kwargs):
@@ -233,7 +233,7 @@ class MonumentViewSet(viewsets.ModelViewSet):
 # ── MonumentSubmission API ────────────────────────────────────────────────────
 
 class SubmissionCreateView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     # Spam va begona manzillarga xat yuborishni cheklash (settings: 'submit')
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = 'submit'
@@ -321,7 +321,7 @@ class SiteSettingsView(APIView):
 # ── Export ────────────────────────────────────────────────────────────────────
 
 class ExportView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     throttle_classes = [ExportRateThrottle]
 
     def get(self, request):

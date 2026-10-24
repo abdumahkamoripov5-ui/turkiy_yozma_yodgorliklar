@@ -1,11 +1,21 @@
 # Turkiy Yozma Yodgorliklar Korpusi
 
+## Yangilangan MVP
+
+Ochiq va sodda bosh sahifa → bepul ro‘yxatdan o‘tish → yodgorliklar, lug‘at,
+tadqiqot vositalari va sodda ovoz berish. Kontentga kirish API darajasida ham
+himoyalangan. Video, darslar, elektron kitobxona va maqola taqrizi ikkinchi bosqichga
+ko‘chirildi; ularning mavjud ma’lumotlari saqlandi.
+
+Joriy qamrov, faoliyat qaydlari, postlar rejasi va ishga tushirish:
+[MVP yangilanishi](documents/MVP_YANGILANISHI.md).
+
 Frontend va backendni bitta Vercel loyihasiga joylash: [Vercel yo‘riqnomasi](documents/VERCEL_DEPLOY.md).
 
 ## Turkiy Meros MVP — Windowsda ochish
 
 `MVPni_ochish.cmd` faylini ikki marta bosing. Sayt: `http://127.0.0.1:8000/app/`.
-Yangi kitobxona, yoshga mos darslar, sayt ichidagi video pleyer, ovoz berish va ilmiy ish moderatsiyasi qo‘shildi.
+Joriy MVPda tarixiy korpus, kengaytirilgan lug‘at, tadqiqot vositalari va sodda ovoz berish mavjud.
 Ishlatish, administrator kirishi va MVP chegaralari: [MVP qo‘llanmasi](documents/MVP_QOLLANMA.md).
 
 MVP qamrovi va domen/serverning oylik-yillik smetasi (23.10.2026): [hujjat](documents/MVP_va_xarajatlar_2026-10-23.md), [Word nusxasi](documents/MVP_va_xarajatlar_2026-10-23.docx).

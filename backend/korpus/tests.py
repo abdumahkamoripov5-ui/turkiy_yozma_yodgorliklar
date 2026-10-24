@@ -35,6 +35,7 @@ class SubmissionTests(TestCase):
     def setUp(self):
         cache.clear()  # throttle holati testlar orasida ulashilmasin
         self.client_api = APIClient()
+        self.client_api.force_authenticate(User.objects.create_user('contributor'))
 
     def test_title_with_newline_does_not_crash(self):
         # Sarlavhadagi yangi qator email subject'ni buzmasligi kerak (oldin 500 bo'lardi)
@@ -69,7 +70,9 @@ class ExportCsvTests(TestCase):
             title='=1+1', year=700, location='@evil', script='koktürk',
             category='bitiglar', description='x' * 30, status='Chop etilgan',
         )
-        r = APIClient().get('/api/v2/export/?format=csv')
+        client = APIClient()
+        client.force_authenticate(User.objects.create_user('exporter'))
+        r = client.get('/api/v2/export/?format=csv')
         body = r.content.decode('utf-8-sig')
         self.assertIn("'=1+1", body)
         self.assertIn("'@evil", body)
@@ -107,6 +110,7 @@ class UploadContentTests(TestCase):
     def setUp(self):
         cache.clear()
         self.api = APIClient()
+        self.api.force_authenticate(User.objects.create_user('contributor'))
 
     def _submit(self, **files):
         data = _submission_payload()
@@ -144,6 +148,7 @@ class MonumentApiTests(TestCase):
     def setUp(self):
         cache.clear()
         self.api = APIClient()
+        self.api.force_authenticate(User.objects.create_user('reader'))
         self.published = Monument.objects.create(
             title='Kültigin', year=732, location='Arxangay', script='koktürk',
             category='bitiglar', description='x' * 30, status='Chop etilgan',
@@ -159,7 +164,7 @@ class MonumentApiTests(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data['total'], 1)  # faqat chop etilgan
 
-    def test_drafts_hidden_from_anonymous(self):
+    def test_drafts_hidden_from_members(self):
         r = self.api.get('/api/v2/monuments/')
         titles = [m['title'] for m in r.data['results']]
         self.assertIn('Kültigin', titles)
@@ -173,6 +178,7 @@ class MonumentApiTests(TestCase):
         self.assertIn('Qoralama', titles)
 
     def test_anonymous_cannot_write(self):
+        self.api.force_authenticate(None)
         r = self.api.post('/api/v2/monuments/', {'title': 'x'}, format='json')
         self.assertIn(r.status_code, (401, 403))
         r = self.api.delete(f'/api/v2/monuments/{self.published.pk}/')

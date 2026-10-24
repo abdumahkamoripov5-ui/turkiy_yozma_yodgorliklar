@@ -649,13 +649,13 @@ const TRANSLATIONS = {
 
 for (const [lang, labels] of Object.entries(READING_TRANSLATIONS)) Object.assign(TRANSLATIONS[lang], labels)
 
-let currentLang = localStorage.getItem('lang') || 'uz'
+let currentLang = ['uz', 'ru', 'en'].includes(localStorage.getItem('lang')) ? localStorage.getItem('lang') : 'uz'
 
 export function getLang() { return currentLang }
 
 export function setLang(lang) {
-  currentLang = lang
-  localStorage.setItem('lang', lang)
+  currentLang = ['uz', 'ru', 'en'].includes(lang) ? lang : 'uz'
+  localStorage.setItem('lang', currentLang)
 }
 
 // vars — matndagi {nom} o'rinlarini to'ldiradi: t('scripts_count', { n: 5 })

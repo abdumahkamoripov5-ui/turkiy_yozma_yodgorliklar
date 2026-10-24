@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react'
 import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
+import { useSearchParams } from 'react-router-dom'
 
 export default function Concordance() {
   const { t } = useApp()
-  const [query, setQuery] = useState('')
+  const [params] = useSearchParams()
+  const [query, setQuery] = useState(params.get('q') || '')
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)

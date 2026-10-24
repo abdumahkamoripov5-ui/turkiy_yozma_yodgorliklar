@@ -13,6 +13,7 @@ from rest_framework.test import APIClient
 from .models import Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork
 
 
+@override_settings(ROOT_URLCONF='korpus.phase_two_test_urls')
 class MvpTests(TestCase):
     def setUp(self):
         cache.clear()
@@ -24,6 +25,7 @@ class MvpTests(TestCase):
         self.option = PollOption.objects.create(poll=self.poll, word='Muqobil', explanation='Izoh')
 
     def test_only_published_books_and_no_page_content_in_list(self):
+        self.api.force_authenticate(self.user)
         public = Book.objects.create(title='Ochiq', author='Muallif', description='Izoh', published=True,
                                      pages=[{'title': 'Satr', 'text': 'Ochiq matn'}])
         hidden = Book.objects.create(title='Yashirin', author='Muallif', description='Izoh')
@@ -82,6 +84,7 @@ class MvpTests(TestCase):
         self.assertFalse(WordEntry.objects.exists())
 
     def test_quiz_answers_are_hidden_and_checked_on_server(self):
+        self.api.force_authenticate(self.user)
         lesson = MediaLesson.objects.create(title='Dars', description='...', audience='children', published=True,
             quiz={'question': 'Savol', 'options': ['a', 'b'], 'answer': 1, 'explanation': 'Izoh'})
         url = f'/api/v2/lessons/{lesson.pk}/'

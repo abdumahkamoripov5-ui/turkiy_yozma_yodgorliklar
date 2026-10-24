@@ -2,6 +2,7 @@ import { translateMvp as tr } from '../mvp/locale'
 import { useMerosLocale } from '../mvp/useLocale'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useCopy } from '../mvp/copy'
 import { useApp } from '../context/AppContext'
 
 export default function Navbar() {
@@ -10,18 +11,14 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const loc = useLocation()
 
-  const links = [
+  const c = useCopy()
+  const links = user ? [
     { to: '/', label: t('nav_home') },
     { to: '/monuments', label: t('nav_monuments') },
-    { to: '/library', label: tr("Kitobxona") },
-    { to: '/learn', label: tr("Bolalar va o‘smirlar") },
-    { to: '/words', label: tr("So‘zlar xazinasi") },
-    { to: '/polls', label: tr("Ovoz berish") },
-    { to: '/research', label: tr("Ilmiy hamkorlik") },
-    { to: '/saved', label: tr("Saqlanganlar") },
-    { to: '/sources', label: tr("Manbalar") },
-    { to: '/tools', label: tr("Tadqiqot vositalari") },
-  ]
+    { to: '/words', label: c('Lug‘at', 'Словарь', 'Dictionary') },
+    { to: '/tools', label: c('Tadqiqot vositalari', 'Инструменты', 'Research tools') },
+    { to: '/polls', label: c('Hamjamiyat', 'Сообщество', 'Community') },
+  ] : []
 
   return (
     <nav className="navbar-blur" style={{
@@ -59,22 +56,22 @@ export default function Navbar() {
               {t('nav_logout')}
             </button>
           ) : (
-            <Link to="/login" className="btn btn-outline" style={{ fontSize:'0.8rem', padding:'0.35rem 0.75rem' }}>
-              {t('nav_login')}
+            <Link to="/login?mode=register" className="btn btn-outline" style={{ fontSize:'0.8rem', padding:'0.35rem 0.75rem' }}>
+              {c('Bepul qo‘shilish', 'Присоединиться', 'Join for free')}
             </Link>
           )}
 
           {/* Hamburger */}
-          <button onClick={() => setOpen(o => !o)} className="btn btn-ghost hamburger"
+          {user && <button onClick={() => setOpen(o => !o)} className="btn btn-ghost hamburger"
             aria-label={tr("Menu")} aria-expanded={open}
             style={{ fontSize:'1.3rem', padding:'0.25rem 0.5rem' }}>
             {open ? '✕' : '☰'}
-          </button>
+          </button>}
         </div>
       </div>
 
       {/* Desktop links — logotip qatoridan pastda, alohida qator */}
-      <div className="container nav-links-desktop"
+      {user && <div className="container nav-links-desktop"
            style={{ display:'flex', gap:'0.25rem', flexWrap:'wrap', justifyContent:'center',
                      padding:'0.5rem 1rem 0.6rem', borderTop:'1px solid var(--border)' }}>
         {links.map(l => (
@@ -89,8 +86,9 @@ export default function Navbar() {
         ))}
       </div>
 
+      }
       {/* Mobile menu */}
-      {open && (
+      {user && open && (
         <div style={{
           background:'var(--bg2)',
           borderTop:'1px solid var(--border)',

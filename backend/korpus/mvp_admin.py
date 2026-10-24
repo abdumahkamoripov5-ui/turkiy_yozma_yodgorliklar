@@ -13,10 +13,20 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(WordEntry)
 class WordAdmin(admin.ModelAdmin):
-    list_display = ['word', 'status', 'published']
+    list_display = ['word', 'status', 'published', 'reviewed_by', 'reviewed_at']
     list_filter = ['status', 'published']
     search_fields = ['word', 'meaning']
-    readonly_fields = ['campaign']
+    readonly_fields = ['campaign', 'reviewed_by', 'reviewed_at']
+
+    def save_model(self, request, obj, form, change):
+        from django.utils import timezone
+        if obj.published:
+            obj.reviewed_by = request.user
+            obj.reviewed_at = timezone.now()
+        else:
+            obj.reviewed_by = None
+            obj.reviewed_at = None
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(MediaLesson)
@@ -56,7 +66,24 @@ class PollAdmin(admin.ModelAdmin):
             except ValidationError as exc:
                 self.message_user(request, f'{poll.title}: {"; ".join(exc.messages)}', messages.ERROR)
 
-    actions = [approve]
+    @admin.action(description='Ijtimoiy tarmoq uchun post matnlarini yuklab olish')
+    def social_drafts(self, request, queryset):
+        from django.http import HttpResponse
+        from django.conf import settings
+        blocks = []
+        for poll in queryset.prefetch_related('options').order_by('starts_at', 'pk'):
+            options = '\n'.join(f'{index}. {option.word} — {option.explanation}\nManba: {option.source}'
+                                for index, option in enumerate(poll.options.all(), 1))
+            blocks.append(f'TURKIY MEROS · SO‘ZNING ERTASI SIZ BILAN\n\n{poll.title}\n{poll.context}\n\n'
+                          f'{options}\n\nOvoz bering: {settings.FRONTEND_URL.rstrip("/")}/polls\n'
+                          f'Muddat: {poll.ends_at:%d.%m.%Y}\n'
+                          'Jamoatchilik tanlovi. Lug‘atga kiritishdan oldin ekspert tekshiradi.\n'
+                          '#TurkiyMeros #SozningErtasi')
+        response = HttpResponse('\n\n──────────\n\n'.join(blocks), content_type='text/plain; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename="turkiy-meros-postlar.txt"'
+        return response
+
+    actions = [approve, social_drafts]
 
 
 @admin.register(PollVote)
