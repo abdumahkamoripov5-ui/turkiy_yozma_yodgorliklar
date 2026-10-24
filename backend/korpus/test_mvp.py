@@ -151,7 +151,7 @@ class MvpTests(TestCase):
         self.user.is_superuser = True
         self.user.save()
         self.client.force_login(self.user)
-        for model in ['book', 'medialesson', 'wordpoll', 'researchwork', 'wordentry', 'sourcelink']:
+        for model in ['wordpoll', 'wordentry', 'sourcelink', 'monument', 'monumentsubmission']:
             with self.subTest(model=model):
                 self.assertEqual(self.client.get(f'/django-admin/korpus/{model}/').status_code, 200)
                 self.assertEqual(self.client.get(f'/django-admin/korpus/{model}/add/').status_code, 200)

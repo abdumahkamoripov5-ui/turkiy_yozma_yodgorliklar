@@ -48,6 +48,14 @@ taqdim etilmagani uchun uning dizayniga aynan moslashtirish bajarilmagan.
 
 ## Faoliyat qaydlari
 
+Admin panelning asosiy menyusi: yodgorliklar, lug‘at, ovoz berish va takliflar.
+Foydalanuvchilar, rollar, manbalar, sayt sozlamalari va loglar “Sozlamalar va
+tarix” ostida yig‘iladi; tegishli sahifaga kirilganda bu guruh o‘zi ochiladi.
+Kitoblar, video darslar, ilmiy ishlar, alohida ovoz yozuvlari va JWT tokenlari
+admin menyusi va yo‘llaridan chiqarilgan. Bazadagi yozuvlar saqlanadi.
+Boshqaruv bosh sahifasida uchta asosiy hisoblagich, tezkor amallar, tekshiriladigan
+takliflar va so‘nggi tahrirlar qolgan.
+
 Kirishlar mavjud kirish tarixida, autentifikatsiyalangan API amallari esa
 “Foydalanuvchi faoliyati” bo‘limida saqlanadi: foydalanuvchi, HTTP usuli,
 endpoint yo‘li, javob holati va vaqt. Qidiruv matni, parol, token yoki so‘rov

@@ -70,14 +70,18 @@ try {
  const credentials = await readFile(process.env.ADMIN_TEST_CREDENTIALS || new URL('../../.local/MVP_admin_kirish.txt',import.meta.url),'utf8');
  const username=credentials.match(/^Login: (.+)$/m)[1].trim(), password=credentials.match(/^Parol: (.+)$/m)[1].trim();
  await evaluate('document.querySelector("#id_username").value='+JSON.stringify(username)+';document.querySelector("#id_password").value='+JSON.stringify(password)+';document.querySelector("#login-form").requestSubmit()');
- await waitFor("document.querySelectorAll('.studio-metric').length === 4");
+ await waitFor("document.querySelectorAll('.studio-metric').length === 3");
+ assert.equal(await evaluate(`document.querySelector('.studio-welcome') === null`),true);
+ assert.equal(await evaluate(`document.querySelector('.studio-extra-nav').open`),false);
+ assert.equal(await evaluate(`document.querySelectorAll('#nav-sidebar > .studio-nav-group th a').length`),4);
+ assert.equal(await evaluate(`document.querySelector('#nav-sidebar a[href$="/book/"]') === null`),true);
  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
  await capture('admin-dashboard-desktop');
  await evaluate('document.querySelector(".studio-metric").click()');
  await waitFor("document.querySelector('#changelist')");
  await capture('admin-list-desktop');
- await command('Page.navigate',{url:origin+'/django-admin/korpus/book/add/'});
- await waitFor("document.querySelector('#book_form')");
+ await command('Page.navigate',{url:origin+'/django-admin/korpus/wordentry/add/'});
+ await waitFor("document.querySelector('#wordentry_form')");
  await capture('admin-form-desktop');
  await command('Page.navigate',{url:origin+'/django-admin/'});
  await waitFor("document.querySelector('.studio-metric')");
@@ -97,5 +101,13 @@ try {
  await waitFor(`document.querySelector('#main').classList.contains('shifted')`);
  await clickVisible('#toggle-nav-sidebar');
  await waitFor(`!document.querySelector('#main').classList.contains('shifted')`);
+ await command('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+ await command('Page.navigate',{url:origin+'/django-admin/'});
+ await waitFor(`document.querySelector('.studio-extra-nav')`);
+ if (!await evaluate(`document.querySelector('#main').classList.contains('shifted')`)) await clickVisible('#toggle-nav-sidebar');
+ await clickVisible('.studio-extra-nav summary');
+ await clickVisible('#nav-sidebar a[href$="/auth/user/"]');
+ await waitFor(`location.pathname.endsWith('/auth/user/') && document.querySelector('#changelist')`);
+ assert.equal(await evaluate(`document.querySelector('.studio-extra-nav').open`),true);
  assert.deepEqual(exceptions,[]); console.log('Admin login, dashboard, content list, edit form and mobile menu passed');
 } finally {await command('Page.close').catch(()=>{});socket.close()}

@@ -1,10 +1,11 @@
 {% load admin_extras %}
+{% studio_navigation as navigation %}
 <button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="Bo‘limlar menyusi" aria-controls="nav-sidebar"></button>
 <nav class="sticky studio-sidebar" id="nav-sidebar" aria-label="Boshqaruv bo‘limlari">
   <span class="studio-nav-kicker">ISH MAYDONI</span>
   <a class="studio-overview-link {% if request.path == '/django-admin/' %}is-active{% endif %}" href="{% url 'admin:index' %}"><span aria-hidden="true">◫</span> Umumiy ko‘rinish <span aria-hidden="true">↗</span></a>
   <label class="studio-nav-search"><span class="visually-hidden">Bo‘limni qidirish</span><input type="search" id="nav-filter" placeholder="Bo‘limni qidirish…" aria-label="Bo‘limni qidirish"></label>
-  {% for app in available_apps %}<div class="studio-nav-group"><table><caption>{% if app.app_label == 'korpus' %}KONTENT VA HAMKORLIK{% else %}{{ app.name }}{% endif %}</caption><tbody>{% for model in app.models %}<tr class="{% if model.admin_url in request.path %}current-model{% endif %}"><th scope="row">{% if model.admin_url %}<a href="{{ model.admin_url }}"{% if model.admin_url in request.path %} aria-current="page"{% endif %}><span class="studio-nav-initial" aria-hidden="true">{{ model.name|studio_initial }}</span>{{ model.name }}</a>{% else %}<span>{{ model.name }}</span>{% endif %}</th><td>{% if model.add_url %}<a class="studio-nav-add" href="{{ model.add_url }}" aria-label="{{ model.name }} qo‘shish">+</a>{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% endfor %}
-  <div class="studio-sidebar-note"><span aria-hidden="true">✳</span><strong>Har bir yozuv — bir meros.</strong><p>Kontentni tekshiring, boyiting va yangi avlodga yetkazing.</p><a href="/app/">Platformaga o‘tish ↗</a></div>
+  {% include "admin/studio_model_links.html" with models=navigation.core %}
+  {% if navigation.extra %}<details class="studio-extra-nav"{% if navigation.extra_open %} open{% endif %}><summary>Sozlamalar va tarix</summary>{% include "admin/studio_model_links.html" with models=navigation.extra %}</details>{% endif %}
 </nav>
 <button class="studio-nav-backdrop" aria-label="Menyuni yopish" tabindex="-1" hidden></button>

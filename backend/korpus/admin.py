@@ -455,3 +455,12 @@ class UserActivityAdmin(admin.ModelAdmin):
 admin.site.site_header  = "Turkiy Korpus — Boshqaruv Paneli"
 admin.site.site_title   = "Turkiy Korpus Admin"
 admin.site.index_title  = "Yodgorliklar boshqaruvi"
+
+# Phase-two content and JWT internals are not part of the editorial workspace.
+# Unregistering removes their admin routes without deleting stored records.
+from .models import Book, MediaLesson, ResearchWork, PollVote
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+
+for archived_model in (Book, MediaLesson, ResearchWork, PollVote, OutstandingToken, BlacklistedToken):
+    if admin.site.is_registered(archived_model):
+        admin.site.unregister(archived_model)

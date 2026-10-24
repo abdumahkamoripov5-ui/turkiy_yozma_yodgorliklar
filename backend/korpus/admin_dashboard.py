@@ -4,7 +4,7 @@ from django.contrib.admin.models import LogEntry
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils import timezone
-from .models import Monument, Book, MediaLesson, WordEntry, WordPoll, ResearchWork, MonumentSubmission, SourceLink
+from .models import Monument, WordEntry, WordPoll, MonumentSubmission
 
 
 def dashboard_data(request):
@@ -14,11 +14,8 @@ def dashboard_data(request):
         return result
     definitions = [
         (Monument, 'Yodgorliklar', 'Yodgorlik qo‘shish', '𐰴', 'sage', Q(status='Chop etilgan')),
-        (Book, 'Elektron kitoblar', 'Kitob qo‘shish', '▤', 'blue', Q(published=True)),
-        (MediaLesson, 'Video darslar', 'Dars qo‘shish', '▷', 'peach', Q(published=True)),
         (WordEntry, 'Lug‘at so‘zlari', 'So‘z qo‘shish', 'Aa', 'gold', Q(published=True)),
         (WordPoll, 'Ovoz kampaniyalari', 'Kampaniya qo‘shish', '◉', 'sage', Q(published=True)),
-        (SourceLink, 'Tashqi manbalar', 'Manba qo‘shish', '↗', 'blue', Q(published=True)),
     ]
     for model, label, action, icon, tone, published_filter in definitions:
         model_admin = admin.site._registry[model]
@@ -39,12 +36,11 @@ def dashboard_data(request):
                'draft': counts['total'] - counts['published_count'],
                'percent': round(100 * counts['published_count'] / counts['total']) if counts['total'] else 0}
         result['sections'].append(row)
-        if model in (Monument, Book, MediaLesson, WordEntry):
-            result['cards'].append(row)
+        result['cards'].append(row)
         result['total'] += counts['total']
         result['published'] += counts['published_count']
         result['active_polls'] += counts.get('active', 0)
-    for model, kind, date_field in ((ResearchWork, 'Ilmiy ish', 'created_at'), (MonumentSubmission, 'Yodgorlik taklifi', 'submitted_at')):
+    for model, kind, date_field in ((MonumentSubmission, 'Yodgorlik taklifi', 'submitted_at'),):
         model_admin = admin.site._registry[model]
         if not model_admin.has_view_or_change_permission(request):
             continue

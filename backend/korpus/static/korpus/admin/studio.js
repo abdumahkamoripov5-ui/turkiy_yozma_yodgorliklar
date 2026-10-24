@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const main = document.getElementById('main')
   const backdrop = document.querySelector('.studio-nav-backdrop')
   const mobile = window.matchMedia('(max-width: 900px)')
+  const navFilter = document.getElementById('nav-filter')
+  navFilter?.addEventListener('input', () => {
+    const extra = document.querySelector('.studio-extra-nav')
+    if (extra && navFilter.value.trim()) extra.open = true
+  })
   if (toggle && main) {
     const sync = () => {
       const open = main.classList.contains('shifted')
