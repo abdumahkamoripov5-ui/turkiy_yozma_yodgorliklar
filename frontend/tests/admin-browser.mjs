@@ -43,6 +43,23 @@ async function capture(name) {
   await writeFile(new URL(`../../.local/${name}.png`, import.meta.url), Buffer.from(result.data, 'base64'))
 }
 
+async function clickVisible(selector) {
+  const point = await evaluate(`(() => {
+    const node = document.querySelector(${JSON.stringify(selector)});
+    if (!node) return null;
+    const rect = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    const x = rect.left + rect.width / 2, y = rect.top + rect.height / 2;
+    const target = document.elementFromPoint(x, y);
+    return {x, y, visible: style.display !== 'none' && style.visibility !== 'hidden'
+      && rect.width > 0 && rect.height > 0 && x >= 0 && x < innerWidth && y >= 0 && y < innerHeight
+      && (target === node || node.contains(target))};
+  })()`)
+  assert.equal(point?.visible, true, `Control is hidden or obstructed: ${selector}`)
+  await command('Input.dispatchMouseEvent', {type:'mousePressed', x:point.x, y:point.y, button:'left', clickCount:1})
+  await command('Input.dispatchMouseEvent', {type:'mouseReleased', x:point.x, y:point.y, button:'left', clickCount:1})
+}
+
 try {
  await command('Page.enable'); await command('Runtime.enable'); await command('Network.enable'); await command('Network.setCacheDisabled',{cacheDisabled:true}); await command('Network.clearBrowserCookies');
  await command('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
@@ -50,7 +67,7 @@ try {
  await command('Page.navigate',{url:origin+'/django-admin/login/'});
  await waitFor("document.querySelector('#id_username')");
  await capture('admin-login-desktop');
- const credentials = await readFile(new URL('../../.local/MVP_admin_kirish.txt',import.meta.url),'utf8');
+ const credentials = await readFile(process.env.ADMIN_TEST_CREDENTIALS || new URL('../../.local/MVP_admin_kirish.txt',import.meta.url),'utf8');
  const username=credentials.match(/^Login: (.+)$/m)[1].trim(), password=credentials.match(/^Parol: (.+)$/m)[1].trim();
  await evaluate('document.querySelector("#id_username").value='+JSON.stringify(username)+';document.querySelector("#id_password").value='+JSON.stringify(password)+';document.querySelector("#login-form").requestSubmit()');
  await waitFor("document.querySelectorAll('.studio-metric').length === 4");
@@ -68,8 +85,17 @@ try {
  await command('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true,'Admin mobile overflow');
  await capture('admin-dashboard-mobile');
- await evaluate('document.querySelector("#toggle-nav-sidebar").click()');
+ await clickVisible('#toggle-nav-sidebar');
  await waitFor('document.querySelector("#main").classList.contains("shifted")');
+ await waitFor(`getComputedStyle(document.querySelector('#nav-sidebar')).visibility === 'visible'`);
+ await waitFor(`document.querySelector('#nav-sidebar').getBoundingClientRect().left >= 0`);
+ assert.notEqual(await evaluate(`getComputedStyle(document.querySelector('#nav-sidebar')).display`), 'none');
  await capture('admin-menu-mobile');
+ await clickVisible('#nav-sidebar a[href$="/korpus/wordentry/"]');
+ await waitFor(`location.pathname.endsWith('/wordentry/') && document.querySelector('#changelist')`);
+ await clickVisible('#toggle-nav-sidebar');
+ await waitFor(`document.querySelector('#main').classList.contains('shifted')`);
+ await clickVisible('#toggle-nav-sidebar');
+ await waitFor(`!document.querySelector('#main').classList.contains('shifted')`);
  assert.deepEqual(exceptions,[]); console.log('Admin login, dashboard, content list, edit form and mobile menu passed');
 } finally {await command('Page.close').catch(()=>{});socket.close()}
