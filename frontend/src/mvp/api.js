@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import api from '../api'
+import { useApp } from '../context/AppContext'
 
 export { api }
 
@@ -26,25 +27,29 @@ export function stored(key, fallback) {
 }
 
 export function useSaved() {
-  const read = () => {
-    const value = stored('meros-saved', [])
+  const { user } = useApp()
+  const storageKey = `meros-saved:${user?.username || 'guest'}`
+  const read = useCallback(() => {
+    const value = stored(storageKey, [])
     return Array.isArray(value) ? value : []
-  }
+  }, [storageKey])
   const [saved, setSaved] = useState(read)
   useEffect(() => {
     const refresh = () => setSaved(read())
+    refresh()
     window.addEventListener('meros-saved', refresh)
     window.addEventListener('storage', refresh)
     return () => {
       window.removeEventListener('meros-saved', refresh)
       window.removeEventListener('storage', refresh)
     }
-  }, [])
+  }, [read])
   const toggle = item => {
+    if (!user) return
     const previous = read()
     const next = previous.some(entry => entry.key === item.key)
       ? previous.filter(entry => entry.key !== item.key) : [...previous, item]
-    localStorage.setItem('meros-saved', JSON.stringify(next))
+    localStorage.setItem(storageKey, JSON.stringify(next))
     window.dispatchEvent(new Event('meros-saved'))
   }
   return { saved, toggle }

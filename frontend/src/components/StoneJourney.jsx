@@ -115,7 +115,7 @@ export default function StoneJourney({ monuments, onSelect }) {
       <span className="journey-side-label" aria-hidden="true">{tr("TOSHGA BITILGAN XOTIRA")}</span>
       <div className="journey-intro"><span className="journey-edition"><i />{' '}{tr("O‘TMISHGA OCHILGAN ESHIK")}</span><h1 id="journey-title">{tr("Ming yillik meros.")}<br /><em>{tr("Bir qadam yaqinroq.")}</em></h1><p>{tr("Bitiktoshlar orasidan yuring. So‘zlar ortidagi tarixni kashf eting.")}</p>
         <form className="journey-search" onSubmit={event => { event.preventDefault(); navigate(`/monuments?search=${encodeURIComponent(query)}`) }}><span aria-hidden="true">⌕</span><input aria-label={tr("Yodgorliklarni qidirish")} placeholder={tr("Qaysi bitikni izlayapsiz?")} value={query} onChange={event => setQuery(event.target.value)} /><button type="submit">{tr("Izlash")}{' '}<span aria-hidden="true">↗</span></button></form>
-        <div className="journey-entry-links"><Link to="/monuments">{tr("Yodgorliklar")}{' '}<span aria-hidden="true">↗</span></Link><span aria-hidden="true">/</span><Link to="/library">{tr("Kitobxona")}{' '}<span aria-hidden="true">↗</span></Link></div>
+        <div className="journey-entry-links"><Link to="/monuments">{tr("Yodgorliklar")}{' '}<span aria-hidden="true">↗</span></Link><span aria-hidden="true">/</span><Link to="/words">{tr("So‘zlar xazinasi")}{' '}<span aria-hidden="true">↗</span></Link></div>
         {!reduced && <div className="journey-scroll-prompt"><span className="journey-scroll-mark" aria-hidden="true">↓</span><span>{tr("SCROLL QILING. SAYOHAT BOSHLANADI.")}</span></div>}
       </div>
       <div className="journey-atmosphere" aria-hidden="true" />

@@ -4,6 +4,7 @@ import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 import MonumentCard from '../components/MonumentCard'
 import MonumentModal from '../components/MonumentModal'
+import PreviewNotice from '../components/PreviewNotice'
 
 // [qiymat (backend kaliti), ko'rinadigan nom]
 const SCRIPTS = [
@@ -77,6 +78,7 @@ export default function Monuments() {
     <div className="page">
       <div className="container">
         <h1 className="page-title">{t('nav_monuments')} ({count})</h1>
+        <PreviewNotice />
 
         {/* Filters */}
         <div style={{ display:'flex', gap:'0.75rem', flexWrap:'wrap', marginBottom:'1.5rem' }}>

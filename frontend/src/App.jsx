@@ -9,6 +9,8 @@ import MotionEffects from './components/MotionEffects'
 
 // Sahifalar lazy yuklanadi — leaflet (xarita) va boshqa og'ir kodlar faqat kerak bo'lganda olinadi.
 const Monuments = lazy(() => import('./pages/Monuments'))
+const Explore = lazy(() => import('./pages/Explore'))
+const PersonalLibrary = lazy(() => import('./pages/PersonalLibrary'))
 const Timeline = lazy(() => import('./pages/Timeline'))
 const MapView = lazy(() => import('./pages/MapView'))
 const Scripts = lazy(() => import('./pages/Scripts'))
@@ -56,13 +58,15 @@ function Layout() {
         <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route element={<RequireAuth />}>
-          <Route path="/polls" element={<Polls />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/monuments" element={<Monuments />} />
           <Route path="/words" element={<Words />} />
           <Route path="/words/:id" element={<WordArticle />} />
+          <Route element={<RequireAuth />}>
+          <Route path="/saved" element={<PersonalLibrary />} />
+          <Route path="/polls" element={<Polls />} />
           <Route path="/sources" element={<Sources />} />
           <Route path="/tools" element={<ResearchTools />} />
-          <Route path="/monuments" element={<Monuments />} />
           <Route path="/timeline" element={<Timeline />} />
           <Route path="/map" element={<MapView />} />
           <Route path="/scripts" element={<Scripts />} />

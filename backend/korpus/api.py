@@ -86,6 +86,9 @@ class MonumentViewSet(viewsets.ModelViewSet):
         return MonumentDetailSerializer
 
     def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            from .access import preview_monuments
+            return preview_monuments().order_by('year', 'pk')
         # Qoralamalar faqat admin uchun, ?include_drafts=1 bilan. Oddiy foydalanuvchi
         # va saytning o'zi faqat chop etilgan yodgorliklarni ko'radi.
         qs = Monument.objects.all().order_by('year')
@@ -96,6 +99,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
         return qs.filter(status='Chop etilgan')
 
     def get_permissions(self):
+        if self.action in ('list', 'retrieve', 'featured'):
+            return [permissions.AllowAny()]
         if self.action in ('list', 'retrieve', 'featured', 'stats', 'concordance', 'word_frequency'):
             return [permissions.IsAuthenticated()]
         return [permissions.IsAdminUser()]
@@ -113,7 +118,9 @@ class MonumentViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='featured')
     def featured(self, request):
-        qs = self.get_queryset().filter(featured=True)
+        qs = self.get_queryset()
+        if request.user.is_authenticated:
+            qs = qs.filter(featured=True)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
 

@@ -2,9 +2,10 @@
 
 ## Yangilangan MVP
 
-Ochiq va sodda bosh sahifa → bepul ro‘yxatdan o‘tish → yodgorliklar, lug‘at,
-tadqiqot vositalari va sodda ovoz berish. Kontentga kirish API darajasida ham
-himoyalangan. Video, darslar, elektron kitobxona va maqola taqrizi ikkinchi bosqichga
+Ochiq va sodda bosh sahifa → ixtiyoriy 3D sayohat va uchta yodgorlik/uchta so‘z
+bilan tanishish → bepul hisob orqali to‘liq korpus, tadqiqot vositalari, saqlash
+va sodda ovoz berish. Ochiq tanlov chegarasi API darajasida ham tekshiriladi.
+Video, darslar, elektron kitobxona va maqola taqrizi ikkinchi bosqichga
 ko‘chirildi; ularning mavjud ma’lumotlari saqlandi.
 
 Joriy qamrov, faoliyat qaydlari, postlar rejasi va ishga tushirish:

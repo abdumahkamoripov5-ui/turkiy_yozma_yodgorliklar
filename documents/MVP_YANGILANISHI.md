@@ -2,13 +2,20 @@
 
 ## Foydalanuvchi yo‘li
 
-Bosh sahifa — qisqa tanishtiruv, uch qadam va bepul ro‘yxatdan o‘tish.
-Hisob ochilgach yodgorliklar, lug‘at, tadqiqot vositalari va hamjamiyat ochiladi.
-Kirish talab qilinishi API orqali ham tekshiriladi. Asosiy kontent bepul.
+Bosh sahifa — qisqa tanishtiruv, uch qadam va “Merosni kashf eting” tugmasi.
+Oldingi bitiktoshlar sayohati `/explore` sahifasida ixtiyoriy ravishda ochiladi.
+Mehmonlar uchta saralangan yodgorlik va uchta lug‘at maqolasini hisob ochmasdan
+o‘qiy oladi. Ochiq tanlov API darajasida chegaralangan: filtr, sahifalash,
+to‘g‘ridan-to‘g‘ri ID va so‘z uchrashuvlari orqali qolgan matnlar ochilmaydi.
+Hisob ochilgach to‘liq korpus, lug‘at, tadqiqot vositalari va hamjamiyat ochiladi.
+Asosiy kontent bepul.
 Interfeys: o‘zbek, rus va ingliz. Tarixiy manbalar o‘z tilida qoladi.
 
-Menyuda beshta yo‘nalish: bosh sahifa, yodgorliklar, lug‘at, tadqiqot vositalari,
-hamjamiyat. Xarita, vaqt shkalasi, konkordans, CSV/JSON eksport va taklif yuborish
+Mehmon menyusida kashf etish va lug‘at; hisobga kirgach bosh sahifa, yodgorliklar,
+lug‘at, tadqiqot vositalari, hamjamiyat va saqlanganlar ko‘rinadi.
+Saqlash faqat hisobga kirgach ishlaydi; tanlangan so‘zlar ushbu brauzerda
+foydalanuvchi nomi bilan alohida saqlanadi. Qurilmalararo sinxronlash ulanmagan.
+Xarita, vaqt shkalasi, konkordans, CSV/JSON eksport va taklif yuborish
 tadqiqot vositalarida joylashgan.
 
 ## Ilmiy ma’lumotlar

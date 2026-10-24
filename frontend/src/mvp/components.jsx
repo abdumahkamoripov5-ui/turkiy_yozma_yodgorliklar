@@ -1,7 +1,9 @@
 import { translateMvp as tr } from './locale'
 import { useMerosLocale } from './useLocale'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useSaved } from './api'
+import { useApp } from '../context/AppContext'
+import { useCopy } from './copy'
 
 export function PageHeading({ eyebrow, title, children }) {
   useMerosLocale()
@@ -18,8 +20,12 @@ export function RemoteState({ remote, empty, children }) {
 
 export function SaveButton({ item }) {
   useMerosLocale()
+  const { user } = useApp()
+  const c = useCopy()
+  const location = useLocation()
   const { saved, toggle } = useSaved()
   const active = saved.some(entry => entry.key === item.key)
+  if (!user) return <Link className="meros-text-link" to={`/login?mode=register&next=${encodeURIComponent(location.pathname + location.search + location.hash)}`}>{c('Saqlash uchun qo‘shiling', 'Войдите, чтобы сохранить', 'Join to save')}</Link>
   return <button className={`meros-save ${active ? 'is-saved' : ''}`} aria-pressed={active} onClick={() => toggle(item)}>
     {active ? tr("✓ Saqlandi") : tr("＋ Saqlash")}
   </button>

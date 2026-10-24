@@ -18,7 +18,11 @@ export default function Navbar() {
     { to: '/words', label: c('Lug‘at', 'Словарь', 'Dictionary') },
     { to: '/tools', label: c('Tadqiqot vositalari', 'Инструменты', 'Research tools') },
     { to: '/polls', label: c('Hamjamiyat', 'Сообщество', 'Community') },
-  ] : []
+    { to: '/saved', label: c('Saqlanganlar', 'Сохранённое', 'Saved') },
+  ] : [
+    { to: '/explore', label: c('Merosni kashf eting', 'Откройте наследие', 'Explore the heritage') },
+    { to: '/words', label: c('Lug‘at', 'Словарь', 'Dictionary') },
+  ]
 
   return (
     <nav className="navbar-blur" style={{
@@ -62,16 +66,16 @@ export default function Navbar() {
           )}
 
           {/* Hamburger */}
-          {user && <button onClick={() => setOpen(o => !o)} className="btn btn-ghost hamburger"
+          <button onClick={() => setOpen(o => !o)} className="btn btn-ghost hamburger"
             aria-label={tr("Menu")} aria-expanded={open}
             style={{ fontSize:'1.3rem', padding:'0.25rem 0.5rem' }}>
             {open ? '✕' : '☰'}
-          </button>}
+          </button>
         </div>
       </div>
 
       {/* Desktop links — logotip qatoridan pastda, alohida qator */}
-      {user && <div className="container nav-links-desktop"
+      <div className="container nav-links-desktop"
            style={{ display:'flex', gap:'0.25rem', flexWrap:'wrap', justifyContent:'center',
                      padding:'0.5rem 1rem 0.6rem', borderTop:'1px solid var(--border)' }}>
         {links.map(l => (
@@ -86,9 +90,8 @@ export default function Navbar() {
         ))}
       </div>
 
-      }
       {/* Mobile menu */}
-      {user && open && (
+      {open && (
         <div style={{
           background:'var(--bg2)',
           borderTop:'1px solid var(--border)',
