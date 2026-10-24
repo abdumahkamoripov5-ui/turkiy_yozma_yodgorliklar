@@ -84,6 +84,7 @@ try {
  await capture('admin-list-desktop');
  await command('Page.navigate',{url:origin+'/django-admin/korpus/wordentry/add/'});
  await waitFor("document.querySelector('#wordentry_form')");
+ await waitFor("document.readyState === 'complete'");
  await waitFor(`document.querySelector('[data-equivalent-rows] select')`);
  assert.equal(await evaluate(`document.querySelector('textarea[name="equivalents"]') === null`),true);
  await evaluate(`document.querySelector('[data-equivalent-rows] select').value='tr'; document.querySelector('[data-equivalent-rows] input').value='el'`);
@@ -122,7 +123,9 @@ try {
  await command('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
  await command('Page.navigate',{url:origin+'/django-admin/'});
  await waitFor(`document.querySelector('.studio-extra-nav')`);
+ await waitFor(`document.readyState === 'complete' && document.querySelector('#toggle-nav-sidebar').hasAttribute('aria-expanded')`);
  if (!await evaluate(`document.querySelector('#main').classList.contains('shifted')`)) await clickVisible('#toggle-nav-sidebar');
+ await waitFor(`getComputedStyle(document.querySelector('#nav-sidebar')).visibility === 'visible' && document.querySelector('#nav-sidebar').getBoundingClientRect().left >= 0`);
  await clickVisible('.studio-extra-nav summary');
  await clickVisible('#nav-sidebar a[href$="/auth/user/"]');
  await waitFor(`location.pathname.endsWith('/auth/user/') && document.querySelector('#changelist')`);
