@@ -226,6 +226,27 @@ body.login { background:#f7f7f2; height:auto; }
 /* Django's responsive.css hides both controls below 767px. The studio uses a drawer. */
 .studio-extra-nav { border-top:1px solid #b0bea72a; margin-top:18px; padding-top:16px; }
 .studio-extra-nav summary { cursor:pointer; color:#bdceba; font-size:12px; padding:10px; }
+#nav-sidebar td .studio-nav-add { font-size:10px; border:1px solid #b0bea72a; border-radius:5px; padding:5px 7px; white-space:nowrap; }
+.studio-equivalents { max-width:100%; overflow-x:auto; }
+.studio-equivalents table { width:auto; }
+.studio-equivalents th,.studio-equivalents td { padding:8px; }
+.studio-equivalents input,.studio-equivalents select { box-sizing:border-box; width:100%; min-width:120px; }
+.studio-equivalents button { cursor:pointer; border:1px solid var(--border-color); border-radius:5px; background:var(--studio-panel); color:var(--link-fg); padding:7px 10px; white-space:nowrap; }
+.studio-equivalents > button { margin-top:10px; }
+.related-widget-wrapper { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+.related-widget-wrapper-link { width:auto; height:auto; padding:5px 7px; border:1px solid var(--border-color); border-radius:5px; font-size:10px; }
+.related-widget-wrapper-link img { display:none; }
+.related-widget-wrapper-link.add-related::after { content:'Qo‘shish'; }
+.related-widget-wrapper-link.change-related::after { content:'Tahrirlash'; }
+.related-widget-wrapper-link.view-related::after { content:'Ko‘rish'; }
+.related-widget-wrapper-link.delete-related::after { content:'O‘chirish'; }
+@media(max-width:600px) {
+  .studio-equivalents table,.studio-equivalents tbody,.studio-equivalents tr,.studio-equivalents td { display:block; width:100%; box-sizing:border-box; }
+  .studio-equivalents thead { display:none; }
+  .studio-equivalents td { padding:4px 0; }
+  .studio-equivalents tr { padding:8px 0; border-bottom:1px solid var(--border-color); }
+  .studio-equivalents input,.studio-equivalents select { min-width:0; max-width:100%; }
+}
 .studio-extra-nav[open] summary { color:#ecdba6; }
 .studio-dashboard .studio-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
 @media(max-width:600px) { .studio-dashboard .studio-metrics { grid-template-columns:1fr; } }

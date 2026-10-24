@@ -11,6 +11,7 @@ from django.conf import settings as django_settings
 from .csv_utils import safe_cell
 from .models import Monument, MonumentLine, SiteSettings, MonumentSubmission, LoginActivity
 from . import mvp_admin  # noqa: F401
+from .admin_forms import MonumentAdminForm
 
 
 # ── Custom actions ─────────────────────────────────────────────────────────────
@@ -55,6 +56,7 @@ class MonumentLineInline(admin.StackedInline):
 
 @admin.register(Monument)
 class MonumentAdmin(admin.ModelAdmin):
+    form = MonumentAdminForm
     inlines = [MonumentLineInline]
     list_display = [
         'image_preview', 'title', 'year', 'script_badge',

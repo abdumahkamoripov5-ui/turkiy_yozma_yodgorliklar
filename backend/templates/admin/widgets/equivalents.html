@@ -1,0 +1,5 @@
+<div class="studio-equivalents" id="{{ widget.attrs.id }}" data-equivalents>
+  <table><thead><tr><th scope="col">Til</th><th scope="col">Muqobil so‘z</th><th scope="col"><span class="visually-hidden">Amal</span></th></tr></thead><tbody data-equivalent-rows>
+  {% for row in widget.rows %}<tr><td><select name="{{ widget.name }}_language" aria-label="Til"><option value="">Tilni tanlang</option>{% for code, label in widget.languages %}<option value="{{ code }}"{% if code == row.language %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></td><td><input type="text" name="{{ widget.name }}_word" value="{{ row.word }}" aria-label="Muqobil so‘z"></td><td><button type="button" data-remove-equivalent>Olib tashlash</button></td></tr>{% endfor %}
+  </tbody></table><button type="button" class="button" data-add-equivalent>Til qo‘shish</button>
+</div>

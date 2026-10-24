@@ -47,6 +47,7 @@ async function clickVisible(selector) {
   const point = await evaluate(`(() => {
     const node = document.querySelector(${JSON.stringify(selector)});
     if (!node) return null;
+    node.scrollIntoView({block:'center', behavior:'instant'});
     const rect = node.getBoundingClientRect();
     const style = getComputedStyle(node);
     const x = rect.left + rect.width / 2, y = rect.top + rect.height / 2;
@@ -75,6 +76,7 @@ try {
  assert.equal(await evaluate(`document.querySelector('.studio-extra-nav').open`),false);
  assert.equal(await evaluate(`document.querySelectorAll('#nav-sidebar > .studio-nav-group th a').length`),4);
  assert.equal(await evaluate(`document.querySelector('#nav-sidebar a[href$="/book/"]') === null`),true);
+ assert.equal(await evaluate(`Array.from(document.querySelectorAll('.studio-nav-add')).every(node => node.textContent === 'Qo‘shish')`),true);
  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
  await capture('admin-dashboard-desktop');
  await evaluate('document.querySelector(".studio-metric").click()');
@@ -82,7 +84,23 @@ try {
  await capture('admin-list-desktop');
  await command('Page.navigate',{url:origin+'/django-admin/korpus/wordentry/add/'});
  await waitFor("document.querySelector('#wordentry_form')");
+ await waitFor(`document.querySelector('[data-equivalent-rows] select')`);
+ assert.equal(await evaluate(`document.querySelector('textarea[name="equivalents"]') === null`),true);
+ await evaluate(`document.querySelector('[data-equivalent-rows] select').value='tr'; document.querySelector('[data-equivalent-rows] input').value='el'`);
+ await clickVisible('[data-add-equivalent]');
+ assert.equal(await evaluate(`document.querySelectorAll('[data-equivalent-rows] tr').length`),2);
+ await clickVisible('[data-equivalent-rows] tr:last-child [data-remove-equivalent]');
+ assert.equal(await evaluate(`document.querySelectorAll('[data-equivalent-rows] tr').length`),1);
+ assert.equal(await evaluate(`document.querySelector('[data-equivalent-rows] input').value`),'el');
  await capture('admin-form-desktop');
+ await command('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+ await evaluate(`document.querySelector('[data-equivalents]').scrollIntoView({block:'center',behavior:'instant'})`);
+ assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true,'Word form mobile overflow');
+ await capture('admin-word-form-mobile');
+ await command('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+ await command('Page.navigate',{url:origin+'/django-admin/korpus/monument/add/'});
+ await waitFor(`document.querySelector('#monument_form')`);
+ for (const name of ['researchers','bibliography','tags']) assert.equal(await evaluate(`document.querySelector('#id_${name}').value`),'');
  await command('Page.navigate',{url:origin+'/django-admin/'});
  await waitFor("document.querySelector('.studio-metric')");
  await waitFor("document.readyState === 'complete' && document.querySelector('#toggle-nav-sidebar').hasAttribute('aria-expanded')");

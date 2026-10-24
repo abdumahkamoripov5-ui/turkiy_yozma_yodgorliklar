@@ -2,6 +2,7 @@ from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 
 from .models import Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork, SourceLink
+from .admin_forms import WordAdminForm
 
 
 @admin.register(Book)
@@ -13,6 +14,13 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(WordEntry)
 class WordAdmin(admin.ModelAdmin):
+    form = WordAdminForm
+    fieldsets = (
+        ('So‘z haqida', {'fields': ('word', 'pronunciation', 'meaning', 'example', 'source', 'monument')}),
+        ('Boshqa turkiy tillarda', {'fields': ('equivalents',)}),
+        ('Nashr qilish', {'fields': ('status', 'published')}),
+        ('Tekshiruv tarixi', {'fields': ('campaign', 'reviewed_by', 'reviewed_at'), 'classes': ('collapse',)}),
+    )
     list_display = ['word', 'status', 'published', 'reviewed_by', 'reviewed_at']
     list_filter = ['status', 'published']
     search_fields = ['word', 'meaning']

@@ -56,6 +56,11 @@ admin menyusi va yo‘llaridan chiqarilgan. Bazadagi yozuvlar saqlanadi.
 Boshqaruv bosh sahifasida uchta asosiy hisoblagich, tezkor amallar, tekshiriladigan
 takliflar va so‘nggi tahrirlar qolgan.
 
+Yangi yozuv ochish uchun “+” o‘rniga “Qo‘shish” matni ishlatiladi. Tadqiqotchilar,
+adabiyotlar va kalit so‘zlar oddiy satrlar bilan kiritiladi. Turkiy muqobillar
+til tanlash va so‘z kiritish qatorlari orqali to‘ldiriladi; qo‘lda JSON yozish
+talab qilinmaydi. Saqlash formati va ilgari kiritilgan ma’lumotlar saqlanadi.
+
 Kirishlar mavjud kirish tarixida, autentifikatsiyalangan API amallari esa
 “Foydalanuvchi faoliyati” bo‘limida saqlanadi: foydalanuvchi, HTTP usuli,
 endpoint yo‘li, javob holati va vaqt. Qidiruv matni, parol, token yoki so‘rov
