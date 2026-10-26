@@ -168,6 +168,9 @@ div.breadcrumbs { padding:12px 38px; border-bottom:1px solid var(--border-color)
 .paginator { padding:13px 15px!important; border:1px solid var(--border-color); border-top:0; border-radius:0 0 9px 9px; background:var(--studio-panel); font-size:11px; }
 .paginator a,.paginator .this-page { border-radius:5px; padding:5px 9px; }
 input,textarea,select,.vTextField { border-radius:6px; padding:8px 10px; border-color:var(--border-color); background:var(--studio-panel); color:var(--body-fg); font:inherit; }
+/* Django fixes select height at 30px; our padding and line-height need more room. */
+select { height:auto; min-height:40px; line-height:1.5; }
+select[multiple] { min-height:150px; }
 input[type="checkbox"] { accent-color:#457355; }
 input:focus,textarea:focus,select:focus { outline:2px solid #8aa07b66; outline-offset:1px; border-color:#8aa07b; }
 .aligned label { font-size:11px; color:var(--body-quiet-color); }
@@ -227,6 +230,14 @@ body.login { background:#f7f7f2; height:auto; }
 .studio-extra-nav { border-top:1px solid #b0bea72a; margin-top:18px; padding-top:16px; }
 .studio-extra-nav summary { cursor:pointer; color:#bdceba; font-size:12px; padding:10px; }
 #nav-sidebar td .studio-nav-add { font-size:10px; border:1px solid #b0bea72a; border-radius:5px; padding:5px 7px; white-space:nowrap; }
+/* Reserve space for the add action and wrap navigation labels at word boundaries. */
+#nav-sidebar th { width:auto; white-space:normal; overflow-wrap:anywhere; }
+#nav-sidebar td { width:1%; white-space:nowrap; }
+.studio-heading > div:first-child,.studio-panel-heading > div,.studio-review-list > a > div,.studio-activity li > div { min-width:0; overflow-wrap:anywhere; }
+.studio-quick-actions strong { min-width:0; overflow-wrap:anywhere; }
+.studio-quick-actions a > span,.studio-quick-actions a > b,.studio-status-label,.studio-pending-pill { flex-shrink:0; }
+.studio-panel-heading { flex-wrap:wrap; }
+.aligned label { white-space:normal; overflow-wrap:anywhere; }
 .studio-equivalents { max-width:100%; overflow-x:auto; }
 .studio-equivalents table { width:auto; }
 .studio-equivalents th,.studio-equivalents td { padding:8px; }
@@ -251,6 +262,9 @@ body.login { background:#f7f7f2; height:auto; }
 .studio-dashboard .studio-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
 @media(max-width:600px) { .studio-dashboard .studio-metrics { grid-template-columns:1fr; } }
 @media (max-width:900px) {
+  #header { flex-flow:row nowrap; gap:12px; }
+  #branding { min-width:0; }
+  #user-tools.studio-user-tools { margin:0; flex-shrink:0; white-space:nowrap; }
   #toggle-nav-sidebar { display:block; }
   .main > #nav-sidebar { display:block; }
 }

@@ -93,6 +93,18 @@ class WordAdminForm(forms.ModelForm):
     equivalents = EquivalentsField(label='Turkiy tillardagi muqobillar', required=False,
                                   help_text='Tilni tanlang va shu tildagi muqobil so‘zni yozing.')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['audio_kind'].required = False
+
+    def clean(self):
+        data = super().clean()
+        data['audio_kind'] = data.get('audio_kind') or 'human'
+        # Replacing an approved recording always requires a fresh listening review.
+        if any(field in self.changed_data for field in ('audio', 'word', 'pronunciation', 'audio_kind', 'audio_credit')):
+            data['audio_approved'] = False
+        return data
+
     class Meta:
         model = WordEntry
         fields = '__all__'

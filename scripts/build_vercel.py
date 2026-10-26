@@ -12,6 +12,11 @@ environment = {**os.environ, 'VITE_BASE': '/app/', 'VITE_API_URL': ''}
 for command in ([npm, 'ci'], [npm, 'run', 'build']):
     subprocess.run(command, cwd=root / 'frontend', env=environment, check=True)
 
+# Schema upgrades are explicit; normal builds never modify the database.
+if os.environ.get('VERCEL_RUN_MIGRATIONS') == '1':
+    import sys
+    subprocess.run([sys.executable, 'manage.py', 'migrate', '--noinput'], cwd=root, check=True)
+
 # Explicit one-off initialization only; ordinary builds never modify the database.
 if os.environ.get('VERCEL_INITIALIZE_DATABASE') == '1':
     import sys

@@ -14,6 +14,15 @@ def public_upload(instance, filename):
     return _random_name('library', filename)
 
 
+def pronunciation_upload(instance, filename):
+    return _random_name('pronunciations', filename)
+
+
+def validate_audio_size(value):
+    if value.size > 10 * 1024 * 1024:
+        raise ValidationError('Audio fayl 10 MB dan oshmasin.')
+
+
 def private_upload(instance, filename):
     return _random_name('research', filename)
 
@@ -80,6 +89,13 @@ class Book(models.Model):
 class WordEntry(models.Model):
     word = models.CharField('So‘z', max_length=100)
     pronunciation = models.CharField('Talaffuz', max_length=200, blank=True)
+    audio = models.FileField('Talaffuz audiosi', upload_to=pronunciation_upload, blank=True,
+                             validators=[FileExtensionValidator(['mp3', 'wav', 'ogg']), validate_audio_size])
+    audio_kind = models.CharField('Ovoz turi', max_length=10, default='human',
+                                  choices=[('human', 'Inson ovozi'), ('ai', 'Sun’iy intellekt')])
+    audio_credit = models.CharField('Ovoz muallifi / xizmat va foydalanish huquqi', max_length=500, blank=True)
+    audio_approved = models.BooleanField('Talaffuz audiosi tekshirildi', default=False,
+                                         help_text='Audioni eshitib, talaffuz to‘g‘riligini tekshirgach belgilang.')
     equivalents = models.JSONField('Turkiy muqobillar (til: so‘z)', default=dict, blank=True)
     reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
                                     on_delete=models.SET_NULL, related_name='reviewed_words')
@@ -104,6 +120,11 @@ class WordEntry(models.Model):
 
     def clean(self):
         super().clean()
+        if self.audio_approved and (not self.audio or not self.audio_credit.strip()):
+            raise ValidationError({'audio_approved': 'Tasdiqlash uchun audio va uning manbasini kiriting.'})
+        if (self.audio and not self.audio._committed and not settings.DEBUG
+                and not settings.AWS_STORAGE_BUCKET_NAME and not settings.MEDIA_UPLOADS_PERSISTENT):
+            raise ValidationError({'audio': 'Audio yuklashdan oldin doimiy media xotirasini sozlang.'})
         if not isinstance(self.equivalents, dict) or any(
                 not isinstance(k, str) or not isinstance(v, str)
                 for k, v in self.equivalents.items()):

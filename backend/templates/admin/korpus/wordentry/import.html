@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<div class="module" style="padding:20px">
+  <p><a href="{% url 'admin:korpus_wordentry_template' %}">Excel namunasini yuklab olish (.xlsx)</a></p>
+  <p>Namunaning birinchi varag‘ini to‘ldiring. So‘z, ma’no va manba majburiy. Ko‘pi bilan 1000 qator, 5 MB.</p>
+  <p>Yangi so‘zlar qoralama saqlanadi. Bir xil so‘z va manbali mavjud yozuvlar o‘tkaziladi.</p>
+  {% if errors %}<ul class="errorlist">{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+  {% if token %}
+    <p>{{ entries|length }} ta yangi so‘z. {{ skipped }} ta takroriy qator o‘tkazildi.</p>
+    <div class="studio-table-wrap"><table><thead><tr><th>So‘z</th><th>Ma’nosi</th><th>Manba</th></tr></thead><tbody>
+    {% for entry in entries %}<tr><td>{{ entry.word }}</td><td>{{ entry.meaning }}</td><td>{{ entry.source }}</td></tr>{% endfor %}
+    </tbody></table></div>
+    <form method="post">{% csrf_token %}<input type="hidden" name="token" value="{{ token }}"><p><button class="button" type="submit">Tasdiqlash va qoralama saqlash</button></p></form>
+  {% endif %}
+  <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}<button class="button" type="submit">Tekshirish va ko‘rib chiqish</button>
+  </form>
+  <p><a href="{% url 'admin:korpus_wordentry_changelist' %}">Lug‘atga qaytish</a></p>
+</div>
+{% endblock %}

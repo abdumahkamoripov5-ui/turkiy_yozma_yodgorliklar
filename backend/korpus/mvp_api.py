@@ -17,10 +17,35 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork, SourceLink
 from .throttling import ScopedRateThrottle
+from .demo_audio import demo_audio_url
 
 
 class WordSerializer(serializers.ModelSerializer):
     reviewed = serializers.SerializerMethodField()
+    audio = serializers.SerializerMethodField()
+    audio_kind = serializers.SerializerMethodField()
+    audio_credit = serializers.SerializerMethodField()
+    audio_demo = serializers.SerializerMethodField()
+
+    def get_audio_demo(self, obj):
+        return not (obj.audio_approved and obj.audio) and bool(demo_audio_url(obj))
+
+    def get_audio(self, obj):
+        url = obj.audio.url if obj.audio_approved and obj.audio else demo_audio_url(obj)
+        if not url:
+            return None
+        request = self.context.get('request')
+        return request.build_absolute_uri(url) if request else url
+
+    def get_audio_kind(self, obj):
+        if self.get_audio_demo(obj):
+            return 'ai'
+        return obj.audio_kind if obj.audio_approved and obj.audio else None
+
+    def get_audio_credit(self, obj):
+        if self.get_audio_demo(obj):
+            return 'Microsoft Edge TTS · uz-UZ-MadinaNeural'
+        return obj.audio_credit if obj.audio_approved and obj.audio else ''
 
     def get_reviewed(self, obj):
         return obj.reviewed_at is not None
@@ -28,7 +53,7 @@ class WordSerializer(serializers.ModelSerializer):
     class Meta:
         model = WordEntry
         fields = ['id', 'word', 'pronunciation', 'meaning', 'example', 'source', 'status',
-                  'monument', 'campaign', 'equivalents', 'reviewed']
+                  'monument', 'campaign', 'equivalents', 'reviewed', 'audio', 'audio_kind', 'audio_credit', 'audio_demo']
 
 
 class BookSerializer(serializers.ModelSerializer):

@@ -43,6 +43,17 @@ async function capture(name) {
   await writeFile(new URL(`../../.local/${name}.png`, import.meta.url), Buffer.from(result.data, 'base64'))
 }
 
+async function assertSelectTextFits() {
+  const clipped = await evaluate(`Array.from(document.querySelectorAll('select:not([multiple])'))
+    .filter(node => node.getBoundingClientRect().height > 0)
+    .filter(node => {
+      const style = getComputedStyle(node);
+      const available = node.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+      return available + 1 < parseFloat(style.lineHeight);
+    }).map(node => node.name)`);
+  assert.deepEqual(clipped, [], 'Select text is clipped by the control height');
+}
+
 async function clickVisible(selector) {
   const point = await evaluate(`(() => {
     const node = document.querySelector(${JSON.stringify(selector)});
@@ -86,6 +97,7 @@ try {
  await waitFor("document.querySelector('#wordentry_form')");
  await waitFor("document.readyState === 'complete'");
  await waitFor(`document.querySelector('[data-equivalent-rows] select')`);
+ await assertSelectTextFits();
  assert.equal(await evaluate(`document.querySelector('textarea[name="equivalents"]') === null`),true);
  await evaluate(`document.querySelector('[data-equivalent-rows] select').value='tr'; document.querySelector('[data-equivalent-rows] input').value='el'`);
  await clickVisible('[data-add-equivalent]');
@@ -97,6 +109,7 @@ try {
  await command('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
  await evaluate(`document.querySelector('[data-equivalents]').scrollIntoView({block:'center',behavior:'instant'})`);
  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true,'Word form mobile overflow');
+ await assertSelectTextFits();
  await capture('admin-word-form-mobile');
  await command('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
  await command('Page.navigate',{url:origin+'/django-admin/korpus/monument/add/'});
