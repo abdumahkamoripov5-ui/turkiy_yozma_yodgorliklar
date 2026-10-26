@@ -263,6 +263,7 @@ REST_FRAMEWORK = {
         'search': '120/hour',  # konkordans, so'z chastotasi (og'ir hisob-kitob)
         'export': '30/hour',   # butun korpusni eksport qilish
         'login':  '10/minute', # parol tanlab ko'rishdan himoya (token olish)
+        'analytics': '240/hour',
     },
 }
 

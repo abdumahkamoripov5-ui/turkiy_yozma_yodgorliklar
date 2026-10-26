@@ -13,12 +13,13 @@ class MembershipTests(TestCase):
         self.user = get_user_model().objects.create_user('member', password='a-strong-password-7842')
 
     def test_anonymous_cannot_bypass_frontend_gate(self):
-        for path in ['monuments/stats/', 'monuments/concordance/?q=el',
+        for path in ['monuments/', 'monuments/featured/', 'words/', 'words/lookup/?q=el',
+                     'monuments/stats/', 'monuments/concordance/?q=el',
                      'polls/', 'sources/', 'export/?format=json']:
             self.assertEqual(self.api.get('/api/v2/' + path).status_code, 401, path)
         self.assertEqual(self.api.post('/api/v2/submit/', {}).status_code, 401)
 
-    def test_public_selection_cannot_be_widened_by_query_or_id(self):
+    def test_all_content_requires_membership_even_with_queries_or_ids(self):
         monuments = []
         words = []
         for index in range(6):
@@ -29,18 +30,17 @@ class MembershipTests(TestCase):
                                                    source='Edition', published=True))
         for resource in ['monuments', 'words']:
             response = self.api.get(f'/api/v2/{resource}/?page_size=200&ordering=-id&include_drafts=1')
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.data['count'], 3)
-        self.assertEqual(len(self.api.get('/api/v2/monuments/featured/').data), 3)
-        self.assertEqual(self.api.get(f'/api/v2/monuments/{monuments[0].pk}/').status_code, 200)
-        self.assertEqual(self.api.get(f'/api/v2/monuments/{monuments[-1].pk}/').status_code, 404)
-        self.assertEqual(self.api.get(f'/api/v2/words/{words[-1].pk}/').status_code, 404)
-        self.assertEqual(self.api.get('/api/v2/words/lookup/?q=word5').data['results'], [])
-        self.assertEqual(self.api.get('/api/v2/monuments/?search=Monument%205').data['count'], 0)
+            self.assertEqual(response.status_code, 401)
+        for path in ['monuments/featured/', f'monuments/{monuments[0].pk}/',
+                     f'monuments/{monuments[-1].pk}/', f'words/{words[-1].pk}/',
+                     'words/lookup/?q=word5', 'monuments/?search=Monument%205']:
+            self.assertEqual(self.api.get('/api/v2/' + path).status_code, 401, path)
         self.api.force_authenticate(self.user)
         self.assertEqual(self.api.get('/api/v2/monuments/').data['count'], 6)
         self.assertEqual(self.api.get('/api/v2/words/').data['count'], 6)
         self.assertEqual(self.api.get(f'/api/v2/monuments/{monuments[-1].pk}/').status_code, 200)
+        self.assertEqual(self.api.get(f'/api/v2/words/{words[-1].pk}/').status_code, 200)
+        self.assertEqual(len(self.api.get('/api/v2/words/lookup/?q=word5').data['results']), 1)
 
     def test_public_occurrences_do_not_reveal_members_only_monuments(self):
         monuments = [Monument.objects.create(title=f'Monument {index}', year=700 + index,
@@ -51,7 +51,7 @@ class MembershipTests(TestCase):
                                         source='Edition', published=True)
         word = WordEntry.objects.create(word='el', meaning='People', source='Edition', published=True)
         url = f'/api/v2/words/{word.pk}/occurrences/'
-        self.assertEqual(len(self.api.get(url).data['results']), 3)
+        self.assertEqual(self.api.get(url).status_code, 401)
         self.api.force_authenticate(self.user)
         self.assertEqual(len(self.api.get(url).data['results']), 4)
 

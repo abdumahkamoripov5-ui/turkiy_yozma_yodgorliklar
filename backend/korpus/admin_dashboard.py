@@ -56,6 +56,8 @@ def dashboard_data(request):
     result['queue'] = sorted(result['queue'], key=lambda row: row['date'])[:5]
     result['percent'] = round(100 * result['published'] / result['total']) if result['total'] else 0
     result['draft'] = result['total'] - result['published']
+    from .analytics import usage_report
+    result['analytics'] = usage_report(request)
     for entry in LogEntry.objects.filter(user=request.user).select_related('content_type').order_by('-action_time')[:6]:
         model = entry.content_type.model_class() if entry.content_type else None
         model_admin = admin.site._registry.get(model)

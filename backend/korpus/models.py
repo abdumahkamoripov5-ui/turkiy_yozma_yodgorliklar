@@ -2,6 +2,7 @@ import os
 import uuid
 
 from django.db import models
+from django.utils import timezone
 
 
 def _random_name(folder, filename):
@@ -261,6 +262,31 @@ class UserActivity(models.Model):
         ordering = ['-timestamp']
         verbose_name = 'Foydalanuvchi faoliyati'
         verbose_name_plural = 'Foydalanuvchi faoliyati'
+
+
+class SiteVisit(models.Model):
+    visitor_key = models.UUIDField(db_index=True)
+    session_key = models.UUIDField(default=uuid.uuid4, unique=True)
+    user = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.SET_NULL)
+    started_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    last_seen = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Sayt tashrifi'
+        verbose_name_plural = 'Sayt tashriflari'
+
+
+class PageView(models.Model):
+    visit = models.ForeignKey(SiteVisit, on_delete=models.CASCADE, related_name='pageviews')
+    event_key = models.UUIDField(unique=True)
+    user = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.SET_NULL)
+    page = models.CharField(max_length=32)
+    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        indexes = [models.Index(fields=['page', 'timestamp'], name='pageview_page_time')]
+        verbose_name = 'Sahifa ochilishi'
+        verbose_name_plural = 'Sahifa ochilishlari'
 
 
 class SiteSettings(models.Model):

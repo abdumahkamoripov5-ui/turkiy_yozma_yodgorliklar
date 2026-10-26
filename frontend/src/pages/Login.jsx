@@ -11,8 +11,8 @@ export default function Login() {
   const { t, login } = useApp()
   const c = useCopy()
   const navigate = useNavigate()
-  const [params] = useSearchParams()
-  const [register, setRegister] = useState(params.get('mode') === 'register')
+  const [params, setParams] = useSearchParams()
+  const register = params.get('mode') === 'register'
   const [form, setForm] = useState({ username: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -68,7 +68,7 @@ export default function Login() {
           </button>
         </form>
         {register && <p style={{ fontSize: '.85rem', marginTop: '1rem', color: 'var(--text2)' }}>{c('Kamida 8 belgili, oddiy bo‘lmagan parol tanlang. Kirish va foydalanish hodisalari hisobingiz bilan qayd etiladi.', 'Выберите сложный пароль от 8 символов. События входа и использования записываются с вашим аккаунтом.', 'Choose a strong password of at least 8 characters. Sign-in and usage events are recorded with your account.')}</p>}
-        <button className="meros-text-link" style={{ marginTop: '1rem', width: '100%' }} onClick={() => { setRegister(value => !value); setError(null) }}>{register ? c('Akkauntingiz bormi? Kirish', 'Уже есть аккаунт? Войти', 'Already a member? Sign in') : c('Bepul ro‘yxatdan o‘tish', 'Бесплатная регистрация', 'Register for free')}</button>
+        <button className="meros-text-link" style={{ marginTop: '1rem', width: '100%' }} onClick={() => { const next = new URLSearchParams(params); if (register) next.delete('mode'); else next.set('mode', 'register'); setParams(next, { replace: true }); setError(null) }}>{register ? c('Akkauntingiz bormi? Kirish', 'Уже есть аккаунт? Войти', 'Already a member? Sign in') : c('Bepul ro‘yxatdan o‘tish', 'Бесплатная регистрация', 'Register for free')}</button>
       </div>
     </div>
   )

@@ -447,6 +447,23 @@ class UserActivityAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'path']
     date_hierarchy = 'timestamp'
 
+    def get_urls(self):
+        from django.urls import path
+        return [path('report/', self.admin_site.admin_view(self.report_view),
+                     name='korpus_useractivity_report')] + super().get_urls()
+
+    def report_view(self, request):
+        from django.core.exceptions import PermissionDenied
+        from django.template.response import TemplateResponse
+        from .analytics import usage_report
+        report = usage_report(request)
+        if report is None:
+            raise PermissionDenied
+        return TemplateResponse(request, 'admin/analytics_report.html', {
+            **self.admin_site.each_context(request), 'title': 'Tashriflar va foydalanish statistikasi',
+            'report': report, 'opts': self.model._meta,
+        })
+
     def has_add_permission(self, request):
         return False
 

@@ -7,6 +7,8 @@ export default function MotionEffects() {
   const { pathname } = useLocation()
 
   useEffect(() => {
+    // This preview owns its scroll timeline; avoid a second page-wide RAF/observer.
+    if (pathname === '/stone-preview' || pathname === '/') return undefined
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
     const main = document.querySelector('main')
     if (!main) return undefined
@@ -81,5 +83,5 @@ export default function MotionEffects() {
     }
   }, [pathname])
 
-  return <div className="reading-progress" aria-hidden="true"><span ref={progress} /></div>
+  return pathname === '/stone-preview' || pathname === '/' ? null : <div className="reading-progress" aria-hidden="true"><span ref={progress} /></div>
 }

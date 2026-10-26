@@ -4,6 +4,7 @@
 <nav class="sticky studio-sidebar" id="nav-sidebar" aria-label="Boshqaruv bo‘limlari">
   <span class="studio-nav-kicker">ISH MAYDONI</span>
   <a class="studio-overview-link {% if request.path == '/django-admin/' %}is-active{% endif %}" href="{% url 'admin:index' %}"><span aria-hidden="true">◫</span> Umumiy ko‘rinish <span aria-hidden="true">↗</span></a>
+  {% if perms.korpus.view_useractivity %}<a class="studio-overview-link" href="{% url 'admin:korpus_useractivity_report' %}"><span aria-hidden="true">▥</span> Statistika va hisobotlar <span aria-hidden="true">↗</span></a>{% endif %}
   <label class="studio-nav-search"><span class="visually-hidden">Bo‘limni qidirish</span><input type="search" id="nav-filter" placeholder="Bo‘limni qidirish…" aria-label="Bo‘limni qidirish"></label>
   {% include "admin/studio_model_links.html" with models=navigation.core %}
   {% if navigation.extra %}<details class="studio-extra-nav"{% if navigation.extra_open %} open{% endif %}><summary>Sozlamalar va tarix</summary>{% include "admin/studio_model_links.html" with models=navigation.extra %}</details>{% endif %}

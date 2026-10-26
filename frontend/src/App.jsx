@@ -4,8 +4,10 @@ import { AppProvider, useApp } from './context/AppContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Landing'
+import StonePreview from './pages/StonePreview'
 import './mvp/landing.css'
 import MotionEffects from './components/MotionEffects'
+import UsageTracker from './components/UsageTracker'
 
 // Sahifalar lazy yuklanadi — leaflet (xarita) va boshqa og'ir kodlar faqat kerak bo'lganda olinadi.
 const Monuments = lazy(() => import('./pages/Monuments'))
@@ -52,17 +54,19 @@ function Layout() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
       <RouteScroll />
+      <UsageTracker />
       <MotionEffects />
       <Navbar />
       <main>
         <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/stone-preview" element={<StonePreview />} />
+          <Route element={<RequireAuth />}>
           <Route path="/explore" element={<Explore />} />
           <Route path="/monuments" element={<Monuments />} />
           <Route path="/words" element={<Words />} />
           <Route path="/words/:id" element={<WordArticle />} />
-          <Route element={<RequireAuth />}>
           <Route path="/saved" element={<PersonalLibrary />} />
           <Route path="/polls" element={<Polls />} />
           <Route path="/sources" element={<Sources />} />
@@ -93,7 +97,7 @@ function Layout() {
 function RequireAuth() {
   const { user } = useApp()
   const location = useLocation()
-  return user ? <Outlet /> : <Navigate replace to={`/login?next=${encodeURIComponent(location.pathname + location.search + location.hash)}`} />
+  return user ? <Outlet /> : <Navigate replace to={`/login?mode=register&next=${encodeURIComponent(location.pathname + location.search + location.hash)}`} />
 }
 
 function NotFound() {

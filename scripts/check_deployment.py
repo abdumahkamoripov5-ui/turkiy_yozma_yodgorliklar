@@ -27,9 +27,6 @@ def check(path, expected=200, token=None):
                 result['count_or_status'] = data.get('count', data.get('status')) if isinstance(data, dict) else len(data)
                 if isinstance(data, dict) and 'release' in data:
                     result['release'] = data['release']
-                if not token and path in ['/api/v2/monuments/?page_size=200', '/api/v2/words/?page_size=200']:
-                    if data['count'] > 3:
-                        result['error'] = 'Public selection exceeds three items'
             if response.status != expected:
                 result['error'] = f'Expected {expected}'
             return result
@@ -43,8 +40,8 @@ def check(path, expected=200, token=None):
 
 
 paths = [('/api/v2/health/', 200), ('/app/', 200), ('/app/explore', 200),
-         ('/api/v2/monuments/?page_size=200', 200), ('/api/v2/monuments/featured/', 200),
-         ('/api/v2/words/?page_size=200', 200), ('/api/v2/polls/', 401),
+         ('/api/v2/monuments/?page_size=200', 401), ('/api/v2/monuments/featured/', 401),
+         ('/api/v2/words/?page_size=200', 401), ('/api/v2/polls/', 401),
          ('/api/v2/export/?format=json', 401), ('/api/v2/monuments/stats/', 401),
          ('/api/v2/books/', 404), ('/api/v2/lessons/', 404), ('/api/v2/research/', 404),
          ('/django-admin/login/', 200)]

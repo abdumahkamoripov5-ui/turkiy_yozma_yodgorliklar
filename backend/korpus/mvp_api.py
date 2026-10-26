@@ -133,15 +133,6 @@ class WordViewSet(PublicReadOnlyViewSet):
     search_fields = ['word', 'meaning', 'example']
     throttle_scope = 'search'
 
-    def get_permissions(self):
-        return [permissions.AllowAny()]
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            from .access import preview_words
-            return preview_words()
-        return super().get_queryset()
-
     @action(detail=True, methods=['get'])
     def occurrences(self, request, pk=None):
         from .models import Monument
@@ -151,9 +142,6 @@ class WordViewSet(PublicReadOnlyViewSet):
         key = normalize_word(entry.word)
         results = []
         monuments = Monument.objects.filter(status='Chop etilgan').prefetch_related('reading_lines')
-        if not request.user.is_authenticated:
-            from .access import preview_monuments
-            monuments = preview_monuments().prefetch_related('reading_lines')
         for monument in monuments:
             for line in reading_data(monument)['lines']:
                 words = re.findall(r"[^\W\d_]+(?:['’‘ʻʼʹ-][^\W\d_]+)*", line['transliteration'], re.UNICODE)

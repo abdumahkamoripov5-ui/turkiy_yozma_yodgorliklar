@@ -143,5 +143,17 @@ try {
  await clickVisible('#nav-sidebar a[href$="/auth/user/"]');
  await waitFor(`location.pathname.endsWith('/auth/user/') && document.querySelector('#changelist')`);
  assert.equal(await evaluate(`document.querySelector('.studio-extra-nav').open`),true);
- assert.deepEqual(exceptions,[]); console.log('Admin login, dashboard, content list, edit form and mobile menu passed');
+ await command('Page.navigate',{url:origin+'/django-admin/korpus/useractivity/report/?report=month'});
+ await waitFor(`document.querySelector('.studio-analytics')`);
+ assert.equal(await evaluate(`document.querySelectorAll('.studio-analytics-cards > div').length`),6);
+ assert.equal(await evaluate(`document.querySelectorAll('.studio-analytics-chart > div').length`),30);
+ await capture('analytics-report-desktop');
+ await command('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+ assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true,'Analytics mobile overflow');
+ await capture('analytics-report-mobile');
+ await clickVisible('.studio-report-tabs a[href="?report=week"]');
+ await waitFor(`document.querySelectorAll('.studio-analytics-chart > div').length === 7`);
+ await evaluate(`document.documentElement.setAttribute('data-theme','dark')`);
+ await capture('analytics-report-dark-mobile');
+ assert.deepEqual(exceptions,[]); console.log('Admin login, dashboard, content list, edit form, mobile menu and daily/weekly/monthly analytics passed');
 } finally {await command('Page.close').catch(()=>{});socket.close()}

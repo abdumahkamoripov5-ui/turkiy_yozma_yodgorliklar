@@ -9,6 +9,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from korpus import api as korpus_api
 from korpus import mvp_api
+from korpus.analytics import PageEventView
 
 # ── DRF Router ────────────────────────────────────────────────────────────────
 router = DefaultRouter()
@@ -37,6 +38,7 @@ urlpatterns = [
     path('api/v2/auth/token/',         korpus_api.CustomTokenObtainPairView.as_view(), name='token-obtain'),
     path('api/v2/auth/register/', mvp_api.RegisterView.as_view(), name='register'),
     path('api/v2/health/', mvp_api.HealthView.as_view(), name='mvp-health'),
+    path('api/v2/analytics/event/', PageEventView.as_view(), name='analytics-event'),
     path('api/v2/auth/token/refresh/', TokenRefreshView.as_view(),                     name='token-refresh'),
     path('api/v2/submit/',             korpus_api.SubmissionCreateView.as_view(),       name='v2-submit'),
     path('api/v2/settings/',           korpus_api.SiteSettingsView.as_view(),           name='v2-settings'),

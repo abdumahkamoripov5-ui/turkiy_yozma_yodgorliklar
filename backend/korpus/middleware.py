@@ -12,7 +12,7 @@ class ActivityMiddleware:
         if request.path.startswith('/api/v2/') and not request.path.endswith('/health/'):
             response['Cache-Control'] = 'private, no-store'
             user = getattr(request, 'user', None)
-            if user and user.is_authenticated:
+            if user and user.is_authenticated and not request.path.startswith('/api/v2/analytics/'):
                 UserActivity.objects.create(user=user, method=request.method,
                                             path=request.path[:250], status=response.status_code)
         return response
