@@ -2,9 +2,13 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 import { getLang, setLang as setI18nLang, t } from '../i18n'
 
 const AppContext = createContext(null)
+const readTheme = () => {
+  const stored = localStorage.getItem('theme')
+  return stored === 'light' || stored === 'dark' ? stored : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
 
 export function AppProvider({ children }) {
-  const [theme, setThemeState] = useState(() => localStorage.getItem('theme') || 'light')
+  const [theme, setThemeState] = useState(readTheme)
   const [lang, setLangState] = useState(getLang)
   const [user, setUser] = useState(() => {
     const u = localStorage.getItem('username')
@@ -18,6 +22,16 @@ export function AppProvider({ children }) {
       localStorage.setItem('theme', next)
       return next
     })
+  }, [])
+
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-color-scheme: dark)')
+    const sync = () => setThemeState(readTheme())
+    const storage = event => { if (event.key === 'theme' || event.key === null) sync() }
+    const system = () => { if (!['light', 'dark'].includes(localStorage.getItem('theme'))) sync() }
+    window.addEventListener('storage', storage)
+    preference.addEventListener('change', system)
+    return () => { window.removeEventListener('storage', storage); preference.removeEventListener('change', system) }
   }, [])
 
   const changeLang = useCallback(l => {

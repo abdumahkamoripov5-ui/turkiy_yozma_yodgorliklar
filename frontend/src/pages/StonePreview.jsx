@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCopy } from '../mvp/copy'
 import { useApp } from '../context/AppContext'
-import StoneSculpture from '../components/StoneSculpture'
+import CaveJourney from '../components/CaveJourney'
+import CaveAudio from '../components/CaveAudio'
+import InscriptionReveal from '../components/InscriptionReveal'
 import kultegin from '../assets/stones/kultegin.jpg'
 import bilge from '../assets/stones/bilge-khagan.jpg'
 import detail from '../assets/stones/kultegin-detail.jpg'
@@ -27,8 +29,8 @@ export default function StonePreview() {
   const lightweight=useRef(lite)
   const [reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches)
   const scenes=[
-    {number:'01',tag:c('SUKUTDAGI OVOZ','ГОЛОС В ТИШИНЕ','A VOICE IN SILENCE'),title:c('Tosh jim.\nTarix gapiradi.','Камень молчит.\nИстория говорит.','Silent stone.\nLiving history.'),text:c('Ming yillik masofani bir harakat bilan bosib o‘ting. Toshga bitilgan xotiraga yaqinlashing.','Одно движение через тысячелетие. Приблизьтесь к памяти, высеченной в камне.','Cross a thousand years in a single movement. Move closer to memory carved in stone.'),caption:c('Kultegin bitiktoshi','Стела Кюль-тегина','Kül Tigin stele')},
-    {number:'02',tag:c('IZLARNI OCHING','ОТКРОЙТЕ СЛЕДЫ','UNCOVER THE TRACES'),title:c('Har bir iz —\nbir hikoya.','Каждый след —\nсвоя история.','Every mark,\na story.'),text:c('Kamera yaqinlashadi. Yorug‘lik tosh yuzasidagi belgilar va tabiiy yoriqlar bo‘ylab sirg‘aladi.','Камера приближается. Свет скользит по знакам и естественным трещинам камня.','The camera moves closer. Light travels across carved marks and the stone’s natural fractures.'),caption:c('Kultegin · bitik yuzasi','Кюль-тегин · поверхность надписи','Kül Tigin · inscription surface')},
+    {number:'01',tag:c('SUKUTDAGI OVOZ','ГОЛОС В ТИШИНЕ','A VOICE IN SILENCE'),title:c('Tosh jim.\nTarix gapiradi.','Камень молчит.\nИстория говорит.','Silent stone.\nLiving history.'),text:c('Qadimiy g‘or sukunatiga kiring. Bitiktoshlar orasidan o‘tib, toshga bitilgan xotiraga yaqinlashing.','Одно движение через тысячелетие. Приблизьтесь к памяти, высеченной в камне.','Enter the silence of an ancient cave. Walk among the steles toward memory carved in stone.'),caption:c('Kultegin bitiktoshi','Стела Кюль-тегина','Kül Tigin stele')},
+    {number:'02',tag:c('IZLARNI OCHING','ОТКРОЙТЕ СЛЕДЫ','UNCOVER THE TRACES'),title:c('Har bir iz —\nbir hikoya.','Каждый след —\nсвоя история.','Every mark,\na story.'),text:c('Kirish ortda qoladi. Qoya yo‘lagi bo‘ylab g‘orning ichkari zaliga qadam tashlang.','Вход остаётся позади. Пройдите по каменному коридору во внутренний зал пещеры.','Leave the entrance behind. Follow the rocky passage deeper into the cave chamber.'),caption:c('Kultegin · bitik yuzasi','Кюль-тегин · поверхность надписи','Kül Tigin · inscription surface')},
     {number:'03',tag:c('O‘TMISHDAN KELAJAKKA','ИЗ ПРОШЛОГО В БУДУЩЕЕ','FROM PAST TO FUTURE'),title:c('Merosga\nyangi nigoh.','Новый взгляд\nна наследие.','Heritage,\nseen anew.'),text:c('Bilga xoqon va Kultegin. Asrlarni bog‘lagan bitiklar endi sizning kashfiyotingizni kutadi.','Бильге-каган и Кюль-тегин. Надписи, соединяющие века, ждут вашего открытия.','Bilge Qaghan and Kül Tigin. Inscriptions that connect centuries await your discovery.'),caption:c('Bilga xoqon yodgorligi','Памятник Бильге-кагану','Bilge Qaghan monument')},
   ]
   useEffect(()=>{
@@ -101,17 +103,19 @@ export default function StonePreview() {
   const goTo=index=>{
     if(reduced){document.getElementById(`stone-scene-${index}`)?.scrollIntoView({behavior:'instant',block:'center'});return}
     const header=document.querySelector('.navbar-blur')?.offsetHeight||0,top=root.current.getBoundingClientRect().top+scrollY-header
-    scrollTo({top:top+(root.current.offsetHeight-stage.current.offsetHeight)*[0,.47,.91][index],behavior:'smooth'})
+    scrollTo({top:top+(root.current.offsetHeight-stage.current.offsetHeight)*[0,.43,.86][index],behavior:'smooth'})
   }
+  const finishJourney=()=>scrollTo({top:document.documentElement.scrollHeight,behavior:reduced?'instant':'smooth'})
+  const revealInscription=()=>document.getElementById('inscription-view')?.scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'})
   return <div className={`stone-preview${reduced?' stone-preview-reduced':''}${nativeScroll&&!reduced?' stone-native-scroll':''}${lite?' stone-performance-lite':''}`}>
     <section className="stone-scroll" ref={root} aria-label={c('Bitiktosh bilan sayohat','Путешествие к стеле','A journey to the stone')}>
       <div className="stone-stage" ref={stage} data-scene={active}>
         <div className="cinema-aurora" aria-hidden="true"/><div className="cinema-beam cinema-beam-one" aria-hidden="true"/><div className="cinema-beam cinema-beam-two" aria-hidden="true"/>
         <div className="cinema-dust" aria-hidden="true">{Array.from({length:24},(_,i)=><i key={i} style={{'--dust-x':`${(i*37+11)%100}%`,'--dust-y':`${(i*23+17)%100}%`,'--dust-time':`${7+i%6}s`,'--dust-delay':`${-i*.7}s`}}/>)}</div>
-        <div className="stone-exhibit-heading"><Link to="/">↖ {c('Turkiy Meros','Тюркское наследие','Turkiy Meros')}</Link><span><i/>{c('RAQAMLI EKSPEDITSIYA','ЦИФРОВАЯ ЭКСПЕДИЦИЯ','A DIGITAL EXPEDITION')}</span><span className="stone-preview-badge">{c('Sinov · 02','Эскиз · 02','Preview · 02')}</span></div>
+        <div className="stone-exhibit-heading"><Link to="/">↖ {c('Turkiy Meros','Тюркское наследие','Turkiy Meros')}</Link><span><i/>{c('RAQAMLI EKSPEDITSIYA','ЦИФРОВАЯ ЭКСПЕДИЦИЯ','A DIGITAL EXPEDITION')}</span><div className="cave-controls"><button type="button" className="stone-footer-shortcut" onClick={finishJourney}>{c('Eng pastga','В самый низ','To the bottom')} <span aria-hidden="true">↓</span></button></div></div>
         <div className="cinema-monument-title" aria-hidden="true"><span>{c('TOSH','КАМЕНЬ','STONE')}</span><span>{c('XOTIRASI','ПАМЯТЬ','MEMORY')}</span></div>
         <div className="cinema-orbital-field" aria-hidden="true"><div className="cinema-orbit orbit-a"/><div className="cinema-orbit orbit-b"/><div className="cinema-orbit orbit-c"/><span>VIII</span></div>
-        {!reduced&&<StoneSculpture motion={motion} paused={false} nativeScroll={nativeScroll}/>}
+        {!reduced&&<CaveJourney motion={motion} nativeScroll={nativeScroll}/>}
         <div className="cinema-pedestal" aria-hidden="true"><i/><span/></div>
         <div className="cinema-fragments" aria-hidden="true">{Array.from({length:7},(_,i)=><i key={i} style={{'--fragment-i':i}}/>)}</div>
         <div className="cinema-coordinate" aria-hidden="true">47°12′ N<br/>102°50′ E <span>ORKHON / MONGOLIA</span></div>
@@ -120,7 +124,7 @@ export default function StonePreview() {
           <span className="stone-chapter"><b>{scene.number}</b><i/>{scene.tag}</span>
           {index===0?<h1>{scene.title}</h1>:<h2>{scene.title}</h2>}
           <p>{scene.text}</p>
-          {index===2?<Link className="stone-discover-link" to={user?'/monuments':'/login?mode=register'}>{user?c('Merosni kashf eting','Откройте наследие','Discover the heritage'):c('Bepul hisob ochish','Создать бесплатный аккаунт','Create a free account')}<span>↗</span></Link>:<button className="stone-discover-link" onClick={()=>goTo(index+1)}>{c('Sayohatni davom ettiring','Продолжить путешествие','Continue the journey')}<span>↘</span></button>}
+          {index===2?<button type="button" className="stone-discover-link" onClick={revealInscription}>{c('Bitikni yaqindan ko‘ring','Рассмотреть надпись','See the inscription up close')}<span>↓</span></button>:<button className="stone-discover-link" onClick={()=>goTo(index+1)}>{c('Sayohatni davom ettiring','Продолжить путешествие','Continue the journey')}<span>↘</span></button>}
           {reduced&&<img className="stone-static-image" src={[kultegin,detail,bilge][index]} alt={scene.caption} width="900" height="1200"/>}
         </article>)}</div>
         <div className="cinema-detail-window" aria-hidden="true"><img src={detail} alt="" width="581" height="525"/><div className="cinema-scan-line"/><span>01 / {c('BITIKNING IZI','СЛЕД НАДПИСИ','THE INSCRIPTION')}</span><i/></div>
@@ -128,6 +132,8 @@ export default function StonePreview() {
         <div className="stone-scroll-progress" aria-hidden="true"><span ref={bar}/></div>
       </div>
     </section>
-    <section className="stone-afterword container"><span className="meros-eyebrow">{c('TOSHDAN MATNGA','ОТ КАМНЯ К ТЕКСТУ','FROM STONE TO TEXT')}</span><h2>{c('Endi tarixni\no‘zingiz o‘qing.','Теперь прочитайте\nисторию сами.','Now read\nthe history yourself.')}</h2><p>{c('Ko‘rganingiz — haqiqiy muzey fotosuratlari asosidagi badiiy 3D tajriba. Bu arxeologik 3D skan emas. Matnlar va tarjimalarni korpusda o‘rganing.','Перед вами художественный 3D-опыт на основе подлинных музейных фотографий, а не археологический 3D-скан. Тексты и переводы доступны в корпусе.','An artistic 3D experience built from original museum photographs, not an archaeological 3D scan. Explore texts and translations in the corpus.')}</p><Link className="stone-discover-link" to={user?'/monuments':'/login?mode=register'}>{user?c('Korpusni ochish','Открыть корпус','Open the corpus'):c('Bepul hisob ochish','Создать бесплатный аккаунт','Create a free account')}<span>↗</span></Link><details className="stone-photo-sources"><summary>{c('Fotosuratlar va manbalar','Фотографии и источники','Photographs and sources')}</summary>{sources.map(([name,author,url])=><p key={url}><a href={url} target="_blank" rel="noreferrer">{name} ↗</a> · {author} · Public domain / Wikimedia Commons</p>)}</details></section>
+    <CaveAudio />
+    <InscriptionReveal />
+    <section className="stone-afterword container"><span className="meros-eyebrow">{c('TOSHDAN MATNGA','ОТ КАМНЯ К ТЕКСТУ','FROM STONE TO TEXT')}</span><h2>{c('Endi tarixni\no‘zingiz o‘qing.','Теперь прочитайте\nисторию сами.','Now read\nthe history yourself.')}</h2><p>{c('G‘or va undagi bitiktoshlar — Teshik-Tosh hamda asl muzey suratlari asosida AI yordamida yaratilgan badiiy sahna. Bitiklarning asl matni va tarjimalarini korpusda o‘rganing.','Пещера и стелы — художественная AI-сцена по мотивам фотографий Тешик-Таш и музейных оригиналов. Подлинные тексты и переводы доступны в корпусе.','The cave and steles are an AI-created artistic scene inspired by Teshik-Tash and original museum photographs. Explore authentic inscriptions and translations in the corpus.')}</p><Link className="stone-discover-link" to={user?'/monuments':'/login?mode=register'}>{user?c('Korpusni ochish','Открыть корпус','Open the corpus'):c('Bepul hisob ochish','Создать бесплатный аккаунт','Create a free account')}<span>↗</span></Link><details className="stone-photo-sources"><summary>{c('Fotosuratlar va manbalar','Фотографии и источники','Photographs and sources')}</summary>{sources.map(([name,author,url])=><p key={url}><a href={url} target="_blank" rel="noreferrer">{name} ↗</a> · {author} · Public domain / Wikimedia Commons</p>)}<p className="cave-reference-credit">{c('G‘or uchun vizual manba: ','Визуальный ориентир для пещеры: ','Cave visual reference: ')}<a href="https://uzbekistan.travel/en/o/surkhandarya-cradle-ancient-civilizations/" target="_blank" rel="noreferrer">Teshik-Tosh · Uzbekistan Travel ↗</a></p></details></section>
   </div>
 }

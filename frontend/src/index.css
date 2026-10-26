@@ -493,6 +493,14 @@ a.card:hover .icon-chip {
 }
 .site-footer > * { position: relative; z-index: 1; }
 .site-footer a:not(:hover) { color: var(--text2); }
+.footer-content { display:flex; justify-content:space-between; flex-wrap:wrap; gap:2rem; }
+.footer-account { max-width:430px; }
+.footer-account-links { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px; }
+.footer-account-links a { display:inline-flex; align-items:center; justify-content:center; gap:20px; min-height:44px; padding:10px 20px; border:1px solid var(--border-strong); border-radius:5px; font-size:.85rem; }
+.site-footer .footer-register:not(:hover) { color:var(--bg); background:var(--accent); border-color:var(--accent); }
+.footer-account-links a:hover { border-color:var(--accent); color:var(--accent); }
+.footer-account p { line-height:1.7; }
+#site-footer { scroll-margin-top:80px; padding-bottom:max(2rem,env(safe-area-inset-bottom)); }
 
 /* ── Jadval ────────────────────────────────────────────────────── */
 table { border-collapse: collapse; width: 100%; }

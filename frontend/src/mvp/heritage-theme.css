@@ -1,43 +1,45 @@
-/* Warm manuscript paper, bronze details and contemporary slate / olive ink. */
+/* Shared palette: warm ivory and apricot by day, violet and soft gold by night. */
 :root,
 [data-theme="light"] {
   color-scheme:light;
-  --bg:#f4f0e7; --bg2:#fcfaf5; --bg3:#eae5da;
-  --text:#293638; --text2:#5e6965;
-  --border:#d9d3c6; --border-strong:#aea99a;
-  --accent:#805a34; --accent2:#694624; --accent3:#624527;
-  --accent-rgb:128,90,52;
-  --accent-grad:linear-gradient(120deg,#405953,#2e4544);
-  --nav-bg:rgba(249,246,239,.95);
-  --museum-gold:#b48b58; --museum-ink:#293c3e;
-  --shadow:0 4px 20px #283a3210;
-  --shadow-lg:0 18px 48px #283a321a;
-  --glow:0 0 32px #b48b5810;
+  --bg:#fff8ef; --bg2:#fffdf8; --bg3:#f4e7d8;
+  --text:#342c40; --text2:#706178;
+  --border:#e4d7cc; --border-strong:#bba39e;
+  --accent:#995328; --accent2:#7e3e26; --accent3:#804126;
+  --accent-rgb:153,83,40;
+  --accent-grad:linear-gradient(120deg,#a85f3c,#925538);
+  --button-text:#ffffff;
+  --nav-bg:rgba(255,253,248,.97);
+  --museum-gold:#a85f3c; --museum-ink:#342c40;
+  --shadow:0 4px 20px #6342650a;
+  --shadow-lg:0 18px 48px #63426514;
+  --glow:0 0 32px #e9b9a118;
   --grain-opacity:.018;
 }
 [data-theme="dark"] {
   color-scheme:dark;
-  --bg:#1b2426; --bg2:#242f31; --bg3:#2d3a3b;
-  --text:#e9e5db; --text2:#b7beb4;
-  --border:#405052; --border-strong:#697773;
-  --accent:#d7b489; --accent2:#e7caa4; --accent3:#e0bd93;
-  --accent-rgb:215,180,137;
-  --accent-grad:linear-gradient(120deg,#455f58,#354e4c);
-  --nav-bg:rgba(27,36,38,.96);
-  --museum-gold:#d7b489; --museum-ink:#e9e5db;
-  --shadow:0 4px 20px #0e171821;
-  --shadow-lg:0 18px 48px #0e171833;
+  --bg:#19182b; --bg2:#242239; --bg3:#302c48;
+  --text:#f6edf8; --text2:#c5b8d0;
+  --border:#46405e; --border-strong:#827092;
+  --accent:#efbd91; --accent2:#ffdab3; --accent3:#f5cda9;
+  --accent-rgb:239,189,145;
+  --accent-grad:linear-gradient(120deg,#d6ae87,#edc9a4);
+  --button-text:#211c32;
+  --nav-bg:rgba(36,34,57,.97);
+  --museum-gold:#efbd91; --museum-ink:#f6edf8;
+  --shadow:0 4px 20px #08061130;
+  --shadow-lg:0 18px 48px #08061145;
   --glow:none;
   --grain-opacity:.012;
 }
 body { line-height:1.75; }
 a:hover { color:var(--accent2); }
-.btn-primary { color:#fbf7ed; box-shadow:0 4px 12px #293c3e18; }
-.btn-primary:hover { color:#fffaf1; box-shadow:0 6px 18px #293c3e25; filter:brightness(1.07); }
+.btn-primary { color:var(--button-text); box-shadow:var(--shadow); }
+.btn-primary:hover { color:var(--button-text); box-shadow:var(--shadow-lg); filter:brightness(1.05); }
 .btn-outline:hover { background:var(--bg3); color:var(--accent2); }
 .navbar-blur { border-bottom:1px solid var(--border); }
 .brand-symbol { color:var(--accent); background:var(--bg2); border-color:var(--border); }
-.simple-landing { background:radial-gradient(ellipse at 92% 8%,rgba(var(--accent-rgb),.07),transparent 42%); }
+.simple-landing { background:radial-gradient(ellipse at 92% 8%,#dba9ed14,transparent 42%),radial-gradient(ellipse at 5% 45%,rgba(var(--accent-rgb),.05),transparent 45%); }
 .simple-landing .landing-hero { padding-top:4.5rem; padding-bottom:4rem; }
 .simple-landing .landing-features { padding-top:2rem; padding-bottom:4rem; }
 .simple-landing .landing-community { padding-top:4rem; padding-bottom:4.5rem; }

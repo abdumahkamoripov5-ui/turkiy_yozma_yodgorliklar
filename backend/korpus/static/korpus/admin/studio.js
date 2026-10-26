@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Django and the public site share the same saved theme preference.
+  window.addEventListener('storage', event => {
+    if (event.key === 'theme' || event.key === null) {
+      const mode = localStorage.getItem('theme')
+      document.documentElement.dataset.theme = ['light', 'dark'].includes(mode) ? mode : 'auto'
+    }
+  })
   const toggle = document.getElementById('toggle-nav-sidebar')
   const main = document.getElementById('main')
   const backdrop = document.querySelector('.studio-nav-backdrop')
