@@ -34,7 +34,7 @@ try{
  await fill('#login_username','member_qa_'+Date.now())
  await fill('#login_password','qa-'+crypto.randomUUID()+'Z!')
  await evaluate("document.querySelector('#login_username').form.requestSubmit()")
- await wait("location.pathname.endsWith('/words') && document.querySelector('.meros-word-card')")
+ await wait(`location.pathname===${JSON.stringify(new URL(base).pathname)} && document.querySelector('.member-home')`)
  assert.equal(await evaluate("document.querySelector('.nav-links-desktop a[href$=\"/words\"]')!==null"),true)
  assert.equal(await evaluate("document.querySelector('.preview-notice')===null"),true)
  await wait("document.cookie.includes('meros_visitor')===false") // visitor cookie is HttpOnly
@@ -42,8 +42,8 @@ try{
  const shot=await command('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})
  await writeFile(new URL('../../.local/membership-registered.png',import.meta.url),Buffer.from(shot.data,'base64'))
  await evaluate("document.querySelector('.nav-controls button.btn-outline').click()")
- await wait("document.querySelector('#login_username') && location.pathname.endsWith('/login')")
+ await wait(`document.querySelector('.stone-stage') && location.pathname===${JSON.stringify(new URL(base).pathname)}`)
  assert.equal(await evaluate("document.querySelector('.nav-links-desktop')===null"),true)
  assert.deepEqual(exceptions,[])
- console.log('Guest navigation, direct-link/API gate, real registration, next destination, member functions and logout passed')
+ console.log('Guest navigation, direct-link/API gate, real registration to member home, member navigation and logout to guest home passed')
 }finally{await command('Page.close').catch(()=>{});ws.close()}

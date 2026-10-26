@@ -1,16 +1,16 @@
-/* Shared palette: warm ivory and apricot by day, violet and soft gold by night. */
+/* Shared palette: sky blue and lavender by day, violet and soft gold by night. */
 :root,
 [data-theme="light"] {
   color-scheme:light;
-  --bg:#fff8ef; --bg2:#fffdf8; --bg3:#f4e7d8;
-  --text:#342c40; --text2:#706178;
-  --border:#e4d7cc; --border-strong:#bba39e;
-  --accent:#995328; --accent2:#7e3e26; --accent3:#804126;
-  --accent-rgb:153,83,40;
-  --accent-grad:linear-gradient(120deg,#a85f3c,#925538);
+  --bg:#f2f5ff; --bg2:#fcfdff; --bg3:#e7ecfb;
+  --text:#30334d; --text2:#626781;
+  --border:#d7def1; --border-strong:#a3add0;
+  --accent:#7054a1; --accent2:#58407f; --accent3:#60458c;
+  --accent-rgb:112,84,161;
+  --accent-grad:linear-gradient(120deg,#7c60ad,#665092);
   --button-text:#ffffff;
-  --nav-bg:rgba(255,253,248,.97);
-  --museum-gold:#a85f3c; --museum-ink:#342c40;
+  --nav-bg:rgba(252,253,255,.97);
+  --museum-gold:#7054a1; --museum-ink:#30334d;
   --shadow:0 4px 20px #6342650a;
   --shadow-lg:0 18px 48px #63426514;
   --glow:0 0 32px #e9b9a118;

@@ -1,19 +1,19 @@
-/* Shared with the public site: ivory/apricot and violet/soft gold. */
+/* Shared with the public site: sky blue/lavender and violet/soft gold. */
 :root,html[data-theme="light"] {
   color-scheme:light;
-  --primary:#995328; --secondary:#80506e; --accent:#a85f3c; --primary-fg:#ffffff;
-  --body-fg:#342c40; --body-bg:#fff8ef; --body-quiet-color:#706178; --body-medium-color:#706178; --body-loud-color:#342c40;
-  --header-bg:#fffdf8; --header-color:#342c40; --header-branding-color:#995328; --header-link-color:#80506e;
-  --breadcrumbs-bg:#fff8ef; --breadcrumbs-fg:#706178; --breadcrumbs-link-fg:#995328;
-  --link-fg:#995328; --link-hover-color:#7e3e26; --link-selected-fg:#804126;
-  --hairline-color:#eee2d9; --border-color:#e4d7cc; --darkened-bg:#f4e7d8;
-  --selected-bg:#f3e8f5; --selected-row:#f8eff9;
-  --button-fg:#ffffff; --button-bg:#995328; --button-hover-bg:#7e3e26; --default-button-bg:#80506e; --default-button-hover-bg:#65405b;
-  --object-tools-fg:#ffffff; --object-tools-bg:#80506e; --object-tools-hover-bg:#65405b;
-  --studio-panel:#fffdf8; --studio-muted:#706178; --studio-shadow:0 4px 20px #6342650a;
+  --primary:#7054a1; --secondary:#5b6fa1; --accent:#7054a1; --primary-fg:#ffffff;
+  --body-fg:#30334d; --body-bg:#f2f5ff; --body-quiet-color:#626781; --body-medium-color:#626781; --body-loud-color:#30334d;
+  --header-bg:#fcfdff; --header-color:#30334d; --header-branding-color:#7054a1; --header-link-color:#5b6fa1;
+  --breadcrumbs-bg:#f2f5ff; --breadcrumbs-fg:#626781; --breadcrumbs-link-fg:#7054a1;
+  --link-fg:#7054a1; --link-hover-color:#58407f; --link-selected-fg:#60458c;
+  --hairline-color:#e7ebf7; --border-color:#d7def1; --darkened-bg:#e7ecfb;
+  --selected-bg:#e8e8fa; --selected-row:#eef0fd;
+  --button-fg:#ffffff; --button-bg:#7054a1; --button-hover-bg:#58407f; --default-button-bg:#5b6fa1; --default-button-hover-bg:#465885;
+  --object-tools-fg:#ffffff; --object-tools-bg:#5b6fa1; --object-tools-hover-bg:#465885;
+  --studio-panel:#fcfdff; --studio-muted:#626781; --studio-shadow:0 4px 20px #6342650a;
   --heritage-sidebar:#483550; --heritage-sidebar-text:#f8edf8;
   --heritage-sidebar-muted:#dbc8df; --heritage-gold:#ffdab3;
-  --studio-welcome-bg:linear-gradient(120deg,#efe3f7,#fce4d3); --studio-welcome-fg:#342c40;
+  --studio-welcome-bg:linear-gradient(120deg,#e6e8ff,#e4f3ff); --studio-welcome-fg:#30334d;
 }
 html[data-theme="dark"] {
   color-scheme:dark;
