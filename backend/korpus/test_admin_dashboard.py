@@ -70,7 +70,7 @@ class EditorialDashboardTests(TestCase):
         request = self.request_for(self.owner)
         data = studio_navigation({'request': request, 'available_apps': admin.site.get_app_list(request)})
         self.assertEqual([item['object_name'] for item in data['core']],
-                         ['Monument', 'WordEntry', 'WordPoll', 'MonumentSubmission'])
+                         ['Monument', 'MonumentLine', 'WordEntry', 'WordForm', 'ReadingVariant', 'WordPoll', 'MonumentSubmission'])
         self.assertFalse(data['extra_open'])
         self.assertTrue(any(item['object_name'] == 'User' for item in data['extra']))
         request.path = '/django-admin/auth/user/'

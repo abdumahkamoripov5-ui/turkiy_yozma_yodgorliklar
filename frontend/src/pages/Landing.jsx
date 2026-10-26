@@ -1,12 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { useCopy } from '../mvp/copy'
 import StonePreview from './StonePreview'
 import inscription from '../assets/stones/kultegin-detail.jpg'
+import { useWorkspace } from '../context/WorkspaceContext'
+import './research.css'
 
 export default function Landing() {
   const c = useCopy()
   const { user } = useApp()
+  const navigate = useNavigate()
+  const [query, setQuery] = useState('')
+  const workspace = useWorkspace()
+  const recent = workspace.items.find(item => item.kind === 'progress')
   const features = [
     ['01', c('Asl matndan boshlang', 'Начните с оригинала', 'Start with the original'), c('Yodgorliklarni asl yozuv, transliteratsiya va tarjima bilan satrma-satr o‘qing.', 'Читайте памятники построчно: оригинал, транслитерация и перевод.', 'Read inscriptions line by line with original text, transliteration and translation.')],
     ['02', c('So‘zning izini toping', 'Проследите историю слова', 'Follow a word’s history'), c('Lug‘at va konkordans orqali so‘zning ma’nosi va tarixiy kontekstini o‘rganing.', 'Изучайте значения и исторический контекст с помощью словаря и конкорданса.', 'Explore meanings and historical context through the dictionary and concordance.')],
@@ -18,6 +25,8 @@ export default function Landing() {
         <span className="meros-eyebrow">{c('TURKIY MEROS', 'ТЮРКСКОЕ НАСЛЕДИЕ', 'TURKIY MEROS')}</span>
         <h1 id="member-home-title">{c('Merosni o‘rganishda\ndavom eting.', 'Продолжайте\nизучать наследие.', 'Continue exploring\nyour heritage.')}</h1>
         <p>{c('Asl bitiklarni o‘qing, tarixiy so‘zlarni izlang va yangi bilimlarni kashf eting.', 'Читайте подлинные надписи, ищите исторические слова и открывайте новые знания.', 'Read original inscriptions, explore historical words and discover something new.')}</p>
+        <form className="member-corpus-search" onSubmit={event => { event.preventDefault(); navigate(`/corpus?q=${encodeURIComponent(query.trim())}`) }}><input type="search" required maxLength={150} aria-label={c('Korpusdan izlash', 'Поиск в корпусе', 'Search the corpus')} placeholder={c('So‘z yoki iborani korpusdan izlang…', 'Ищите слово или фразу в корпусе…', 'Search a word or phrase in the corpus…')} value={query} onChange={event => setQuery(event.target.value)} /><button type="submit" className="btn btn-primary">{c('Izlash', 'Поиск', 'Search')}</button></form>
+        {recent && <p className="member-continue"><Link to={recent.target}>{c('O‘qishni davom ettirish', 'Продолжить чтение', 'Continue reading')}: {recent.title} →</Link></p>}
         <div className="landing-actions"><Link className="btn btn-primary" to="/monuments">{c('Yodgorliklarni ochish', 'Открыть памятники', 'Explore monuments')} ↗</Link><Link className="btn btn-outline" to="/words">{c('So‘zlar xazinasi', 'Сокровищница слов', 'Word treasury')}</Link></div>
       </div>
       <figure className="member-home-image"><img src={inscription} alt={c('Kultegin bitiktoshidagi asl yozuvlar', 'Подлинные надписи на стеле Кюль-тегина', 'Original inscriptions on the Kül Tigin stele')} width="581" height="525" fetchPriority="high" /><figcaption>{c('Kultegin bitiktoshi · 732-yil', 'Стела Кюль-тегина · 732 год', 'Kül Tigin stele · 732')}</figcaption></figure>

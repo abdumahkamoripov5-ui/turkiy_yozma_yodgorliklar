@@ -30,7 +30,9 @@ class _FixedScopeThrottle(ClientIPMixin, throttling.SimpleRateThrottle):
     scope = None
 
     def get_cache_key(self, request, view):
-        return self.cache_format % {'scope': self.scope, 'ident': self.get_ident(request)}
+        user = getattr(request, 'user', None)
+        ident = f'user:{user.pk}' if user and user.is_authenticated else self.get_ident(request)
+        return self.cache_format % {'scope': self.scope, 'ident': ident}
 
 
 class SearchRateThrottle(_FixedScopeThrottle):

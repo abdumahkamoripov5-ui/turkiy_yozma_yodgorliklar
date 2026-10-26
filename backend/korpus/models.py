@@ -147,6 +147,10 @@ class MonumentLine(models.Model):
     translation = models.TextField('Tarjima', blank=True)
     source = models.CharField('Nashr / manba va sahifa', max_length=1000, blank=True)
     published = models.BooleanField('Tekshirilgan va nashr qilingan', default=False)
+    facsimile_url = models.URLField('Satr surati URL', blank=True, max_length=2000)
+    image_region = models.JSONField('Suratdagi hudud: x, y, width, height (%)', default=dict, blank=True)
+    certainty = models.CharField('O‘qilish holati', max_length=20, choices=[('certain', 'Aniq'), ('uncertain', 'Noaniq'), ('restored', 'Tiklangan')], default='certain')
+    editorial_note = models.TextField('Ilmiy izoh', blank=True)
 
     class Meta:
         ordering = ['position', 'id']
@@ -160,6 +164,16 @@ class MonumentLine(models.Model):
             raise ValidationError('Satrga kamida bitta matn kiriting.')
         if self.published and not self.source.strip():
             raise ValidationError({'source': 'Tekshirilgan satr uchun nashr va sahifani ko‘rsating.'})
+        region = self.image_region
+        if region:
+            keys = ('x', 'y', 'width', 'height')
+            if (not isinstance(region, dict) or set(region) != set(keys)
+                    or any(type(region.get(k)) not in (int, float) or not 0 <= region[k] <= 100 for k in keys)
+                    or region['width'] <= 0 or region['height'] <= 0
+                    or region['x'] + region['width'] > 100 or region['y'] + region['height'] > 100):
+                raise ValidationError({'image_region': 'x, y, width, height foizlarda; hudud surat chegarasidan chiqmasin.'})
+        if self.facsimile_url and not self.facsimile_url.startswith(('https://', 'http://')):
+            raise ValidationError({'facsimile_url': 'HTTP yoki HTTPS surat manzilini kiriting.'})
 
     def __str__(self):
         return f'{self.monument}: {self.label or self.position}'
@@ -307,3 +321,4 @@ class SiteSettings(models.Model):
 from .mvp_models import (  # noqa: E402,F401
     Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork, SourceLink,
 )
+from .research_models import ResearchItem, WordForm, ReadingVariant  # noqa: E402,F401

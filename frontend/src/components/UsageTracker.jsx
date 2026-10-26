@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
+import api from '../api'
 
 const recorded=new Set()
 const pages=new Set(['explore','monuments','words','tools','polls','saved','sources','timeline','map',
   'scripts','stats','concordance','compare','bibliography','glossary','recommended-words',
-  'frequent-words','submit','about'])
+  'frequent-words','submit','about','corpus','morphology'])
 
 export default function UsageTracker() {
   const location=useLocation()
@@ -22,7 +23,7 @@ export default function UsageTracker() {
       if(recorded.has(key))return
       recorded.add(key)
       if(recorded.size>128)recorded.delete(recorded.values().next().value)
-      import('../api').then(({default:api})=>api.post('/analytics/event/',{page,event_id:crypto.randomUUID()})).catch(()=>{
+      api.post('/analytics/event/',{page,event_id:crypto.randomUUID()}).catch(()=>{
         // Analytics must never interrupt navigation, login or reading.
         recorded.delete(key)
       })

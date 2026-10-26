@@ -1,0 +1,41 @@
+import { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { useCopy } from '../mvp/copy'
+import { useRemote } from '../mvp/api'
+import { PageHeading, RemoteState } from '../mvp/components'
+import CorpusFilters from '../components/CorpusFilters'
+import ResearchExport from '../components/ResearchExport'
+import './research.css'
+
+export default function CorpusStatistics() {
+  const c = useCopy()
+  const [params, setParams] = useSearchParams()
+  const [draft, setDraft] = useState(() => Object.fromEntries(params))
+  const [collocate, setCollocate] = useState(params.get('collocate') || '')
+  useEffect(() => { setDraft(Object.fromEntries(params)); setCollocate(params.get('collocate') || '') }, [params])
+  const current = { ...Object.fromEntries(params), field: params.get('field') || 'transliteration' }
+  const remote = useRemote(`/research/frequency/?${new URLSearchParams(current)}`)
+  const neighbors = useRemote(params.get('collocate') ? `/research/collocations/?${new URLSearchParams({ ...current, q: params.get('collocate'), mode: 'word' })}` : null)
+  const set = (key, value) => setDraft(previous => ({ ...previous, [key]: value }))
+  const searchLink = word => `/corpus?${new URLSearchParams({ ...current, q: word, mode: 'word' })}`
+  return <div className="container meros-page research-page">
+    <PageHeading eyebrow={c('TANLANGAN KORPUS', 'ВЫБРАННЫЙ КОРПУС', 'SELECTED CORPUS')} title={c('Chastota va birga qo‘llanish', 'Частотность и сочетаемость', 'Frequency and collocations')}>{c('Davr va manbalarni tanlang. Takrorlanishlarni korpus hajmiga nisbatan solishtiring.', 'Выберите периоды и источники. Сравнивайте частоты с учётом объёма корпуса.', 'Select periods and sources. Compare frequencies relative to corpus size.')}</PageHeading>
+    <form onSubmit={event => { event.preventDefault(); setParams(new URLSearchParams(Object.entries(draft).filter(([, value]) => value !== ''))) }} className="research-search-form">
+      <div className="research-search-options"><label>{c('Matn turi', 'Слой текста', 'Text layer')}<select value={draft.field || 'transliteration'} onChange={event => set('field', event.target.value)}><option value="transliteration">{c('Transliteratsiya', 'Транслитерация', 'Transliteration')}</option><option value="original">{c('Asl yozuv', 'Оригинал', 'Original')}</option><option value="translation">{c('Tarjima', 'Перевод', 'Translation')}</option></select></label><label>{c('So‘zni filtrlash', 'Фильтр слов', 'Filter words')}<input type="search" value={draft.q || ''} maxLength={150} onChange={event => set('q', event.target.value)} /></label><label>{c('Eng kam takror', 'Мин. частота', 'Minimum frequency')}<input type="number" min="1" max="1000000" value={draft.min_count || '1'} onChange={event => set('min_count', event.target.value)} /></label><label>{c('Natijalar soni', 'Количество строк', 'Number of rows')}<select value={draft.limit || '100'} onChange={event => set('limit', event.target.value)}>{[50, 100, 200, 500].map(count => <option key={count}>{count}</option>)}</select></label></div>
+      <CorpusFilters value={draft} onChange={setDraft} /><button type="submit" className="btn btn-primary">{c('Hisoblash', 'Рассчитать', 'Calculate')}</button>
+    </form>
+    <RemoteState remote={remote}>{remote.data && <>
+      <div className="research-metrics"><div><strong>{remote.data.document_count}</strong><span>{c('yodgorlik', 'памятников', 'monuments')}</span></div><div><strong>{remote.data.total_tokens}</strong><span>{c('so‘z qo‘llanishi', 'словоупотреблений', 'tokens')}</span></div><div><strong>{remote.data.unique_words}</strong><span>{c('turli shakl', 'разных форм', 'distinct forms')}</span></div></div>
+      <p className="research-help">{c('So‘zlar kichik harf va bir xil apostrofga keltiriladi. “Har 10 000 so‘zga” tanlangan matn turining jami so‘zlari asosida hisoblanadi.', 'Слова приводятся к нижнему регистру и единому апострофу. Частота на 10 000 рассчитана по всем словам выбранного слоя текста.', 'Words use lowercase and normalized apostrophes. Frequency per 10,000 uses all tokens in the selected text layer.')}</p>
+      <div className="research-table-scroll"><table><thead><tr><th>{c('So‘z', 'Слово', 'Word')}</th><th>{c('Takror', 'Частота', 'Count')}</th><th>{c('Yodgorliklar', 'Памятники', 'Documents')}</th><th>{c('Har 10 000 so‘zga', 'На 10 000 слов', 'Per 10,000')}</th><th>{c('Amallar', 'Действия', 'Actions')}</th></tr></thead><tbody>{remote.data.results.map(row => <tr key={row.word}><th><Link to={searchLink(row.word)}>{row.word}</Link></th><td>{row.count}</td><td>{row.documents}</td><td>{row.per_10000}</td><td><button type="button" className="meros-text-link" onClick={() => setParams({ ...current, collocate: row.word })}>{c('Yonidagi so‘zlar', 'Соседние слова', 'Nearby words')} ↘</button></td></tr>)}</tbody></table></div>
+      {!remote.data.results.length && <p className="meros-empty">{c('Tanlangan matnlarda mos so‘z topilmadi.', 'В выбранных текстах слова не найдены.', 'No matching words in the selected texts.')}</p>}
+      {remote.data.truncated && <p className="meros-meta">{c('Jadval tanlangan miqdorgacha ko‘rsatildi. So‘z yoki filtr bilan toraytiring.', 'Показано выбранное число строк. Уточните слово или фильтры.', 'The table is limited to the selected row count. Narrow the word or filters.')}</p>}
+      <ResearchExport endpoint="/research/frequency/" params={current} />
+      <details className="research-distribution"><summary>{c('Yodgorliklar bo‘yicha taqsimot', 'Распределение по памятникам', 'Distribution by monument')}</summary><div className="research-table-scroll"><table><thead><tr><th>{c('Yodgorlik', 'Памятник', 'Monument')}</th><th>{c('Yil', 'Год', 'Year')}</th><th>{c('So‘zlar', 'Слова', 'Tokens')}</th>{current.q && <><th>{c('Mos shakllar', 'Совпадения', 'Matches')}</th><th>{c('Har 10 000 so‘zga', 'На 10 000 слов', 'Per 10,000')}</th></>}</tr></thead><tbody>{remote.data.documents.map(row => <tr key={row.id}><th><Link to={`/monuments?monument=${row.id}`}>{row.title}</Link></th><td>{row.year}</td><td>{row.tokens}</td>{current.q && <><td>{row.matches}</td><td>{row.matches_per_10000}</td></>}</tr>)}</tbody></table></div></details>
+    </>}</RemoteState>
+    <section className="research-collocations"><h2>{c('So‘z atrofidagi qo‘llanishlar', 'Окружение слова', 'Words in context')}</h2><form className="research-actions" onSubmit={event => { event.preventDefault(); setParams({ ...current, collocate }) }}><label>{c('Markaziy so‘z', 'Искомое слово', 'Target word')}<input required maxLength={150} value={collocate} onChange={event => setCollocate(event.target.value)} /></label><label>{c('Chap / o‘ngdagi so‘zlar', 'Слов слева / справа', 'Words left / right')}<select value={params.get('window') || '5'} onChange={event => setParams({ ...current, window: event.target.value })}>{[1, 2, 3, 5, 10].map(number => <option key={number}>{number}</option>)}</select></label><button type="submit" className="btn btn-outline">{c('Ko‘rish', 'Показать', 'Show')}</button></form>
+      {params.get('collocate') && <RemoteState remote={neighbors}>{neighbors.data && <><p>{neighbors.data.target_occurrences} {c('markaziy qo‘llanish; har ikki tomonda', 'вхождений; окно с каждой стороны', 'target occurrences; window on each side:')} {neighbors.data.window} {c('so‘z', 'слов', 'words')}.</p><div className="research-table-scroll"><table><thead><tr><th>{c('Yonma-yon so‘z', 'Соседнее слово', 'Nearby word')}</th><th>{c('Jami', 'Всего', 'Total')}</th><th>{c('Chap', 'Слева', 'Left')}</th><th>{c('O‘ng', 'Справа', 'Right')}</th><th>{c('Yodgorliklar', 'Памятники', 'Documents')}</th></tr></thead><tbody>{neighbors.data.results.map(row => <tr key={row.word}><th><Link to={searchLink(row.word)}>{row.word}</Link></th><td>{row.count}</td><td>{row.left}</td><td>{row.right}</td><td>{row.documents}</td></tr>)}</tbody></table></div></>}</RemoteState>}
+    </section>
+    <ResearchExport endpoint="/research/export/" params={Object.fromEntries(Object.entries(current).filter(([key]) => !['q', 'collocate', 'min_count', 'limit', 'window'].includes(key)))} formats={['tei', 'xlsx', 'csv', 'json']} label={c('Tanlangan korpus matnlari', 'Тексты выбранного корпуса', 'Selected corpus texts')} />
+  </div>
+}

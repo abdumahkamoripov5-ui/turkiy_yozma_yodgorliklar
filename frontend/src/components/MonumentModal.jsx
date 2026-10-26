@@ -4,6 +4,9 @@ import { useApp } from '../context/AppContext'
 import { buildCitations } from '../utils/citation'
 import { formatYear } from '../utils/format'
 import ParallelReading from './ParallelReading'
+import { Link } from 'react-router-dom'
+import { useCopy } from '../mvp/copy'
+import { SaveButton } from '../mvp/components'
 
 // Shu sessiyada ochilgan yodgorliklar — ko'rishlar soni har ochilishda emas,
 // bir marta oshsin (StrictMode'dagi ikki marta chaqiruv ham hisoblanmaydi)
@@ -22,6 +25,7 @@ function markViewed(id) {
 
 export default function MonumentModal({ monument, onClose }) {
   const { t } = useApp()
+  const c = useCopy()
   const [detail, setDetail] = useState(null)
   const [tab, setTab] = useState('parallel')
   const [loading, setLoading] = useState(true)
@@ -114,6 +118,7 @@ export default function MonumentModal({ monument, onClose }) {
         </div>
 
         <div className="modal-body">
+          {!loading && !error && <div className="research-actions"><SaveButton item={{ key: `monument-${data.id}`, title: data.title, to: `/monuments?monument=${data.id}`, type: 'monument' }} /><Link to={`/corpus?monuments=${data.id}`} onClick={onClose}>{c('Ushbu matndan izlash', 'Искать в этом тексте', 'Search this text')} ↗</Link><Link to={`/compare?monuments=${data.id}`} onClick={onClose}>{c('Taqqoslashga qo‘shish', 'Добавить к сравнению', 'Add to comparison')} ↗</Link></div>}
           {loading && <div className="spinner" />}
           {error && <div className="error-msg" role="alert">{t('error_load')}<div><button className="btn btn-outline" onClick={() => setAttempt(a => a + 1)}>{t('retry')}</button></div></div>}
 

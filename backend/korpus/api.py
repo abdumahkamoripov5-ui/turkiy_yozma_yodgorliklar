@@ -36,18 +36,22 @@ WORDFREQ_CACHE_TIMEOUT = 3600
 # ── Filters ───────────────────────────────────────────────────────────────────
 
 class MonumentFilter(FilterSet):
-    year_min  = NumberFilter(field_name='year', lookup_expr='gte')
+    year_min  = NumberFilter(method='filter_year_min')
     year_max  = NumberFilter(field_name='year', lookup_expr='lte')
     script    = CharFilter(field_name='script', lookup_expr='iexact')
     category  = CharFilter(field_name='category', lookup_expr='iexact')
     featured  = CharFilter(method='filter_featured')
+    location = CharFilter(field_name='location', lookup_expr='icontains')
+
+    def filter_year_min(self, qs, name, value):
+        return qs.filter(Q(year_end__gte=value) | Q(year_end__isnull=True, year__gte=value))
 
     def filter_featured(self, qs, name, value):
         return qs.filter(featured=(value.lower() == 'true'))
 
     class Meta:
         model  = Monument
-        fields = ['script', 'category', 'language', 'featured', 'year_min', 'year_max']
+        fields = ['script', 'category', 'language', 'location', 'featured', 'year_min', 'year_max']
 
 
 # ── Custom JWT — username ni javobga qo'shish ─────────────────────────────────
@@ -76,7 +80,7 @@ class MonumentViewSet(viewsets.ModelViewSet):
     queryset = Monument.objects.filter(status='Chop etilgan').order_by('year')
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = MonumentFilter
-    search_fields   = ['title', 'description', 'location', 'transliteration', 'translation']
+    search_fields   = ['title', 'title_original', 'description', 'location', 'full_text', 'transliteration', 'translation']
     ordering_fields = ['year', 'views', 'title', 'importance', 'word_count']
     ordering        = ['year']
 
@@ -93,7 +97,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
         if (self.request.query_params.get('include_drafts') == '1'
                 and user.is_authenticated and user.is_staff):
             return qs
-        return qs.filter(status='Chop etilgan')
+        from .research import filtered_monuments
+        return filtered_monuments(self.request.query_params)
 
     def get_permissions(self):
         if self.action in ('list', 'retrieve', 'featured', 'stats', 'concordance', 'word_frequency'):
@@ -120,7 +125,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='stats')
     def stats(self, request):
-        qs = Monument.objects.filter(status='Chop etilgan')
+        from .research import filtered_monuments, frequency_data, corpus_rows
+        qs = filtered_monuments(request.query_params)
         agg = qs.aggregate(
             total_views=Sum('views'),
             total_words=Sum('word_count'),
@@ -142,11 +148,15 @@ class MonumentViewSet(viewsets.ModelViewSet):
             if year is not None:
                 by_century[(year < 0, century_of(year))] += 1
         centuries = sorted(by_century.items(), key=lambda kv: -kv[0][1] if kv[0][0] else kv[0][1])
+        lexical = frequency_data({**request.query_params.dict(), 'field': 'transliteration', 'limit': '1'})
+        line_total = sum(1 for monument in qs for line in corpus_rows(monument) if line.get('transliteration', '').strip())
         return Response({
             'total':      qs.count(),
             'totalViews': agg['total_views'] or 0,
-            'totalWords': agg['total_words'] or 0,
-            'totalLines': agg['total_lines'] or 0,
+            'totalWords': lexical['total_tokens'],
+            'totalLines': line_total,
+            'recordedTotalWords': agg['total_words'] or 0,
+            'countingMethod': 'published_transliteration_tokens',
             'byScript':   by_script,
             'byCategory': by_category,
             'byCentury':  [

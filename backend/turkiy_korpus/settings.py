@@ -260,7 +260,7 @@ REST_FRAMEWORK = {
         'anon':   '1000/hour',
         'user':   '5000/hour',
         'submit': '5/hour',    # taklif yuborish (SubmissionCreateView)
-        'search': '120/hour',  # konkordans, so'z chastotasi (og'ir hisob-kitob)
+        'search': '300/hour',  # Shaxsiy tadqiqot: qidiruv, so'z izohi va morfologiya
         'export': '30/hour',   # butun korpusni eksport qilish
         'login':  '10/minute', # parol tanlab ko'rishdan himoya (token olish)
         'analytics': '240/hour',

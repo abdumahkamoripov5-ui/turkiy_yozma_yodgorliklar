@@ -4,13 +4,14 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, Exists, OuterRef
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from .csv_utils import safe_cell
 from .models import Monument, MonumentLine, SiteSettings, MonumentSubmission, LoginActivity
 from . import mvp_admin  # noqa: F401
+from . import research_admin  # noqa: F401
 from .admin_forms import MonumentAdminForm
 
 
@@ -51,7 +52,46 @@ def export_csv(modeladmin, request, queryset):
 class MonumentLineInline(admin.StackedInline):
     model = MonumentLine
     extra = 0
-    fields = ['position', 'label', 'original', 'transliteration', 'translation', 'source', 'published']
+    fields = ['position', 'label', 'original', 'transliteration', 'translation', 'source',
+              'certainty', 'editorial_note', 'facsimile_url', 'image_region', 'published']
+
+    class Media:
+        js = ['korpus/admin/facsimile.js']
+        css = {'all': ['korpus/admin/facsimile.css']}
+
+
+class EditorialQualityFilter(admin.SimpleListFilter):
+    title = 'Ma’lumot sifati'
+    parameter_name = 'editorial_quality'
+
+    def lookups(self, request, model_admin):
+        return [('source', 'Manbasi yetishmaydi'), ('text', 'Transliteratsiyasi yo‘q'),
+                ('translation', 'Tarjimasi yo‘q'), ('image', 'Surati yo‘q'), ('pending', 'Tekshirilmagan satrlari bor')]
+
+    def queryset(self, request, queryset):
+        if self.value() in ('source', 'text', 'translation'):
+            field = {'source': 'source', 'text': 'transliteration', 'translation': 'translation'}[self.value()]
+            lines = MonumentLine.objects.filter(monument_id=OuterRef('pk'), published=True).exclude(**{field: ''})
+            queryset = queryset.annotate(has_editorial=Exists(lines)).filter(has_editorial=False)
+            return queryset.filter(bibliography=[]) if self.value() == 'source' else queryset.filter(**{'transliteration' if self.value() == 'text' else 'translation': ''})
+        if self.value() == 'image':
+            return queryset.filter(image='')
+        if self.value() == 'pending':
+            return queryset.filter(reading_lines__published=False).distinct()
+        return queryset
+
+
+@admin.register(MonumentLine)
+class MonumentLineAdmin(admin.ModelAdmin):
+    list_display = ['monument', 'position', 'label', 'certainty', 'source', 'published']
+    list_filter = ['published', 'certainty', 'monument__script']
+    search_fields = ['monument__title', 'label', 'original', 'transliteration', 'source']
+    autocomplete_fields = ['monument']
+    ordering = ['monument', 'position']
+
+    class Media:
+        js = ['korpus/admin/facsimile.js']
+        css = {'all': ['korpus/admin/facsimile.css']}
 
 
 @admin.register(Monument)
@@ -62,7 +102,7 @@ class MonumentAdmin(admin.ModelAdmin):
         'image_preview', 'title', 'year', 'script_badge',
         'category', 'location', 'word_count', 'views_count', 'featured'
     ]
-    list_filter  = ['script', 'category', 'featured', 'language']
+    list_filter  = ['script', 'category', 'featured', 'language', EditorialQualityFilter]
     search_fields = ['title', 'description', 'location', 'transliteration']
     list_editable = ['featured']
     ordering      = ['year']

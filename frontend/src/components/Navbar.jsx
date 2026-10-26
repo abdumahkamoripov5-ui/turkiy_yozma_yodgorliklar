@@ -14,11 +14,12 @@ export default function Navbar() {
   const c = useCopy()
   const links = user ? [
     { to: '/', label: t('nav_home') },
+    { to: '/corpus', label: c('Korpus qidiruvi', 'Поиск в корпусе', 'Corpus search') },
     { to: '/monuments', label: t('nav_monuments') },
     { to: '/words', label: c('Lug‘at', 'Словарь', 'Dictionary') },
     { to: '/tools', label: c('Tadqiqot vositalari', 'Инструменты', 'Research tools') },
     { to: '/polls', label: c('Hamjamiyat', 'Сообщество', 'Community') },
-    { to: '/saved', label: c('Saqlanganlar', 'Сохранённое', 'Saved') },
+    { to: '/saved', label: c('Tadqiqot daftari', 'Тетрадь', 'Notebook') },
   ] : []
 
   return (

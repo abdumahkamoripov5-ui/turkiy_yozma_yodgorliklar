@@ -7,11 +7,12 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def studio_navigation(context):
     """Use Django's permission-filtered models and keep technical tools folded."""
-    core_order = ['Monument', 'WordEntry', 'WordPoll', 'MonumentSubmission']
+    core_order = ['Monument', 'MonumentLine', 'WordEntry', 'WordForm', 'ReadingVariant', 'WordPoll', 'MonumentSubmission']
     labels = {'Monument': 'Yodgorliklar', 'WordEntry': 'Lug‘at', 'WordPoll': 'Ovoz berish',
               'MonumentSubmission': 'Takliflar', 'User': 'Foydalanuvchilar', 'Group': 'Rollar va ruxsatlar',
               'SourceLink': 'Manbalar', 'SiteSettings': 'Sayt sozlamalari',
-              'UserActivity': 'Faoliyat tarixi', 'LoginActivity': 'Kirish tarixi'}
+              'UserActivity': 'Faoliyat tarixi', 'LoginActivity': 'Kirish tarixi',
+              'MonumentLine': 'Satrlar va suratlar', 'WordForm': 'Morfologik tahlillar', 'ReadingVariant': 'O‘qilish variantlari'}
     extra_order = ['User', 'Group', 'SourceLink', 'SiteSettings', 'UserActivity', 'LoginActivity']
     core, extra = [], []
     request = context.get('request')

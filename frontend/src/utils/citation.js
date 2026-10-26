@@ -31,7 +31,8 @@ export function buildCitations(m, url) {
   const authors = authorsFrom(m.researchers)
   const y = yearStr(m.year)
   const t = today()
-  const link = url || (typeof window !== 'undefined' ? window.location.origin : '')
+  const base = (import.meta.env?.BASE_URL || '/').replace(/\/$/, '')
+  const link = url || (typeof window !== 'undefined' ? `${window.location.origin}${base}/monuments?monument=${encodeURIComponent(m.id)}` : '')
   const title = m.title || '—'
   const authorsStr = authors.length ? authors.join(', ') + '. ' : ''
 

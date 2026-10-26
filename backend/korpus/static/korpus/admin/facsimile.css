@@ -1,0 +1,9 @@
+.studio-region-editor { margin-top:12px; max-width:650px; width:100%; }
+.studio-region-editor p { color:var(--body-quiet-color); font-size:12px; line-height:1.6; }
+.studio-region-frame { position:relative; width:100%; border:1px solid var(--border-color); border-radius:6px; overflow:hidden; touch-action:none; cursor:crosshair; margin-block:12px; }
+.studio-region-frame[hidden],.studio-region-box[hidden] { display:none; }
+.studio-region-frame img { display:block; width:100%; height:auto; user-select:none; }
+.studio-region-box { position:absolute; border:2px solid #ffd457; background:#ffd45733; pointer-events:none; box-shadow:0 0 0 1px #251c00; }
+.studio-region-editor .button { cursor:pointer; margin-top:8px; }
+.aligned .form-row:has(.studio-region-editor) .flex-container { flex-wrap:wrap; }
+.aligned .form-row:has(.studio-region-editor) textarea { max-width:100%; }

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
+import { WorkspaceProvider } from './context/WorkspaceContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Landing'
@@ -18,6 +19,7 @@ const MapView = lazy(() => import('./pages/MapView'))
 const Scripts = lazy(() => import('./pages/Scripts'))
 const Stats = lazy(() => import('./pages/Stats'))
 const Concordance = lazy(() => import('./pages/Concordance'))
+const Morphology = lazy(() => import('./pages/Morphology'))
 const Compare = lazy(() => import('./pages/Compare'))
 const Bibliography = lazy(() => import('./pages/Bibliography'))
 const Glossary = lazy(() => import('./pages/Glossary'))
@@ -76,6 +78,8 @@ function Layout() {
           <Route path="/scripts" element={<Scripts />} />
           <Route path="/stats" element={<Stats />} />
           <Route path="/concordance" element={<Concordance />} />
+          <Route path="/corpus" element={<Concordance />} />
+          <Route path="/morphology" element={<Morphology />} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/bibliography" element={<Bibliography />} />
           <Route path="/glossary" element={<Glossary />} />
@@ -114,7 +118,7 @@ function NotFound() {
 export default function App() {
   return (
     <AppProvider>
-      <Layout />
+      <WorkspaceProvider><Layout /></WorkspaceProvider>
     </AppProvider>
   )
 }

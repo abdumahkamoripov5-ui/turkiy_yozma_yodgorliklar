@@ -133,34 +133,58 @@ class WordViewSet(PublicReadOnlyViewSet):
     search_fields = ['word', 'meaning', 'example']
     throttle_scope = 'search'
 
+    def filter_queryset(self, queryset):
+        filtered = super().filter_queryset(queryset)
+        query = self.request.query_params.get('search', '').strip()
+        if self.action == 'list' and query and len(query) <= 150:
+            from .models import WordForm
+            from .research import canonical
+            from django.db.models import Q
+            key = canonical(query)
+            ids = [form.word_id for form in WordForm.objects.filter(published=True,
+                reviewed=True, reviewed_by__isnull=False, word__published=True)
+                if canonical(form.form) == key or canonical(form.lemma) == key]
+            exact_ids = [entry.pk for entry in queryset.only('id', 'word') if canonical(entry.word) == key]
+            return queryset.filter(Q(pk__in=filtered.values('pk')) | Q(pk__in=ids + exact_ids)).order_by('word', 'pk')
+        return filtered
+
     @action(detail=True, methods=['get'])
     def occurrences(self, request, pk=None):
-        from .models import Monument
-        from .reading import reading_data, normalize_word
-        import re
+        from .models import Monument, WordForm
+        from .reading import normalize_word
+        from .research import corpus_rows, bibliography_text, result_target, WORD_RE
         entry = self.get_object()
         key = normalize_word(entry.word)
+        forms = {key}
+        for form in WordForm.objects.filter(published=True, reviewed=True, reviewed_by__isnull=False):
+            if form.word_id == entry.pk or normalize_word(form.lemma) == key:
+                forms.add(normalize_word(form.form))
         results = []
         monuments = Monument.objects.filter(status='Chop etilgan').prefetch_related('reading_lines')
         for monument in monuments:
-            for line in reading_data(monument)['lines']:
-                words = re.findall(r"[^\W\d_]+(?:['’‘ʻʼʹ-][^\W\d_]+)*", line['transliteration'], re.UNICODE)
-                if key in [normalize_word(word) for word in words]:
-                    results.append({'monument': monument.pk, 'title': monument.title, **line})
-                    if len(results) >= 100:
+            for line in corpus_rows(monument):
+                words = WORD_RE.findall(line.get('transliteration', ''))
+                if forms.intersection(normalize_word(word) for word in words):
+                    if len(results) == 100:
                         return Response({'results': results, 'truncated': True})
+                    results.append({'monument': monument.pk, 'title': monument.title, **line,
+                        'source': line.get('source') or bibliography_text(monument),
+                        'target': result_target(monument.pk, line['position'] if line['alignment'] != 'unavailable' else None)})
         return Response({'results': results, 'truncated': False})
 
     @action(detail=False, methods=['get'], throttle_classes=[ScopedRateThrottle])
     def lookup(self, request):
         from .reading import normalize_word
+        from .models import WordForm
         query = request.query_params.get('q', '').strip()
         if not query or len(query) > 100:
             raise ValidationError({'q': '1–100 belgili so‘z kiriting.'})
         key = normalize_word(query)
+        form_ids = {form.word_id for form in WordForm.objects.filter(published=True, reviewed=True,
+            reviewed_by__isnull=False, word__published=True) if normalize_word(form.form) == key}
         matches = []
         for entry in self.get_queryset().iterator():
-            if normalize_word(entry.word) == key:
+            if normalize_word(entry.word) == key or entry.pk in form_ids:
                 matches.append(entry)
                 if len(matches) == 20:
                     break

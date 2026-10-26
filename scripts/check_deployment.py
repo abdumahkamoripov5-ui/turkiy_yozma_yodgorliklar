@@ -44,6 +44,8 @@ paths = [('/api/v2/health/', 200), ('/app/', 200), ('/app/explore', 200),
          ('/api/v2/words/?page_size=200', 401), ('/api/v2/polls/', 401),
          ('/api/v2/export/?format=json', 401), ('/api/v2/monuments/stats/', 401),
          ('/api/v2/books/', 404), ('/api/v2/lessons/', 404), ('/api/v2/research/', 404),
+         ('/api/v2/research/search/?q=el', 401), ('/api/v2/research/options/', 401),
+         ('/api/v2/workspace/items/', 401), ('/static/korpus/admin/facsimile.js', 200),
          ('/django-admin/login/', 200)]
 with ThreadPoolExecutor(max_workers=4) as pool:
     results = list(pool.map(lambda item: check(*item), paths))
@@ -59,7 +61,9 @@ if args.credentials:
             token = data['access']
         for path in ['/api/v2/monuments/?page_size=1', '/api/v2/words/?page_size=1',
                      '/api/v2/polls/', '/api/v2/monuments/stats/', '/api/v2/export/?format=json',
-                     '/api/v2/export/?format=csv']:
+                     '/api/v2/export/?format=csv', '/api/v2/research/options/',
+                     '/api/v2/research/search/?q=el', '/api/v2/research/frequency/',
+                     '/api/v2/research/morphology/?q=el', '/api/v2/workspace/items/']:
             results.append(check(path, token=token))
     except Exception as error:
         results.append({'admin_login_error': str(error)})

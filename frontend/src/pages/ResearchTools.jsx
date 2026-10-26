@@ -5,6 +5,9 @@ import { PageHeading } from '../mvp/components'
 import ExportControls from '../components/ExportControls'
 
 const tools = [
+  ['/corpus', '⌕', 'Kengaytirilgan korpus qidiruvi', 'Davr, hudud, manba, yozuv va lemma bo‘yicha izlang; natijalarni manbasi bilan yuklab oling.'],
+  ['/morphology', '≡', 'Lemma va morfologiya', 'Ekspert tekshirgan bosh shakl, o‘zak va grammatik tahlillar.'],
+  ['/saved', '▤', 'Tadqiqot daftari', 'Qaydlar, satrlar, saqlangan qidiruvlar va o‘qish joyingizni qurilmalararo saqlang.'],
   ['/concordance', '⌕', 'Kontekstli qidiruv', 'So‘zlarni asl matn, transliteratsiya va tarjimadan konteksti bilan toping.'],
   ['/compare', '⇄', 'Matnlarni taqqoslash', 'Ikki yodgorlik matnini yonma-yon solishtiring.'],
   ['/map', '◎', 'Meros xaritasi', 'Yodgorliklarning geografiyasi bilan tanishing.'],

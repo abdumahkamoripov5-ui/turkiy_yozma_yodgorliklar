@@ -9,6 +9,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from korpus import api as korpus_api
 from korpus import mvp_api
+from korpus import research_api
 from korpus.analytics import PageEventView
 
 # ── DRF Router ────────────────────────────────────────────────────────────────
@@ -17,6 +18,7 @@ router.register(r'monuments', korpus_api.MonumentViewSet, basename='monument')
 router.register(r'words', mvp_api.WordViewSet, basename='word')
 router.register(r'polls', mvp_api.PollViewSet, basename='poll')
 router.register(r'sources', mvp_api.SourceViewSet, basename='source')
+router.register(r'workspace/items', research_api.WorkspaceViewSet, basename='workspace-item')
 
 
 def react_index(request):
@@ -38,6 +40,14 @@ urlpatterns = [
     path('api/v2/auth/token/',         korpus_api.CustomTokenObtainPairView.as_view(), name='token-obtain'),
     path('api/v2/auth/register/', mvp_api.RegisterView.as_view(), name='register'),
     path('api/v2/health/', mvp_api.HealthView.as_view(), name='mvp-health'),
+    path('api/v2/research/search/', research_api.ResearchSearchView.as_view()),
+    path('api/v2/research/frequency/', research_api.ResearchFrequencyView.as_view()),
+    path('api/v2/research/collocations/', research_api.ResearchCollocationsView.as_view()),
+    path('api/v2/research/options/', research_api.ResearchOptionsView.as_view()),
+    path('api/v2/research/morphology/', research_api.MorphologyView.as_view()),
+    path('api/v2/research/variants/', research_api.ReadingVariantsView.as_view()),
+    path('api/v2/research/export/', research_api.ResearchCorpusExportView.as_view()),
+    path('api/v2/workspace/export/', research_api.WorkspaceExportView.as_view()),
     path('api/v2/analytics/event/', PageEventView.as_view(), name='analytics-event'),
     path('api/v2/auth/token/refresh/', TokenRefreshView.as_view(),                     name='token-refresh'),
     path('api/v2/submit/',             korpus_api.SubmissionCreateView.as_view(),       name='v2-submit'),

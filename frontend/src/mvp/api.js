@@ -1,19 +1,22 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import api from '../api'
-import { useApp } from '../context/AppContext'
+import { useWorkspace } from '../context/WorkspaceContext'
 
 export { api }
 
 export function useRemote(path) {
-  const [state, setState] = useState({ data: null, loading: true, error: false })
+  const [state, setState] = useState({ data: null, loading: Boolean(path), error: false })
   const [version, setVersion] = useState(0)
   useEffect(() => {
+    if (!path) { setState({ data: null, loading: false, error: false }); return undefined }
     let active = true
     setState({ data: null, loading: true, error: false })
     api.get(path).then(({ data }) => {
       if (active) setState({ data, loading: false, error: false })
-    }).catch(() => {
-      if (active) setState({ data: null, loading: false, error: true })
+    }).catch(error => {
+      const data = error.response?.data
+      const message = typeof data?.detail === 'string' ? data.detail : data && typeof data === 'object' ? Object.values(data).flat().join(' ') : ''
+      if (active) setState({ data: null, loading: false, error: true, message })
     })
     return () => { active = false }
   }, [path, version])
@@ -27,32 +30,11 @@ export function stored(key, fallback) {
 }
 
 export function useSaved() {
-  const { user } = useApp()
-  const storageKey = `meros-saved:${user?.username || 'guest'}`
-  const read = useCallback(() => {
-    const value = stored(storageKey, [])
-    return Array.isArray(value) ? value : []
-  }, [storageKey])
-  const [saved, setSaved] = useState(read)
-  useEffect(() => {
-    const refresh = () => setSaved(read())
-    refresh()
-    window.addEventListener('meros-saved', refresh)
-    window.addEventListener('storage', refresh)
-    return () => {
-      window.removeEventListener('meros-saved', refresh)
-      window.removeEventListener('storage', refresh)
-    }
-  }, [read])
-  const toggle = item => {
-    if (!user) return
-    const previous = read()
-    const next = previous.some(entry => entry.key === item.key)
-      ? previous.filter(entry => entry.key !== item.key) : [...previous, item]
-    localStorage.setItem(storageKey, JSON.stringify(next))
-    window.dispatchEvent(new Event('meros-saved'))
-  }
-  return { saved, toggle }
+  const { items, save, remove, loading, error } = useWorkspace()
+  const saved = items.filter(item => item.kind === 'bookmark').map(item => ({ ...item, to: item.target }))
+  const toggle = item => saved.some(entry => entry.key === item.key) ? remove(item.key)
+    : save({ key: item.key, kind: 'bookmark', title: item.title, target: item.to, payload: { type: item.type || '' } })
+  return { saved, toggle, loading, error }
 }
 
 export function errorMessage(error, fallback = 'Amal bajarilmadi. Qayta urinib ko‘ring.') {

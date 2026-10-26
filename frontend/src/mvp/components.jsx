@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useSaved } from './api'
 import { useApp } from '../context/AppContext'
 import { useCopy } from './copy'
+import { useState } from 'react'
 
 export function PageHeading({ eyebrow, title, children }) {
   useMerosLocale()
@@ -13,7 +14,7 @@ export function PageHeading({ eyebrow, title, children }) {
 export function RemoteState({ remote, empty, children }) {
   useMerosLocale()
   if (remote.loading) return <div className="meros-empty" role="status"><div className="spinner" />{tr("Ma’lumotlar yuklanmoqda…")}</div>
-  if (remote.error) return <div className="meros-empty" role="alert"><h2>{tr("Hozircha ulana olmadik")}</h2><p>{tr("Server bilan aloqani tekshirib, qayta urinib ko‘ring.")}</p><button className="btn btn-outline" onClick={remote.reload}>{tr("Qayta urinish")}</button></div>
+  if (remote.error) return <div className="meros-empty" role="alert"><h2>{tr("Hozircha ulana olmadik")}</h2><p>{remote.message || tr("Server bilan aloqani tekshirib, qayta urinib ko‘ring.")}</p><button className="btn btn-outline" onClick={remote.reload}>{tr("Qayta urinish")}</button></div>
   if (empty) return <div className="meros-empty"><h2>{tr("Hali material topilmadi")}</h2><p>{tr("Boshqa so‘z bilan qidiring yoki keyinroq qayting.")}</p></div>
   return children
 }
@@ -23,12 +24,17 @@ export function SaveButton({ item }) {
   const { user } = useApp()
   const c = useCopy()
   const location = useLocation()
-  const { saved, toggle } = useSaved()
+  const { saved, toggle, loading } = useSaved()
+  const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
   const active = saved.some(entry => entry.key === item.key)
   if (!user) return <Link className="meros-text-link" to={`/login?mode=register&next=${encodeURIComponent(location.pathname + location.search + location.hash)}`}>{c('Saqlash uchun qo‘shiling', 'Войдите, чтобы сохранить', 'Join to save')}</Link>
-  return <button className={`meros-save ${active ? 'is-saved' : ''}`} aria-pressed={active} onClick={() => toggle(item)}>
+  return <span><button type="button" className={`meros-save ${active ? 'is-saved' : ''}`} disabled={busy || loading} aria-pressed={active} onClick={async () => {
+    setBusy(true); setFailed(false)
+    try { await toggle(item) } catch { setFailed(true) } finally { setBusy(false) }
+  }}>
     {active ? tr("✓ Saqlandi") : tr("＋ Saqlash")}
-  </button>
+  </button>{failed && <small role="alert">{c('Saqlanmadi. Qayta urinib ko‘ring.', 'Не сохранено. Повторите попытку.', 'Not saved. Try again.')}</small>}</span>
 }
 
 export function BookCard({ book }) {

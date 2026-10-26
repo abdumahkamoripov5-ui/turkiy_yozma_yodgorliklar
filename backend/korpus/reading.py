@@ -8,8 +8,10 @@ def normalize_word(value):
 
 
 def reading_data(monument):
-    lines = list(monument.reading_lines.filter(published=True).values(
-        'id', 'position', 'label', 'original', 'transliteration', 'translation', 'source'))
+    fields = ('id', 'position', 'label', 'original', 'transliteration', 'translation', 'source',
+              'facsimile_url', 'image_region', 'certainty', 'editorial_note')
+    lines = [{field: getattr(line, field) for field in fields}
+             for line in monument.reading_lines.all() if line.published]
     if lines:
         return {'alignment': 'editorial', 'lines': lines}
     columns = [value.strip().splitlines() if value.strip() else [] for value in
