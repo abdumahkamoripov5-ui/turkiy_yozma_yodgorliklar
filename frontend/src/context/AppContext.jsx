@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
-import { getLang, setLang as setI18nLang, t } from '../i18n'
+import { getLang, setLang as setI18nLang, setPublishedTranslations, t } from '../i18n'
 import { EXTRA_LANGUAGES } from '../locale-additions'
+import api from '../api'
 
 const AppContext = createContext(null)
 const readTheme = () => {
@@ -10,6 +11,7 @@ const readTheme = () => {
 
 export function AppProvider({ children }) {
   const [theme, setThemeState] = useState(readTheme)
+  const [translationVersion, setTranslationVersion] = useState(0)
   const [lang, setLangState] = useState(() => {
     const preferred = getLang()
     if (['uz', 'ru', 'en', ...EXTRA_LANGUAGES].includes(preferred)) return preferred
@@ -40,6 +42,17 @@ export function AppProvider({ children }) {
     return () => { window.removeEventListener('storage', storage); preference.removeEventListener('change', system) }
   }, [])
 
+  useEffect(() => {
+    let active = true
+    setPublishedTranslations(lang, {})
+    api.get(`/translations/${lang}/`).then(({ data }) => {
+      if (!active) return
+      setPublishedTranslations(lang, data.translations)
+      setTranslationVersion(version => version + 1)
+    }).catch(() => {})
+    return () => { active = false }
+  }, [lang])
+
   const changeLang = useCallback(l => {
     setI18nLang(l)
     setLangState(l)
@@ -66,7 +79,7 @@ export function AppProvider({ children }) {
     return () => window.removeEventListener('auth-expired', logout)
   }, [logout])
 
-  const translate = useCallback((key, vars) => t(key, vars, lang), [lang])
+  const translate = (key, vars) => { void translationVersion; return t(key, vars, lang) }
 
   return (
     <AppContext.Provider value={{ theme, toggleTheme, lang, changeLang, user, login, logout, t: translate }}>

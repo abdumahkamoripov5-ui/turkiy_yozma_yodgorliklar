@@ -11,6 +11,7 @@ from korpus import api as korpus_api
 from korpus import mvp_api
 from korpus import research_api
 from korpus.analytics import PageEventView
+from korpus import translation_api
 
 # ── DRF Router ────────────────────────────────────────────────────────────────
 router = DefaultRouter()
@@ -48,6 +49,8 @@ urlpatterns = [
     path('api/v2/research/morphology/', research_api.MorphologyView.as_view()),
     path('api/v2/research/variants/', research_api.ReadingVariantsView.as_view()),
     path('api/v2/research/suggestions/', research_api.EditorialSuggestionView.as_view()),
+    path('api/v2/translations/generate/', translation_api.GoogleTranslationDraftView.as_view(), name='translation-generate'),
+    path('api/v2/translations/<str:language>/', translation_api.PublishedTranslationCatalogView.as_view(), name='translation-catalog'),
     path('api/v2/research/export/', research_api.ResearchCorpusExportView.as_view()),
     path('api/v2/workspace/export/', research_api.WorkspaceExportView.as_view()),
     path('api/v2/analytics/event/', PageEventView.as_view(), name='analytics-event'),

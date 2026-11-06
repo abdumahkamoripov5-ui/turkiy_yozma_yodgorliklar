@@ -652,9 +652,14 @@ for (const [lang, labels] of Object.entries(READING_TRANSLATIONS)) Object.assign
 for (const lang of EXTRA_LANGUAGES) TRANSLATIONS[lang] = { ...TRANSLATIONS.uz, ...TRANSLATIONS[lang], ...EXTRA_TRANSLATIONS[lang], ...EXTRA_READING[lang] }
 
 const SUPPORTED_LANGUAGES = ['uz', 'ru', 'en', ...EXTRA_LANGUAGES]
+const publishedTranslations = {}
 let currentLang = SUPPORTED_LANGUAGES.includes(localStorage.getItem('lang')) ? localStorage.getItem('lang') : 'uz'
 
 export function getLang() { return currentLang }
+export function setPublishedTranslations(lang, entries) {
+  if (SUPPORTED_LANGUAGES.includes(lang) && entries && typeof entries === 'object') publishedTranslations[lang] = entries
+}
+export function getPublishedTranslation(lang, key) { return publishedTranslations[lang]?.[key] }
 
 export function setLang(lang) {
   currentLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'uz'
@@ -663,7 +668,7 @@ export function setLang(lang) {
 
 // vars — matndagi {nom} o'rinlarini to'ldiradi: t('scripts_count', { n: 5 })
 export function t(key, vars, lang = currentLang) {
-  const text = TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS.uz[key] ?? key
+  const text = publishedTranslations[lang]?.[key] ?? TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS.uz[key] ?? key
   if (!vars) return text
   return text.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m))
 }

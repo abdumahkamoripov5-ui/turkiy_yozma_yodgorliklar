@@ -1,0 +1,6 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+{% block object-tools-items %}
+  {% if has_add_permission and perms.korpus.use_google_translation %}<li><a href="{% url 'admin:korpus_interfacetranslation_google_draft' %}" class="addlink">Google orqali qoralama yaratish</a></li>{% endif %}
+  {{ block.super }}
+{% endblock %}

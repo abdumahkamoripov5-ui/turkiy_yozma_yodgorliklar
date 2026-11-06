@@ -18,3 +18,4 @@ dj-database-url==3.0.1
 
 # Yuklangan fayllar uchun tashqi xotira (S3 / Cloudflare R2) — AWS_STORAGE_BUCKET_NAME berilganda
 django-storages[s3]==1.14.6
+google-cloud-translate==3.28.0

@@ -338,3 +338,4 @@ from .mvp_models import (  # noqa: E402,F401
     Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork, SourceLink,
 )
 from .research_models import EditorialSuggestion, ResearchItem, WordForm, ReadingVariant  # noqa: E402,F401
+from .translation_models import InterfaceTranslation  # noqa: E402,F401

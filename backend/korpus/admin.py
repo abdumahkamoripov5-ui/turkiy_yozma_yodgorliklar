@@ -12,6 +12,7 @@ from .csv_utils import safe_cell
 from .models import Monument, MonumentLine, SiteSettings, MonumentSubmission, LoginActivity
 from . import mvp_admin  # noqa: F401
 from . import research_admin  # noqa: F401
+from . import translation_admin  # noqa: F401
 from .admin_forms import MonumentAdminForm
 from .scientific_review import ScientificReviewMixin, approve_scientific_content
 

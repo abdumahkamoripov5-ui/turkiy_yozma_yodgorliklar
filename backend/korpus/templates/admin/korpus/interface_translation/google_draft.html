@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Boshqaruv</a> › <a href="{% url 'admin:korpus_interfacetranslation_changelist' %}">Interfeys tarjimalari</a> › Google tarjimasi</div>{% endblock %}
+{% block content %}
+<div id="content-main">
+  <p>Faqat ommaviy sayt interfeysi matnlarini yuboring. Tarixiy bitik, ilmiy izoh, foydalanuvchi ma’lumoti yoki maxfiy matn kiritmang. Google natijalari qoralama bo‘lib qoladi; tasdiqlangan tarjimon ularni alohida nashr etishi kerak.</p>
+  <p>Tojik tili Google tomonidan tajribaviy qo‘llab-quvvatlanadi; natijani alohida sinchiklab tekshiring.</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <fieldset class="module aligned">
+      <div class="form-row"><div><label for="id_items">Tarjima qatorlari</label><textarea id="id_items" name="items" maxlength="70000" rows="12" required style="width: min(100%, 52rem); font-family: monospace"></textarea><div class="help">Har qatorda kalit, TAB belgisi va o‘zbekcha matn yozing. Kalit bo‘lmasa, matnning o‘zi kalit bo‘ladi. 30 qatorgacha, jami 5 000 belgi. Masalan: nav_map[TAB]Xarita</div></div></div>
+      <div class="form-row"><div><label>Nishon tillari</label><div>{% for code, name in languages %}<label style="display: inline-flex; gap: .45rem; margin: .6rem 1rem .3rem 0; align-items: center"><input type="checkbox" name="target_languages" value="{{ code }}">{{ name }}</label>{% endfor %}</div></div></div>
+    </fieldset>
+    <div class="submit-row"><input type="submit" value="Qoralamalarni yaratish" class="default"></div>
+  </form>
+</div>
+{% endblock %}

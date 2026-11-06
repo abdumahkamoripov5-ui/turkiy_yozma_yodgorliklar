@@ -7,7 +7,7 @@ globalThis.localStorage = {
   setItem: (key, value) => values.set(key, String(value)),
 }
 
-const { getLang, setLang, t } = await import('../src/i18n.js')
+const { getLang, setLang, setPublishedTranslations, t } = await import('../src/i18n.js')
 
 test('all seven interface languages can be selected and persisted', () => {
   for (const [language, expected] of [
@@ -31,4 +31,11 @@ test('unsupported language safely falls back to Uzbek', () => {
   setLang('xx')
   assert.equal(getLang(), 'uz')
   assert.equal(localStorage.getItem('lang'), 'uz')
+})
+
+test('expert-published server translations override the static draft catalog', () => {
+  setLang('kk')
+  setPublishedTranslations('kk', { nav_map: 'Сарапшы бекіткен карта' })
+  assert.equal(t('nav_map'), 'Сарапшы бекіткен карта')
+  setPublishedTranslations('kk', {})
 })

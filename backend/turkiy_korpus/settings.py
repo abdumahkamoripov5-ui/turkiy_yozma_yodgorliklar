@@ -264,6 +264,7 @@ REST_FRAMEWORK = {
         'export': '30/hour',   # butun korpusni eksport qilish
         'login':  '10/minute', # parol tanlab ko'rishdan himoya (token olish)
         'analytics': '240/hour',
+        'google_translate': '5/hour',
     },
 }
 
