@@ -6,6 +6,7 @@ import './mvp/meros.css'
 import './mvp/experience.css'
 import './mvp/journey.css'
 import './mvp/heritage-theme.css'
+import './mvp/scholar.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

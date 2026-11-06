@@ -8,6 +8,11 @@ class MonumentListSerializer(serializers.ModelSerializer):
     script_display   = serializers.CharField(source='get_script_display',   read_only=True)
     category_display = serializers.CharField(source='get_category_display', read_only=True)
     century = serializers.SerializerMethodField()
+    quality = serializers.SerializerMethodField()
+
+    def get_quality(self, obj):
+        from .corpus_scope import monument_quality
+        return monument_quality(obj)
 
     class Meta:
         model  = Monument
@@ -16,7 +21,7 @@ class MonumentListSerializer(serializers.ModelSerializer):
             'location', 'script', 'script_display', 'category', 'category_display',
             'language', 'image', 'description', 'word_count', 'line_count',
             'importance', 'views', 'featured', 'status',
-            'researchers', 'bibliography',
+            'researchers', 'bibliography', 'quality',
             'author_name', 'author_institution', 'is_user_submission',
         ]
 

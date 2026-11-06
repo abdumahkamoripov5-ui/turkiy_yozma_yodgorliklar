@@ -48,12 +48,12 @@ class WordSerializer(serializers.ModelSerializer):
         return obj.audio_credit if obj.audio_approved and obj.audio else ''
 
     def get_reviewed(self, obj):
-        return obj.reviewed_at is not None
+        return obj.reviewed_at is not None and obj.reviewed_by_id is not None
 
     class Meta:
         model = WordEntry
         fields = ['id', 'word', 'pronunciation', 'meaning', 'example', 'source', 'status',
-                  'monument', 'campaign', 'equivalents', 'reviewed', 'audio', 'audio_kind', 'audio_credit', 'audio_demo']
+                  'monument', 'campaign', 'equivalents', 'reviewed', 'audio', 'audio_kind', 'audio_credit', 'audio_demo', 'provenance']
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -133,6 +133,22 @@ class WordViewSet(PublicReadOnlyViewSet):
     search_fields = ['word', 'meaning', 'example']
     throttle_scope = 'search'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.query_params.get('scope') == 'core':
+            from django.db.models import Q
+            from .models import Monument
+            from .corpus_scope import core_monuments
+            queryset = queryset.filter(Q(monument__isnull=True) | Q(monument__in=core_monuments(
+                Monument.objects.filter(status='Chop etilgan'))))
+        reviewed = self.request.query_params.get('reviewed')
+        if reviewed == '1':
+            queryset = queryset.filter(reviewed_at__isnull=False, reviewed_by__isnull=False)
+        elif reviewed == '0':
+            from django.db.models import Q
+            queryset = queryset.filter(Q(reviewed_at__isnull=True) | Q(reviewed_by__isnull=True))
+        return queryset
+
     def filter_queryset(self, queryset):
         filtered = super().filter_queryset(queryset)
         query = self.request.query_params.get('search', '').strip()
@@ -156,11 +172,16 @@ class WordViewSet(PublicReadOnlyViewSet):
         entry = self.get_object()
         key = normalize_word(entry.word)
         forms = {key}
+        if entry.provenance.get('verification') == 'source_prepared':
+            for form in entry.provenance.get('attested_forms', []):
+                if isinstance(form, str):
+                    forms.add(normalize_word(form))
         for form in WordForm.objects.filter(published=True, reviewed=True, reviewed_by__isnull=False):
             if form.word_id == entry.pk or normalize_word(form.lemma) == key:
                 forms.add(normalize_word(form.form))
         results = []
-        monuments = Monument.objects.filter(status='Chop etilgan').prefetch_related('reading_lines')
+        from .corpus_scope import apply_scope
+        monuments = apply_scope(Monument.objects.filter(status='Chop etilgan'), request.query_params).prefetch_related('reading_lines')
         for monument in monuments:
             for line in corpus_rows(monument):
                 words = WORD_RE.findall(line.get('transliteration', ''))
@@ -184,7 +205,9 @@ class WordViewSet(PublicReadOnlyViewSet):
             reviewed_by__isnull=False, word__published=True) if normalize_word(form.form) == key}
         matches = []
         for entry in self.get_queryset().iterator():
-            if normalize_word(entry.word) == key or entry.pk in form_ids:
+            source_forms = entry.provenance.get('attested_forms', []) if entry.provenance.get('verification') == 'source_prepared' else []
+            source_match = isinstance(source_forms, list) and any(isinstance(form, str) and normalize_word(form) == key for form in source_forms)
+            if normalize_word(entry.word) == key or entry.pk in form_ids or source_match:
                 matches.append(entry)
                 if len(matches) == 20:
                     break

@@ -24,7 +24,9 @@ export default function Login() {
     try {
       const r = register ? await api.post('/auth/register/', form) : await auth.login(form.username, form.password)
       login(r.data)
-      navigate('/', { replace: true })
+      const next = params.get('next') || '/'
+      const safeNext = next.startsWith('/') && !next.startsWith('//') && !/[\\\u0000-\u001f]/.test(next) ? next : '/'
+      navigate(safeNext, { replace: true })
     } catch (err) {
       // 429 — juda ko'p urinish (backend cheklovi); boshqa hollarda — login/parol xato
       setError(register ? errorMessage(err) : err.response?.status === 429

@@ -1,22 +1,7 @@
 import { Link } from 'react-router-dom'
+import { ArrowUpRight } from 'lucide-react'
 import { useCopy } from '../mvp/copy'
-import { useApp } from '../context/AppContext'
-
 export default function Footer() {
   const c = useCopy()
-  const { user } = useApp()
-  return <footer id="site-footer" className="site-footer">
-    <div className="container footer-content">
-      <div><strong>𐰴 Turkiy Meros</strong><p>{c('Tarixiy matnlar. So‘zlar. Hamjamiyat.', 'Исторические тексты. Слова. Сообщество.', 'Historical texts. Words. Community.')}</p><small>© {new Date().getFullYear()} Turkiy Meros</small></div>
-      <div className="footer-account">
-        <nav className="footer-account-links" aria-label={c('Hisobga kirish', 'Доступ к аккаунту', 'Account access')}>
-          {user ? <Link to="/submit">{c('Manbali taklif yuborish →', 'Предложить материал →', 'Contribute a source →')}</Link> : <>
-            <Link className="footer-register" to="/login?mode=register">{c('Ro‘yxatdan o‘tish', 'Регистрация', 'Create an account')} <span aria-hidden="true">↗</span></Link>
-            <Link to="/login">{c('Kirish', 'Войти', 'Sign in')} <span aria-hidden="true">→</span></Link>
-          </>}
-        </nav>
-        <p><small>{c('Foydalanish va kirish hodisalari hisobingiz bilan qayd etiladi.', 'События доступа и использования связаны с вашим аккаунтом.', 'Access and usage events are recorded with your account.')}</small></p>
-      </div>
-    </div>
-  </footer>
+  return <footer className="scholar-footer" id="site-footer"><div className="container"><div className="scholar-footer-grid"><div><Link to="/" className="scholar-brand"><span className="scholar-mark" aria-hidden="true">𐱅</span><span>Turkiy Meros<small>VII–VIII · DIGITAL HUMANITIES</small></span></Link><p>{c('Asrlarni bog‘laydigan matnlar. Dalillarga tayangan izlanishlar. Barchamizga tegishli meros.', 'Тексты, соединяющие века. Исследования на основе источников. Наше общее наследие.', 'Texts that connect centuries. Research grounded in evidence. A heritage we share.')}</p></div><div><h3>{c('Korpusni o‘rganing', 'Изучайте корпус', 'Explore the corpus')}</h3><Link to="/monuments">{c('Yodgorliklar', 'Памятники', 'Monuments')}</Link><Link to="/words">{c('Tarixiy lug‘at', 'Исторический словарь', 'Historical dictionary')}</Link><Link to="/map">{c('Geografik xarita', 'Географическая карта', 'Geographical atlas')}</Link><Link to="/timeline">{c('Vaqt shkalasi', 'Хронология', 'Timeline')}</Link></div><div><h3>{c('Tadqiqot uchun', 'Для исследователей', 'For researchers')}</h3><Link to="/corpus">{c('Qidiruv va konkordans', 'Поиск и конкорданс', 'Search and concordance')}</Link><Link to="/sources">{c('Ilmiy manbalar', 'Научные источники', 'Scholarly sources')}</Link><Link to="/quality">{c('Korpus sifati', 'Качество корпуса', 'Corpus quality')}</Link><Link to="/guide">{c('Qo‘llanma va tamoyillar', 'Руководство и принципы', 'Guide and principles')}</Link><Link to="/submit">{c('Hissa qo‘shish', 'Внести вклад', 'Contribute')} <ArrowUpRight size={13} /></Link></div></div><div className="scholar-footer-bottom"><span>© {new Date().getFullYear()} Turkiy Meros</span><span>{c('Har bir matnning manbasi va foydalanish shartlarini tekshiring.', 'Проверяйте источник и условия использования каждого текста.', 'Check each text’s source and reuse conditions.')}</span><Link to="/guide#citation">{c('Qanday iqtibos olinadi?', 'Как цитировать?', 'How to cite')}</Link></div></div></footer>
 }

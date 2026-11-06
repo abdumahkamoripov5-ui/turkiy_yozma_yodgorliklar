@@ -1,0 +1,1562 @@
+{
+  "schema_version": 1,
+  "release": "thomsen1896-v1",
+  "created_on": "2026-11-06",
+  "status": "source_prepared_not_expert_reviewed",
+  "edition": {
+    "author": "Vilhelm Thomsen",
+    "year": 1896,
+    "title": "Inscriptions de l’Orkhon déchiffrées",
+    "publisher": "Imprimerie de la Société de littérature finnoise, Helsingfors",
+    "url": "https://archive.org/details/inscriptionsdel00thomgoog",
+    "doi": "10.33341/sus.789",
+    "rights": "Public domain underlying 1896 work; digitisation credits retained.",
+    "source_pdf_sha256": "efe039c7b67ee8f66e7160b396ac369b8547e145b471fb29afb9b612cde5d9cf"
+  },
+  "coverage": "Selected passages from two monuments, not complete editions. Original Unicode supplied only for 3 independently linked KT lines.",
+  "lines": [
+    {
+      "monument_key": "kultegin",
+      "position": 1,
+      "label": "KT E1",
+      "pages": [
+        97
+      ],
+      "original": "𐰇𐰕𐰀: 𐰚𐰇𐰚: 𐱅𐰭𐰼𐰃: 𐰽𐰺𐰀: 𐰖𐰍𐰕: 𐰘𐰼: 𐰴𐰃𐰞𐰦𐰸𐰑𐰀: 𐰚𐰃𐰤: 𐰺𐰀: 𐰚𐰃𐰾𐰃: 𐰆𐰍𐰞𐰃: 𐰴𐰃𐰞𐰣𐰢𐰾: 𐰚𐰃𐰾𐰃: 𐰆𐰍𐰞𐰃𐰦𐰀: 𐰇𐰕𐰀: 𐰲𐰃𐰢: 𐰯𐰀𐰢: 𐰉𐰆𐰢𐰣: 𐰴𐰍𐰣: 𐰃𐰾𐱅𐰢𐰃: 𐰴𐰍𐰣: 𐰆𐰞𐰺𐰢𐱁: 𐰆𐰞𐰺𐰯𐰣: 𐱅𐰇𐰼𐰰: 𐰉𐰆𐰑𐰣𐰭: 𐰃𐰠𐰃𐰤: 𐱅𐰇𐰼𐰇𐰾𐰃𐰤: 𐱃𐰆𐱃𐰀: 𐰋𐰃𐰼𐰢𐰾: 𐰃𐱅𐰃: 𐰋𐰃𐰼𐰢𐰾:",
+      "transliteration": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "translation": "Yuqorida ko‘k osmon va quyida qoramtir yer yaratilganida, ikkisining orasida inson bolalari yaratilgan. Inson bolalari ustidan ajdodlarim Bumin xoqon va Istami xoqon hukmron bo‘lgan. Hukmron bo‘lib, turk xalqining elini va tartib-qoidalarini tutib, tashkil qilgan.",
+      "note": "",
+      "certainty": "certain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          97
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Quand le ciel bleu en haut et la sombre terre en bas furent créés, entre les deux furent créés les fils des hommes. Au-dessus des fils des hommes s’élevèrent mes ancêtres Boumin kagan et Istèmi kagan. Après être devenus maîtres, ils gouvernèrent et fixèrent l’empire et les institutions du peuple turc.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_source_url": "https://tr.wikisource.org/w/index.php?title=Orhun_Yazıtları_(Kül_Tigin)&oldid=174981",
+        "original_credit": "Turkish Wikisource contributors; Unicode runik ko‘chirma. Toshning fotografik faksimilesi emas.",
+        "original_license": "CC-BY-SA-4.0",
+        "original_license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition",
+        "original_changes": "Unicode glyphs retained; whitespace normalised; punctuation separators retained. No claim of photographic facsimile."
+      }
+    },
+    {
+      "monument_key": "kultegin",
+      "position": 2,
+      "label": "KT E2",
+      "pages": [
+        97
+      ],
+      "original": "",
+      "transliteration": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "translation": "To‘rt tarafning barchasi dushman bo‘lgan. Qo‘shin tortib, to‘rt tarafdagi xalqlarni bo‘ysundirib, qaram qilgan. Boshli kishilarni bosh egdirgan, tizlilarni tiz cho‘ktirgan. Sharqda Qadirqan o‘rmonigacha, g‘arbda Temir Qopig‘gacha joylashtirgan.",
+      "note": "Bu yerda Qadirqan va Tämir Qapıγ tarixiy joy nomlaridir; zamonaviy geografik tenglashtirish berilmadi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          97
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Aux quatre coins du monde ils avaient beaucoup d’ennemis, mais faisant des expéditions avec des armées, ils asservirent et pacifièrent beaucoup de peuples aux quatre coins du monde; ils leur firent baisser la tête et ployer le genou; ils les firent s’établir en avant jusqu’à la forêt de Kadirkan, en arrière jusqu’à la Porte de Fer.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    },
+    {
+      "monument_key": "kultegin",
+      "position": 3,
+      "label": "KT E3–E4a · parcha",
+      "pages": [
+        98
+      ],
+      "original": "",
+      "transliteration": "Ekin ara idioqsız kök türk anča olurur ärmiš. Bilgä qaγan ärmiš alp qaγan ärmiš. Buyruqı yämä bilgä ärmiš ärinč alp ärmiš ärinč. Bägläri yämä bodunı yämä tüz ärmiš. Anı üčün ilig anča tutmıš ärinč ilig tutıp törüg itmiš.",
+      "translation": "Ikki chegara orasida Ko‘k Turk hukmron bo‘lgan. Xoqonlari dono va jasur bo‘lgan. Amaldorlari ham dono va jasur, beklari va xalqi tartibli bo‘lgan. Shu sabab elni shunday boshqarib, uning tartib-qoidalarini tuzgan.",
+      "note": "E3 dan E4 ning birinchi gapigacha bo‘lgan parcha. idioqsız bahsli o‘qish: Thomsen 98-bet izohida muqobil o‘qishni beradi. Ishchi tarjimada bu leksema uchun qat’iy alohida ma’no berilmadi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          98
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n100/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Entre ces deux points extrêmes s’étendaient en souverains les Turcs Bleus. C’étaient de sages kagans, c’étaient de vaillants kagans; tous leurs officiers étaient sages, étaient vaillants; tous leurs nobles, leur peuple entier, étaient justes. C’est pourquoi ils pouvaient gouverner un si grand empire et, en gouvernant l’empire, donner des lois.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    },
+    {
+      "monument_key": "kultegin",
+      "position": 101,
+      "label": "KT S1",
+      "pages": [
+        114,
+        115
+      ],
+      "original": "𐱅𐰭𐰼𐰃: 𐱅𐰏: 𐱅𐰭𐰼𐰃𐰓𐰀: 𐰉𐰆𐰞𐰢𐱁: 𐱅𐰇𐰼𐰰: 𐰋𐰃𐰠𐰏𐰀: 𐰴𐰍𐰣: 𐰉𐰆: 𐰇𐰓𐰚𐰀: 𐰆𐰞𐰺𐱃𐰢: 𐰽𐰉𐰢𐰣: 𐱅𐰇𐰚𐱅𐰃: 𐰾𐰃𐰓𐰏𐰠: 𐰆𐰞𐰖𐰆: 𐰃𐰤: 𐰘𐰏𐰇𐰤𐰢: 𐰆𐰍𐰞𐰣𐰢: 𐰋𐰃𐰼𐰚𐰃: 𐰆𐰍𐱁𐰢: 𐰉𐰆𐰑𐰣𐰢: 𐰋𐰃𐰼𐰘𐰀: 𐱁𐰑𐰯𐰃𐱃: 𐰋𐰏𐰠𐰼: 𐰘𐰃𐰺𐰖𐰀: 𐱃𐰺𐰴𐱃: 𐰉𐰆𐰖𐰺𐰸: 𐰋𐰏𐰠𐰼: 𐰆𐱃𐰕: 𐱃𐱃𐰺:",
+      "transliteration": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "translation": "Osmonga o‘xshash, osmondan bo‘lgan turk Bilga xoqon men bu davrda taxtga o‘tirdim. So‘zimni oxirigacha eshit. Mendan keyingi inilarim va jiyanlarim, farzandlarim, urug‘im va xalqim; janubdagi shadapıt beklar, shimoldagi tarqat va buyruq beklar, O‘ttiz Tatar!",
+      "note": "Nashrda ayrim murojaat unvonlari savol belgisi va izohlar bilan berilgan. Ular zamonaviy davlat lavozimlariga tenglashtirilmadi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          114,
+          115
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Moi qui ressemble au ciel, Bilghè kagan des Turcs, venu du ciel, à l’heure qu’il est, je suis monté sur le trône. Ecoutez jusqu’au bout ce que je vous mande, vous qui venez après moi, mes cadets, mes princes, et tous ensemble, membres de ma race, ainsi que toi mon peuple; à droite, vous nobles chadapits; à gauche, vous nobles et officiers tarkats, Trente-Tatars.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_source_url": "https://tr.wikisource.org/w/index.php?title=Orhun_Yazıtları_(Kül_Tigin)&oldid=174981",
+        "original_credit": "Turkish Wikisource contributors; Unicode runik ko‘chirma. Toshning fotografik faksimilesi emas.",
+        "original_license": "CC-BY-SA-4.0",
+        "original_license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition",
+        "original_changes": "Unicode glyphs retained; whitespace normalised; punctuation separators retained. No claim of photographic facsimile."
+      }
+    },
+    {
+      "monument_key": "kultegin",
+      "position": 102,
+      "label": "KT S2",
+      "pages": [
+        115
+      ],
+      "original": "𐱃𐰸𐰆𐰕: 𐰆𐰍𐰕: 𐰋𐰏𐰠𐰼𐰃: 𐰉𐰆𐰑𐰣𐰃: 𐰉𐰆: 𐰽𐰉𐰢𐰤: 𐰓𐰏𐰇𐱅𐰃: 𐰾𐰃𐰓: 𐰴𐱃𐰍𐰑𐰃: 𐱅𐰃𐰭𐰞𐰀: 𐰃𐰠𐰏𐰼𐰇: 𐰚𐰇𐰤: 𐱃𐰆𐰍𐰽𐰴𐰀: 𐰋𐰃𐰼𐰏𐰼𐰇: 𐰚𐰇𐰤: 𐰆𐰺𐱃𐰆𐰾𐰃𐰭𐰺𐰆: 𐰸𐰆𐰺𐰃𐰍𐰺𐰃: 𐰚𐰇𐰤: 𐰉𐱃𐰾𐰶𐰃𐰭𐰀: 𐰘𐰃𐰺𐰍𐰺𐰃: 𐱅𐰇𐰤: 𐰆𐰺𐱃𐰆𐰾𐰃𐰭𐰺𐰆: 𐰦𐰀: 𐰃𐰲𐰼𐰚𐰃: 𐰉𐰆𐰑𐰣: 𐰴𐰆𐰯: 𐰢𐰭𐰀: 𐰚𐰇𐰼𐰼: 𐰉𐰆𐰨𐰀: 𐰉𐰆𐰑𐰣:",
+      "transliteration": "Toquz oγuz bägläri bodunı bu sabımın ädgüti äšid qatïγdı tıŋla. İlgärü kün toγsıqa birgärü kün ortusıŋaru qurıγaru kün batsıqıŋa yırγaru tün ortusıŋaru anta ičräki bodun qop maŋa körür bunča bodun.",
+      "translation": "To‘qqiz O‘g‘uz beklari va xalqi, bu so‘zimni yaxshilab eshit, diqqat bilan tingla. Sharqda kun chiqishigacha, janubda kun o‘rtasigacha, g‘arbda kun botishigacha, shimolda tun o‘rtasigacha — shu doiradagi xalqlarning barchasi menga qaraydi. Shuncha xalq…",
+      "note": "Gap keyingi satrda davom etadi. Oxirdagi bunča bodun keyingi gapning boshlanishi; to‘liq gap sifatida talqin qilinmadi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          115
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "O vous nobles et peuple des Neuf-Ogouz! Écoutez bien ce que je vous mande, prêtez-y attentivement l’oreille! En avant vers le soleil levant, à droite vers le midi, en arrière vers le soleil couchant, à gauche au minuit, en dedans de ce cercle il y a beaucoup de peuples qui me sont soumis.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_source_url": "https://tr.wikisource.org/w/index.php?title=Orhun_Yazıtları_(Kül_Tigin)&oldid=174981",
+        "original_credit": "Turkish Wikisource contributors; Unicode runik ko‘chirma. Toshning fotografik faksimilesi emas.",
+        "original_license": "CC-BY-SA-4.0",
+        "original_license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition",
+        "original_changes": "Unicode glyphs retained; whitespace normalised; punctuation separators retained. No claim of photographic facsimile."
+      }
+    },
+    {
+      "monument_key": "kultegin",
+      "position": 103,
+      "label": "KT S3",
+      "pages": [
+        115
+      ],
+      "original": "",
+      "transliteration": "Bunča bodun qop itdim. Ol amtı anyıγ yoq. Türk qaγan Ötükän yıš olursar iltä buŋ yoq. İlgärü Šantuŋ yazıqa tägi sülädim taluyqa kičig tägmädim. Birgärü toquz ärsinkä tägi sülädim.",
+      "translation": "Shuncha xalqni tashkil qildim. Hozir bu yerdagi tartib buzilmagan. Turk xoqoni O‘tukan o‘rmonida tursa, elda tashvish bo‘lmaydi. Sharqda Shantung tekisligigacha yurish qildim; dengizga ozgina yetmay qoldim. Janubda Toquz Ärsingacha yurish qildim.",
+      "note": "Muhim tafovut: ol amtı anyıγ yoq jumlasi va taluyqa kičig tägmädim ifodasi bo‘yicha ishchi o‘zbekcha talqin Thomsenning fransuzcha talqinidan farq qiladi. Ikkalasi ochiq berildi; mustaqil filolog tekshiruvi zarur.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          115
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Les peuples que j’ai organisés. Pendant que le kagan des Turcs habite la forêt d’Utuken sans cette gloire ni cette civilisation, le peuple n’a aucun chagrin. En avant j’ai fait des expéditions jusqu’à la plaine de Chantoung, mais je n’ai nullement touché à la mer; à droite j’ai fait des expéditions jusqu’aux Neuf-Ersins.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    },
+    {
+      "monument_key": "kultegin",
+      "position": 104,
+      "label": "KT S4 · parcha",
+      "pages": [
+        115,
+        116
+      ],
+      "original": "",
+      "transliteration": "Tüpütkä kičig tägmädim. Qurıγaru Yinčü ügüz käčä Tämir Qapıγqa tägi sülädim. Yırγaru Yer Bayırqu yiriŋä tägi sülädim. Bunča yerkä tägi yorıtdım.",
+      "translation": "Tibetga ozgina yetmay qoldim. G‘arbda Yinchu daryosini kechib, Temir Qopig‘gacha yurish qildim. Shimolda Yer Bayirqu yerigacha yurish qildim. Shuncha yergacha lashkar yurgizdim.",
+      "note": "S4 ning birinchi qismi. kičig talqini bo‘yicha ishchi tarjima va tarixiy fransuzcha talqin farqi saqlangan. Yinčü ügüz joy nomi manbadagi shaklda berildi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          115,
+          116
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Je n’ai nullement touché au Thibet; en arrière j’ai fait des expéditions au-delà du fleuve des Perles, jusqu’à la Porte de Fer; à gauche j’ai fait des expéditions jusqu’au pays des Yer-Bayirkou. Jusqu’à tant de pays j’ai conduit les Turcs.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    },
+    {
+      "monument_key": "bilge",
+      "position": 1,
+      "label": "BK E1 · shikastlangan parcha",
+      "pages": [
+        122
+      ],
+      "original": "",
+      "transliteration": "Täŋri täg täŋri yaratmıš türk bilgä qaγan sabım. Qaŋım türk bilgä qaγan […] toquz oγuz iki ädiz […] bägläri bodunı […] türk täŋri […].",
+      "translation": "Osmonga o‘xshash, osmon yaratgan turk Bilga xoqonning so‘zi. Otam turk Bilga xoqon […] To‘qqiz O‘g‘uz, Ikki Ädiz […] beklari va xalqi […] turk osmoni […].",
+      "note": "Nashrdagi lakunalar […] bilan ko‘rsatildi. Manbada qavs va savol belgili taxminlar bor; bu parcha to‘liq matn yoki yakdil talqin sifatida berilmagan.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          122
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n124/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Moi qui ressemble au ciel et qui suis institué par le ciel, Bilghè kagan des Turcs, voici ce que je vous mande: mon père, Bilghè kagan des Turcs, les vaillants nobles et le peuple des Neuf-Ogouz, le ciel des Turcs.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    },
+    {
+      "monument_key": "bilge",
+      "position": 2,
+      "label": "BK E2a · shikastlangan parcha",
+      "pages": [
+        122
+      ],
+      "original": "",
+      "transliteration": "[…] üzä qaγan olurtum. Olurtuquma öltäčičä saqınıγma türk bäglär bodun ägirip säbinip toŋtamıš közi yoγaru körti. Böd kä özüm olurıp bunča aγır törüg tört buluŋdaqı […] itdim.",
+      "translation": "[…] ustidan xoqon bo‘lib taxtga o‘tirdim. Taxtga o‘tirganimda o‘limni kutib turgandek bo‘lgan turk beklari va xalqi quvonib, pastga tikilgan ko‘zlarini yuqoriga ko‘tardi. O‘zim taxtga o‘tirib, to‘rt tarafdagi […] muhim tartib-qoidalarni tuzdim.",
+      "note": "E2 ning faqat birinchi qismi. toŋtamış so‘zi Thomsenning o‘zida savol bilan belgilangan; tahririy noaniqlik saqlandi. Böd kä segmentatsiyasi ishchi normalizatsiya bo‘lib, ekspert tekshiruvi kutiladi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          122
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n124/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Je suis devenu le kagan. A mon avènement, les nobles et le peuple des Turcs, qui s’étaient désolés comme s’ils allaient mourir, changèrent et se réjouirent et levèrent les yeux. Après être moi-même monté sur le trône, j’en ai donné tant de lois importantes parmi les peuples des quatre coins du monde.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    },
+    {
+      "monument_key": "bilge",
+      "position": 101,
+      "label": "BK N1 · parcha",
+      "pages": [
+        114
+      ],
+      "original": "",
+      "transliteration": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bödkä olurtum. Sabımın tükäti äšid ulayu ini yigünüm oγlanım biriki oγušım […].",
+      "translation": "Osmonga o‘xshash, osmondan bo‘lgan turk Bilga xoqon men bu davrda taxtga o‘tirdim. So‘zimni oxirigacha eshit; inilarim va jiyanlarim, farzandlarim, urug‘im […].",
+      "note": "Thomsen KT S1 bilan parallel beradi. BK nusxasidagi bo‘sh joylar KT nusxasidan avtomatik to‘ldirilmadi. Bödkä va bu ödkä farqi saqlandi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          114
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "Moi qui ressemble au ciel, Bilghè kagan des Turcs, venu du ciel, à l’heure qu’il est, je suis monté sur le trône. Ecoutez jusqu’au bout ce que je vous mande, vous qui venez après moi, mes cadets, mes princes.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    },
+    {
+      "monument_key": "bilge",
+      "position": 102,
+      "label": "BK N2 · parcha",
+      "pages": [
+        115
+      ],
+      "original": "",
+      "transliteration": "[…] ilgärü kün toγsıŋaru birgärü kün ortusıŋaru qurıγaru kün batsıqıŋa yırγaru tün ortusıŋaru anta ičräki bodun […] ol amtı anyıγ yoq türk qaγan Ötükän […] ilgärü […] taluyqa kičig tägmädim.",
+      "translation": "[…] sharqda kun chiqishi tomon, janubda kun o‘rtasi tomon, g‘arbda kun botishi tomon, shimolda tun o‘rtasi tomon — shu doiradagi xalqlar […] turk xoqoni O‘tukan […] sharqda […] dengizga ozgina yetmay qoldim.",
+      "note": "BK N2 juda shikastlangan. Fransuzcha parallel talqin faqat shu parchada saqlangan geografik jumlaga taalluqli; lakunalar boshqa nusxadan to‘ldirilmagan. Ishchi tarjima uzilib qolgan gaplarni to‘liq gapga aylantirmaydi.",
+      "certainty": "uncertain",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition": "Vilhelm Thomsen (1896), Inscriptions de l’Orkhon déchiffrées. MSFOu V. Helsingfors.",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "edition_year": 1896,
+        "pages": [
+          115
+        ],
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "transliteration_kind": "normalised_working_reading",
+        "source_translation_language": "fr",
+        "source_translation": "En avant vers le soleil levant, à droite vers le midi, en arrière vers le soleil couchant, à gauche au minuit, en dedans de ce cercle il y a beaucoup de peuples qui me sont soumis.",
+        "translation_language": "uz",
+        "translation_status": "working",
+        "translation_credit": "Codex — manbaga tayangan ishchi tarjima; filolog tasdiqlamagan",
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "excerpt": true,
+        "rights": "Thomsenning 1896-yilgi asari: public domain; digitizatsiya: University of Michigan / Google / Internet Archive. Google kreditlari saqlanadi.",
+        "retrieved_on": "2026-11-06",
+        "normalisation": "Bu diplomatik transkripsiya emas. Nashrdagi kichik yuqori unlilar satrga tushirildi; ä, ï/ı, γ, ŋ, č, š bilan o‘quv normalizatsiyasi berildi. Bahsli o‘qishlar izohda saqlanadi.",
+        "original_status": "not_collated; Unicode runes intentionally not reconstructed",
+        "source_translation_kind": "reading_excerpt; editorial punctuation; footnote markers and some parenthetical notes omitted; consult scan for exact edition"
+      }
+    }
+  ],
+  "words": [
+    {
+      "word": "täŋri",
+      "meaning": "Osmon; shu kontekstda osmoniy iloh tushunchasi ham qatnashadi.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "osmon; Tangri",
+        "tr": "gök; Tanrı"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "täŋri"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "kök",
+      "meaning": "Ko‘k, moviy; osmon bilan birikkan rang sifati.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "ko‘k",
+        "tr": "gök"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "kök"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "yer",
+      "meaning": "Yer, zamin.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "yer",
+        "tr": "yer"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "yer"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "asra",
+      "meaning": "Pastda, quyida.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "quyida",
+        "tr": "aşağıda"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "asra"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "üzä",
+      "meaning": "Yuqorida, ustida.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "ustida",
+        "tr": "üstte"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Üzä"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "kiši",
+      "meaning": "Inson, kishi. Ma’lumotdagi kişi shakli bilan bir leksema sifatidagi ishchi bog‘lash.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "kishi",
+        "tr": "kişi"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "kiši"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "oγul",
+      "meaning": "O‘g‘il, farzand; kişi oγlı birikmasida inson bolasi.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "o‘g‘il",
+        "tr": "oğul"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "oγlı"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "qaγan",
+      "meaning": "Xoqon; oliy hukmdor unvoni.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "xoqon",
+        "tr": "kağan"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "qaγan"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "türk",
+      "meaning": "Turk etnonimi; tarixiy matndagi siyosiy jamoa nomi.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "turk",
+        "tr": "Türk"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "türk"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "bodun",
+      "meaning": "Xalq, siyosiy jamoa.",
+      "example": "Toquz oγuz bägläri bodunı bu sabımın ädgüti äšid qatïγdı tıŋla. İlgärü kün toγsıqa birgärü kün ortusıŋaru qurıγaru kün batsıqıŋa yırγaru tün ortusıŋaru anta ičräki bodun qop maŋa körür bunča bodun.",
+      "line_label": "KT S2",
+      "equivalents": {
+        "uz": "xalq",
+        "tr": "halk"
+      },
+      "source": "Thomsen (1896), pp. 115; KT S2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "pages": [
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "bodun"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S2"
+      }
+    },
+    {
+      "word": "il",
+      "meaning": "El, boshqariladigan siyosiy birlik yoki davlat.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "el; davlat",
+        "tr": "il; devlet"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "ilin"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "törü",
+      "meaning": "Tartib-qoida, davlatning qonuniy-ijtimoiy tartibi.",
+      "example": "Üzä kök täŋri asra yaγız yer qılınduqda ekin ara kiši oγlı qılınmıš. Kiši oγlınta üzä äčüm apam Bumın qaγan İstämi qaγan olurmıš. Olurıpan türk bodunıŋ ilin törüsin tuta birmiš iti birmiš.",
+      "line_label": "KT E1",
+      "equivalents": {
+        "uz": "tartib-qoida",
+        "tr": "töre"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "törüsin"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E1"
+      }
+    },
+    {
+      "word": "tört",
+      "meaning": "To‘rt soni.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "to‘rt",
+        "tr": "dört"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Tört"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "buluŋ",
+      "meaning": "Tomon, burchak; tört buluŋ birikmasida to‘rt taraf.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "taraf; burchak",
+        "tr": "yön; köşe"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "buluŋ"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "qop",
+      "meaning": "Hammasi, barcha.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "barcha",
+        "tr": "hep"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "qop"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "yaγı",
+      "meaning": "Dushman.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "yov; dushman",
+        "tr": "yağı; düşman"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "yaγı"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "sü",
+      "meaning": "Qo‘shin, lashkar.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "qo‘shin",
+        "tr": "ordu"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Sü"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "baš",
+      "meaning": "Bosh; başlıγıγ shakli boshli kishilarni anglatadigan birikmada keladi.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "bosh",
+        "tr": "baş"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Bašlıγıγ"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "tiz",
+      "meaning": "Tizza; tizligig shakli tiz cho‘ktirish ifodasida keladi.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "tizza",
+        "tr": "diz"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "tizligig"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "tämir",
+      "meaning": "Temir; Tämir Qapıγ joy nomining tarkibiy qismi.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "temir",
+        "tr": "demir"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Tämir"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "qapıγ",
+      "meaning": "Eshik, darvoza; Tämir Qapıγ nomida keladi.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "qopqa; darvoza",
+        "tr": "kapı"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Qapıγqa"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "yıš",
+      "meaning": "O‘rmonli tog‘lik; Qadırqan yış va Ötükän yış birikmalarida.",
+      "example": "Tört buluŋ qop yaγı ärmiš. Sü süläpän tört buluŋdaqı bodunuγ qop almıš qop baz qılmıš. Bašlıγıγ yükündürmiš tizligig sökürmiš. İlgärü Qadırqan yıšqa tägi kirü Tämir Qapıγqa tägi qondurmıš.",
+      "line_label": "KT E2",
+      "equivalents": {
+        "uz": "o‘rmonli tog‘lik",
+        "tr": "ormanlık dağ"
+      },
+      "source": "Thomsen (1896), pp. 97; KT E2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n99/mode/1up",
+        "pages": [
+          97
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "yıšqa"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E2"
+      }
+    },
+    {
+      "word": "bilgä",
+      "meaning": "Dono, bilimli; hukmdor unvoni tarkibida ham keladi.",
+      "example": "Ekin ara idioqsız kök türk anča olurur ärmiš. Bilgä qaγan ärmiš alp qaγan ärmiš. Buyruqı yämä bilgä ärmiš ärinč alp ärmiš ärinč. Bägläri yämä bodunı yämä tüz ärmiš. Anı üčün ilig anča tutmıš ärinč ilig tutıp törüg itmiš.",
+      "line_label": "KT E3–E4a · parcha",
+      "equivalents": {
+        "uz": "dono",
+        "tr": "bilge"
+      },
+      "source": "Thomsen (1896), pp. 98; KT E3–E4a · parcha. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n100/mode/1up",
+        "pages": [
+          98
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Bilgä"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E3–E4a · parcha"
+      }
+    },
+    {
+      "word": "alp",
+      "meaning": "Jasur, bahodir.",
+      "example": "Ekin ara idioqsız kök türk anča olurur ärmiš. Bilgä qaγan ärmiš alp qaγan ärmiš. Buyruqı yämä bilgä ärmiš ärinč alp ärmiš ärinč. Bägläri yämä bodunı yämä tüz ärmiš. Anı üčün ilig anča tutmıš ärinč ilig tutıp törüg itmiš.",
+      "line_label": "KT E3–E4a · parcha",
+      "equivalents": {
+        "uz": "bahodir",
+        "tr": "alp; yiğit"
+      },
+      "source": "Thomsen (1896), pp. 98; KT E3–E4a · parcha. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n100/mode/1up",
+        "pages": [
+          98
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "alp"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E3–E4a · parcha"
+      }
+    },
+    {
+      "word": "buyruq",
+      "meaning": "Buyruq; shu tarixiy kontekstda amaldor yoki mansab egasi.",
+      "example": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "line_label": "KT S1",
+      "equivalents": {
+        "uz": "amaldor",
+        "tr": "buyruk görevlisi"
+      },
+      "source": "Thomsen (1896), pp. 114, 115; KT S1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "pages": [
+          114,
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "buyruq"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S1"
+      }
+    },
+    {
+      "word": "bäg",
+      "meaning": "Bek; boshqaruv tabaqasiga oid unvon.",
+      "example": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "line_label": "KT S1",
+      "equivalents": {
+        "uz": "bek",
+        "tr": "bey"
+      },
+      "source": "Thomsen (1896), pp. 114, 115; KT S1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "pages": [
+          114,
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "bäglär"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S1"
+      }
+    },
+    {
+      "word": "tüz",
+      "meaning": "To‘g‘ri, tartibli; mazkur kontekstda jamoaning ahilligi va to‘g‘riligi.",
+      "example": "Ekin ara idioqsız kök türk anča olurur ärmiš. Bilgä qaγan ärmiš alp qaγan ärmiš. Buyruqı yämä bilgä ärmiš ärinč alp ärmiš ärinč. Bägläri yämä bodunı yämä tüz ärmiš. Anı üčün ilig anča tutmıš ärinč ilig tutıp törüg itmiš.",
+      "line_label": "KT E3–E4a · parcha",
+      "equivalents": {
+        "uz": "to‘g‘ri; tartibli",
+        "tr": "düz; düzenli"
+      },
+      "source": "Thomsen (1896), pp. 98; KT E3–E4a · parcha. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n100/mode/1up",
+        "pages": [
+          98
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "tüz"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT E3–E4a · parcha"
+      }
+    },
+    {
+      "word": "sab",
+      "meaning": "So‘z, aytilgan xabar yoki murojaat.",
+      "example": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "line_label": "KT S1",
+      "equivalents": {
+        "uz": "so‘z",
+        "tr": "söz"
+      },
+      "source": "Thomsen (1896), pp. 114, 115; KT S1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "pages": [
+          114,
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Sabımın"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S1"
+      }
+    },
+    {
+      "word": "öd",
+      "meaning": "Vaqt, davr.",
+      "example": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "line_label": "KT S1",
+      "equivalents": {
+        "uz": "davr",
+        "tr": "zaman"
+      },
+      "source": "Thomsen (1896), pp. 114, 115; KT S1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "pages": [
+          114,
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "ödkä"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S1"
+      }
+    },
+    {
+      "word": "ini",
+      "meaning": "Kichik aka-uka, ini.",
+      "example": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "line_label": "KT S1",
+      "equivalents": {
+        "uz": "ini",
+        "tr": "küçük kardeş"
+      },
+      "source": "Thomsen (1896), pp. 114, 115; KT S1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "pages": [
+          114,
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "ini"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S1"
+      }
+    },
+    {
+      "word": "oγlan",
+      "meaning": "Farzandlar; murojaat tarkibida oγlanım shaklida.",
+      "example": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "line_label": "KT S1",
+      "equivalents": {
+        "uz": "farzand",
+        "tr": "oğlan; evlat"
+      },
+      "source": "Thomsen (1896), pp. 114, 115; KT S1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "pages": [
+          114,
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "oγlanım"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S1"
+      }
+    },
+    {
+      "word": "kün",
+      "meaning": "Kun, quyosh; yo‘nalishlar tasvirida keladi.",
+      "example": "Toquz oγuz bägläri bodunı bu sabımın ädgüti äšid qatïγdı tıŋla. İlgärü kün toγsıqa birgärü kün ortusıŋaru qurıγaru kün batsıqıŋa yırγaru tün ortusıŋaru anta ičräki bodun qop maŋa körür bunča bodun.",
+      "line_label": "KT S2",
+      "equivalents": {
+        "uz": "kun; quyosh",
+        "tr": "gün; güneş"
+      },
+      "source": "Thomsen (1896), pp. 115; KT S2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "pages": [
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "kün"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S2"
+      }
+    },
+    {
+      "word": "tün",
+      "meaning": "Tun.",
+      "example": "Toquz oγuz bägläri bodunı bu sabımın ädgüti äšid qatïγdı tıŋla. İlgärü kün toγsıqa birgärü kün ortusıŋaru qurıγaru kün batsıqıŋa yırγaru tün ortusıŋaru anta ičräki bodun qop maŋa körür bunča bodun.",
+      "line_label": "KT S2",
+      "equivalents": {
+        "uz": "tun",
+        "tr": "gece"
+      },
+      "source": "Thomsen (1896), pp. 115; KT S2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "pages": [
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "tün"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S2"
+      }
+    },
+    {
+      "word": "toquz",
+      "meaning": "To‘qqiz soni; Toquz Oγuz etnonimik birikmasida.",
+      "example": "Toquz oγuz bägläri bodunı bu sabımın ädgüti äšid qatïγdı tıŋla. İlgärü kün toγsıqa birgärü kün ortusıŋaru qurıγaru kün batsıqıŋa yırγaru tün ortusıŋaru anta ičräki bodun qop maŋa körür bunča bodun.",
+      "line_label": "KT S2",
+      "equivalents": {
+        "uz": "to‘qqiz",
+        "tr": "dokuz"
+      },
+      "source": "Thomsen (1896), pp. 115; KT S2. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "pages": [
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "Toquz"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S2"
+      }
+    },
+    {
+      "word": "otuz",
+      "meaning": "O‘ttiz soni; Otuz Tatar birikmasida.",
+      "example": "Täŋri täg täŋridä bolmıš türk bilgä qaγan bu ödkä olurtum. Sabımın tükäti äšidgil. Ulayu ini yigünüm oγlanım biriki oγušım bodunım biriyä šadapıt bäglär yırıyā tarqat buyruq bäglär otuz tatar.",
+      "line_label": "KT S1",
+      "equivalents": {
+        "uz": "o‘ttiz",
+        "tr": "otuz"
+      },
+      "source": "Thomsen (1896), pp. 114, 115; KT S1. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n116/mode/1up",
+        "pages": [
+          114,
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "otuz"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S1"
+      }
+    },
+    {
+      "word": "taluy",
+      "meaning": "Dengiz.",
+      "example": "Bunča bodun qop itdim. Ol amtı anyıγ yoq. Türk qaγan Ötükän yıš olursar iltä buŋ yoq. İlgärü Šantuŋ yazıqa tägi sülädim taluyqa kičig tägmädim. Birgärü toquz ärsinkä tägi sülädim.",
+      "line_label": "KT S3",
+      "equivalents": {
+        "uz": "dengiz",
+        "tr": "deniz"
+      },
+      "source": "Thomsen (1896), pp. 115; KT S3. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "pages": [
+          115
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "taluyqa"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S3"
+      }
+    },
+    {
+      "word": "ügüz",
+      "meaning": "Daryo; Yinčü ügüz tarixiy joy nomi tarkibida.",
+      "example": "Tüpütkä kičig tägmädim. Qurıγaru Yinčü ügüz käčä Tämir Qapıγqa tägi sülädim. Yırγaru Yer Bayırqu yiriŋä tägi sülädim. Bunča yerkä tägi yorıtdım.",
+      "line_label": "KT S4 · parcha",
+      "equivalents": {
+        "uz": "daryo",
+        "tr": "ırmak"
+      },
+      "source": "Thomsen (1896), pp. 115, 116; KT S4 · parcha. Manbaga tayangan ishchi lug‘at izohi.",
+      "provenance": {
+        "release": "thomsen1896-v1",
+        "edition_url": "https://archive.org/details/inscriptionsdel00thomgoog",
+        "scan_url": "https://archive.org/details/inscriptionsdel00thomgoog/page/n117/mode/1up",
+        "pages": [
+          115,
+          116
+        ],
+        "verification": "source_prepared",
+        "expert_reviewed": false,
+        "gloss_status": "working_contextual_gloss",
+        "attested_forms": [
+          "ügüz"
+        ],
+        "equivalents_status": "working_semantic_equivalents_not_etymological_claims",
+        "rights": "Original contextual glosses prepared for this corpus; CC-BY-4.0.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "pronunciation_status": "not_reconstructed",
+        "line_label": "KT S4 · parcha"
+      }
+    }
+  ]
+}

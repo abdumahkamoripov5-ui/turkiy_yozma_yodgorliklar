@@ -8,6 +8,8 @@ import { useWorkspace } from '../context/WorkspaceContext'
 import { SaveButton } from '../mvp/components'
 import MorphologyDetails from './MorphologyDetails'
 import { FacsimileViewer, LineNote, ReadingProgress } from './ReadingResearch'
+import SourceProvenance from './SourceProvenance'
+import EditorialSuggestion from './EditorialSuggestion'
 import '../pages/research.css'
 
 const WORDS = /([\p{L}\p{M}]+(?:['’‘ʻʼʹ-][\p{L}\p{M}]+)*)/gu
@@ -95,15 +97,17 @@ export default function ParallelReading({ monument }) {
           <button type="button" className="reading-line-label" aria-pressed={active === line.position}
             onClick={() => setActive(line.position)}>{t('reading_line')} {line.label || line.position}</button>
           <div className="reading-columns">{columns.map(([field, label]) => <div key={field} className={`reading-cell ${field}`}>
-            <h4>{label}</h4><div dir="auto">{field === 'original' ? line[field] || '—'
+            <h4>{label}{line.provenance?.release && field !== 'original' && <small className="reading-layer-status"> · {field === 'translation' ? 'UZ' : 'LAT'} · {c('ishchi', 'рабочий', 'working')}</small>}</h4><div dir="auto">{field === 'original' ? line[field] || c('Runik ko‘chirma tekshirilmagan — nashr sahifasini oching.', 'Руническая копия не сверена — откройте страницу издания.', 'Runic copy not collated — open the edition page.')
               : <WordText text={line[field]} selected={selection?.position === line.position ? selection.word : null} onSelect={word => select(word, line.position)} />}</div>
           </div>)}</div>
           {line.source && <p className="reading-line-source">{t('reading_source')}: {line.source}</p>}
+          <SourceProvenance provenance={line.provenance} reviewed={line.expert_reviewed} />
           {line.certainty && line.certainty !== 'certain' && <p className="reading-certainty">{line.certainty === 'restored' ? c('Tiklangan o‘qilish', 'Восстановленное чтение', 'Restored reading') : c('Noaniq o‘qilish', 'Неуверенное чтение', 'Uncertain reading')}</p>}
           {line.editorial_note && <p className="reading-editorial-note">{line.editorial_note}</p>}
           {variants.data?.results.some(row => row.position === line.position) && <details className="reading-variants"><summary>{c('Ilmiy o‘qilish variantlari', 'Научные варианты чтения', 'Scholarly reading variants')}</summary>{variants.data.results.filter(row => row.position === line.position).map(row => <article key={row.id}><strong>{row.scholar}</strong><p dir="auto">{row.reading}</p>{row.translation && <p>{row.translation}</p>}<small>{row.source}</small>{row.note && <p>{row.note}</p>}<span className="meros-meta">{row.certainty === 'certain' ? c('Aniq', 'Уверенное', 'Certain') : row.certainty === 'restored' ? c('Tiklangan', 'Восстановлено', 'Restored') : c('Noaniq', 'Неуверенное', 'Uncertain')}</span></article>)}</details>}
           <SaveButton item={{ key: `line-${monument.id}-${line.position}`, title: `${monument.title} · ${line.label || line.position}`, to: `/monuments?monument=${monument.id}#line-${line.position}`, type: 'line' }} />
           <LineNote monument={monument} line={line} />
+          <EditorialSuggestion line={line} />
           <button className="btn btn-ghost" onClick={() => copyLine(line)}>{copied === line.position ? c('✓ Nusxalandi', '✓ Скопировано', '✓ Copied') : c('Satr havolasi va iqtibosni nusxalash', 'Копировать ссылку и цитату строки', 'Copy line link and citation')}</button>
         </article>) : <div className="reading-columns reading-unaligned">{columns.map(([field, label]) => <div key={field} className="reading-cell">
           <h4>{label}</h4><div dir="auto">{field === 'original' ? monument.full_text || '—'

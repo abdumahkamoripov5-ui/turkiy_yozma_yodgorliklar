@@ -22,6 +22,7 @@ class Command(BaseCommand):
             self.stdout.write('Local corpus content imported successfully.')
         else:
             self.stdout.write('No transfer fixture; schema and cache are ready.')
+        call_command('seed_scholarly_corpus', archive_samples=True, quarantine_unsourced=True)
         from django.contrib.auth import get_user_model
         User = get_user_model()
         password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')

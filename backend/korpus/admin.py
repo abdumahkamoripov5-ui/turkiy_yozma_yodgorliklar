@@ -13,6 +13,7 @@ from .models import Monument, MonumentLine, SiteSettings, MonumentSubmission, Lo
 from . import mvp_admin  # noqa: F401
 from . import research_admin  # noqa: F401
 from .admin_forms import MonumentAdminForm
+from .scientific_review import ScientificReviewMixin, approve_scientific_content
 
 
 # ── Custom actions ─────────────────────────────────────────────────────────────
@@ -53,7 +54,8 @@ class MonumentLineInline(admin.StackedInline):
     model = MonumentLine
     extra = 0
     fields = ['position', 'label', 'original', 'transliteration', 'translation', 'source',
-              'certainty', 'editorial_note', 'facsimile_url', 'image_region', 'published']
+              'certainty', 'editorial_note', 'facsimile_url', 'image_region', 'provenance', 'reviewed_by', 'reviewed_at', 'published']
+    readonly_fields = ['reviewed_by', 'reviewed_at']
 
     class Media:
         js = ['korpus/admin/facsimile.js']
@@ -82,12 +84,14 @@ class EditorialQualityFilter(admin.SimpleListFilter):
 
 
 @admin.register(MonumentLine)
-class MonumentLineAdmin(admin.ModelAdmin):
+class MonumentLineAdmin(ScientificReviewMixin, admin.ModelAdmin):
     list_display = ['monument', 'position', 'label', 'certainty', 'source', 'published']
     list_filter = ['published', 'certainty', 'monument__script']
     search_fields = ['monument__title', 'label', 'original', 'transliteration', 'source']
     autocomplete_fields = ['monument']
     ordering = ['monument', 'position']
+    readonly_fields = ['reviewed_by', 'reviewed_at']
+    actions = [approve_scientific_content]
 
     class Media:
         js = ['korpus/admin/facsimile.js']

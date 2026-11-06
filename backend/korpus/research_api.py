@@ -17,7 +17,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .csv_utils import safe_cell
-from .models import Monument, ReadingVariant, ResearchItem, WordForm
+from .corpus_scope import core_monuments
+from .models import EditorialSuggestion, Monument, MonumentLine, ReadingVariant, ResearchItem, WordForm
 from .reading import reading_data
 from .research import (canonical, collocation_data, filtered_monuments, frequency_data,
                        integer, result_target, search_corpus)
@@ -25,11 +26,13 @@ from .throttling import ExportRateThrottle, SearchRateThrottle
 
 
 def download_rows(rows, columns, fmt, name):
+    def cell(value):
+        return safe_cell(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else value)
     if fmt == 'csv':
         stream = io.StringIO(newline='')
         writer = csv.writer(stream)
         writer.writerow([label for _, label in columns])
-        writer.writerows([[safe_cell(row.get(key, '')) for key, _ in columns] for row in rows])
+        writer.writerows([[cell(row.get(key, '')) for key, _ in columns] for row in rows])
         response = HttpResponse('\ufeff' + stream.getvalue(), content_type='text/csv; charset=utf-8')
     elif fmt == 'xlsx':
         from openpyxl import Workbook
@@ -37,7 +40,7 @@ def download_rows(rows, columns, fmt, name):
         sheet = workbook.create_sheet('Korpus')
         sheet.append([label for _, label in columns])
         for row in rows:
-            sheet.append([safe_cell(row.get(key, '')) for key, _ in columns])
+            sheet.append([cell(row.get(key, '')) for key, _ in columns])
         stream = io.BytesIO()
         workbook.save(stream)
         response = HttpResponse(stream.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -53,12 +56,15 @@ def download_rows(rows, columns, fmt, name):
 
 def add_citations(request, rows):
     base = settings.FRONTEND_URL.rstrip('/')
-    # The production SPA lives under /app; local Vite uses its own basename.
-    if not base.startswith('/'):
+    absolute = base.startswith(('https://', 'http://'))
+    if not absolute and not base.startswith('/'):
         base = '/app'
     for row in rows:
-        row['url'] = request.build_absolute_uri(base + row['target'])
+        target = base + row['target']
+        row['url'] = target if absolute else request.build_absolute_uri(target)
         row['citation'] = f"{row['monumentTitle']} ({row['year']}), {row['label']}. {row['source']}. {row['url']}"
+        if row.get('provenance', {}).get('release'):
+            row['citation'] += ' [Manbaga bog‘langan tanlangan parcha; normalizatsiya va UZ tarjima ishchi; mustaqil ilmiy tasdiq: ' + ('bor' if row.get('expert_reviewed') else 'yo‘q') + '.]'
 
 
 class ResearchSearchView(APIView):
@@ -73,7 +79,7 @@ class ResearchSearchView(APIView):
         if fmt:
             response = download_rows(all_rows, [('monumentTitle', 'Yodgorlik'), ('year', 'Yil'),
                 ('label', 'Satr'), ('field', 'Matn turi'), ('left', 'Chap kontekst'), ('match', 'So‘z'),
-                ('right', 'O‘ng kontekst'), ('source', 'Nashr va sahifa'), ('url', 'Havola'), ('citation', 'Iqtibos')], fmt, 'konkordans')
+                ('right', 'O‘ng kontekst'), ('source', 'Nashr va sahifa'), ('url', 'Havola'), ('citation', 'Iqtibos'), ('provenance', 'Manba va huquqlar'), ('expert_reviewed', 'Mustaqil ilmiy tasdiq')], fmt, 'konkordans')
             response['X-Results-Truncated'] = str(result['truncated']).lower()
             return response
         return Response(result)
@@ -106,7 +112,8 @@ class ResearchOptionsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        qs = Monument.objects.filter(status='Chop etilgan')
+        from .corpus_scope import apply_scope
+        qs = apply_scope(Monument.objects.filter(status='Chop etilgan'), request.query_params)
         return Response({'scripts': [{'value': key, 'label': label} for key, label in Monument.SCRIPT_CHOICES],
                          'categories': [{'value': key, 'label': label} for key, label in Monument.CATEGORY_CHOICES],
                          'languages': list(qs.order_by('language').values_list('language', flat=True).distinct()),
@@ -147,6 +154,44 @@ class ReadingVariantsView(APIView):
         return Response({'results': [{'id': row.pk, 'position': row.line.position, 'label': row.line.label,
             'scholar': row.scholar, 'reading': row.reading, 'translation': row.translation,
             'source': row.source, 'note': row.note, 'certainty': row.certainty} for row in rows]})
+
+
+class EditorialSuggestionSerializer(serializers.ModelSerializer):
+    line = serializers.PrimaryKeyRelatedField(queryset=MonumentLine.objects.filter(published=True,
+        monument__in=core_monuments(Monument.objects.filter(status='Chop etilgan'))))
+    class Meta:
+        model = EditorialSuggestion
+        fields = ['id', 'line', 'proposed_reading', 'rationale', 'source', 'status', 'submitted_at']
+        read_only_fields = ['id', 'status', 'submitted_at']
+
+    def validate_proposed_reading(self, value):
+        value = value.strip()
+        if not value:
+            raise serializers.ValidationError('Taklif etilgan o‘qilishni kiriting.')
+        return value
+
+    def validate_rationale(self, value):
+        value = value.strip()
+        if len(value) < 20:
+            raise serializers.ValidationError('Izoh kamida 20 belgidan iborat bo‘lsin.')
+        return value
+
+    def validate_source(self, value):
+        value = value.strip()
+        if len(value) < 5:
+            raise serializers.ValidationError('Nashr yoki manbaning bibliografik ma’lumotini kiriting.')
+        return value
+
+
+class EditorialSuggestionView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [SearchRateThrottle]
+
+    def post(self, request):
+        serializer = EditorialSuggestionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        suggestion = serializer.save(author=request.user)
+        return Response(EditorialSuggestionSerializer(suggestion).data, status=201)
 
 
 class WorkspaceSerializer(serializers.ModelSerializer):
@@ -256,7 +301,7 @@ def tei_export(monuments):
     desc = node(header, 'fileDesc')
     node(node(desc, 'titleStmt'), 'title', 'Turkiy Meros — tanlangan korpus')
     node(node(desc, 'publicationStmt'), 'p', 'Turkiy Meros. Har bir materialning manbasi alohida ko‘rsatilgan.')
-    node(node(desc, 'sourceDesc'), 'p', 'Saytdagi nashr qilingan matnlar va ekspert tekshirgan satrlar.')
+    node(node(desc, 'sourceDesc'), 'p', 'Nashr qilingan matnlar; manba va mustaqil ilmiy tasdiq holati har bir parchada alohida berilgan.')
     for monument in monuments:
         tei = node(root, 'TEI', **{'{http://www.w3.org/XML/1998/namespace}id': f'm{monument.pk}'})
         desc = node(node(tei, 'teiHeader'), 'fileDesc')
@@ -282,6 +327,9 @@ def tei_export(monuments):
                         segment.text = content
                     if line.get('source'):
                         node(segment, 'note', line['source'], type='source')
+                    if line.get('provenance'):
+                        node(segment, 'note', json.dumps(line['provenance'], ensure_ascii=False), type='provenance')
+                        node(segment, 'note', 'expert_reviewed' if line.get('expert_reviewed') else 'not_expert_reviewed', type='review-status')
             else:
                 node(division, 'p', getattr(monument, 'full_text' if field == 'original' else field))
         variants = ReadingVariant.objects.filter(line__monument=monument, line__published=True,
@@ -328,7 +376,8 @@ class ResearchCorpusExportView(APIView):
                 rows.append({'monumentTitle': monument.title, 'year': monument.year,
                     'label': line['label'] or str(line['position']), 'original': line['original'],
                     'transliteration': line['transliteration'], 'translation': line['translation'],
-                    'source': line['source'], 'target': result_target(monument.pk, line['position'])})
+                    'source': line['source'], 'provenance': line.get('provenance', {}),
+                    'expert_reviewed': line.get('expert_reviewed', False), 'target': result_target(monument.pk, line['position'])})
             if not reading_data(monument)['lines']:
                 rows.append({'monumentTitle': monument.title, 'year': monument.year, 'label': '',
                     'original': monument.full_text, 'transliteration': monument.transliteration,
@@ -336,4 +385,25 @@ class ResearchCorpusExportView(APIView):
         add_citations(request, rows)
         return download_rows(rows, [('monumentTitle', 'Yodgorlik'), ('year', 'Yil'), ('label', 'Satr'),
             ('original', 'Asl matn'), ('transliteration', 'Transliteratsiya'), ('translation', 'Tarjima'),
-            ('source', 'Manba'), ('url', 'Havola')], fmt, 'tanlangan-korpus')
+            ('source', 'Manba'), ('url', 'Havola'), ('provenance', 'Manba va huquqlar'), ('expert_reviewed', 'Mustaqil ilmiy tasdiq')], fmt, 'tanlangan-korpus')
+
+class CorpusQualityView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        from .corpus_scope import monument_quality
+        from .models import WordEntry
+        rows = [{ 'id': monument.pk, 'title': monument.title, 'year': monument.year,
+                  'year_end': monument.year_end, **monument_quality(monument) }
+                for monument in filtered_monuments({'scope': 'core'})]
+        words = WordEntry.objects.filter(published=True)
+        return Response({'scope': {'start': 601, 'end': 800}, 'monuments': rows,
+            'total': len(rows), 'with_bibliography': sum(row['has_bibliography'] for row in rows),
+            'with_editorial_lines': sum(row['editorial_line_count'] > 0 for row in rows),
+            'editorial_lines': sum(row['editorial_line_count'] for row in rows),
+            'source_prepared_lines': sum(row['source_prepared_lines'] for row in rows),
+            'expert_reviewed_lines': sum(row['expert_reviewed_lines'] for row in rows),
+            'complete_editorial_lines': sum(row['complete_editorial_lines'] for row in rows),
+            'published_words': words.count(),
+            'source_prepared_words': sum(word.provenance.get('verification') == 'source_prepared' for word in words),
+            'reviewed_words': words.filter(reviewed_at__isnull=False, reviewed_by__isnull=False).count()})

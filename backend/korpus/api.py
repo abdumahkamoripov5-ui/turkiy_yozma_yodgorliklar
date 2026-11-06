@@ -171,7 +171,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
         q = request.query_params.get('q', '').strip()
         if not q or len(q) < 2:
             return Response({'error': "Kamida 2 ta belgi kiriting"}, status=400)
-        cache_key = f'concordance:{content_version()}:{hashlib.sha256(q.encode()).hexdigest()}'
+        scope = request.query_params.get('scope', '')
+        cache_key = f'concordance:{content_version()}:{hashlib.sha256((scope + chr(0) + q).encode()).hexdigest()}'
         cached = cache.get(cache_key)
         if cached is not None:
             return Response(cached)
@@ -185,7 +186,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
         # re.IGNORECASE — moslik o'rinlari asl matnda hisoblanadi. text.lower() ba'zi
         # harflarda (masalan 'İ' → 'i̇') qator uzunligini o'zgartirib, o'rinlarni siljitardi.
         pattern = re.compile(re.escape(q), re.IGNORECASE)
-        qs = Monument.objects.filter(status='Chop etilgan')
+        from .corpus_scope import apply_scope
+        qs = apply_scope(Monument.objects.filter(status='Chop etilgan'), self.request.query_params)
         for m in qs:
             if len(results) >= max_results:
                 break
@@ -218,7 +220,7 @@ class MonumentViewSet(viewsets.ModelViewSet):
             return Response({'error': "limit butun son bo'lishi kerak"}, status=400)
         limit = max(1, min(limit, 300))
 
-        cache_key = f'word-frequency:{content_version()}'
+        cache_key = f'word-frequency:{content_version()}:{request.query_params.get("scope", "")}'
         top = cache.get(cache_key)
         if top is None:
             top = self._word_counts().most_common(300)
@@ -232,7 +234,8 @@ class MonumentViewSet(viewsets.ModelViewSet):
     def _word_counts(self):
         word_re = re.compile(r"[^\W\d_]+(?:['’ʼʻ][^\W\d_]+)*", re.UNICODE)
         counter = Counter()
-        qs = Monument.objects.filter(status='Chop etilgan').exclude(transliteration='')
+        from .corpus_scope import apply_scope
+        qs = apply_scope(Monument.objects.filter(status='Chop etilgan'), self.request.query_params).exclude(transliteration='')
         for text in qs.values_list('transliteration', flat=True):
             for word in word_re.findall(text or ''):
                 word = word.lower()
@@ -339,7 +342,8 @@ class ExportView(APIView):
         import csv
         from django.http import HttpResponse, JsonResponse
         fmt = request.query_params.get('format', 'json')
-        qs  = Monument.objects.filter(status='Chop etilgan').order_by('year')
+        from .research import filtered_monuments
+        qs = filtered_monuments(request.query_params)
 
         if fmt == 'csv':
             response = HttpResponse(content_type='text/csv; charset=utf-8')

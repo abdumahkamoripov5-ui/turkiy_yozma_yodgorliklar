@@ -5,7 +5,7 @@ import axios from 'axios'
 const API_ROOT = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 const BASE = `${API_ROOT}/api/v2`
 
-const api = axios.create({ baseURL: BASE, timeout: 30000 })
+const api = axios.create({ baseURL: BASE, timeout: 30000, params: { scope: 'core' } })
 
 // JWT token interceptor
 api.interceptors.request.use(cfg => {

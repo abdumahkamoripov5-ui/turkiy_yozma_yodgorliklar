@@ -9,7 +9,12 @@ const readTheme = () => {
 
 export function AppProvider({ children }) {
   const [theme, setThemeState] = useState(readTheme)
-  const [lang, setLangState] = useState(getLang)
+  const [lang, setLangState] = useState(() => {
+    const preferred = getLang()
+    if (['uz', 'ru', 'en'].includes(preferred)) return preferred
+    setI18nLang('uz')
+    return 'uz'
+  })
   const [user, setUser] = useState(() => {
     const u = localStorage.getItem('username')
     const s = localStorage.getItem('is_staff')

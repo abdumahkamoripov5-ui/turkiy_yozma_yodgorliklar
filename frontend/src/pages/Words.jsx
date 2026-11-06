@@ -1,23 +1,21 @@
-import { translateMvp as tr } from '../mvp/locale'
-import { useMerosLocale } from '../mvp/useLocale'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { Search, ArrowUpRight, Languages, ShieldCheck, ArrowRight } from 'lucide-react'
 import { items, useRemote } from '../mvp/api'
 import { PageHeading, Pagination, RemoteState } from '../mvp/components'
 import { useCopy } from '../mvp/copy'
-import PreviewNotice from '../components/PreviewNotice'
-
 export default function Words() {
-  useMerosLocale()
-  const c = useCopy()
-  const [params] = useSearchParams()
-  const [query, setQuery] = useState(params.get('search') || '')
-  const [input, setInput] = useState(params.get('search') || '')
-  const [page, setPage] = useState(1)
-  const remote = useRemote(`/words/?search=${encodeURIComponent(query)}&page=${page}`)
-  const words = items(remote.data)
-  return <div className="container meros-page"><PageHeading eyebrow={c('SO‘ZNING SAYOHATI', 'ИСТОРИЯ СЛОВА', 'A WORD’S JOURNEY')} title={c('Lug‘at', 'Словарь', 'Dictionary')}>{c('Ma’no, talaffuz, tarixiy satrlar va turkiy muqobillar.', 'Значения, произношение, исторические строки и тюркские соответствия.', 'Meanings, pronunciation, historical lines and Turkic equivalents.')}</PageHeading>
-    <PreviewNotice /><form className="meros-search" onSubmit={event => { event.preventDefault(); setQuery(input); setPage(1) }}><span aria-hidden="true">⌕</span><input value={input} onChange={event => setInput(event.target.value)} placeholder={tr("So‘z yoki ma’nosini qidiring…")} aria-label={tr("Lug‘atdan qidirish")} /><button className="btn btn-primary">{tr("Qidirish →")}</button></form>
-    <RemoteState remote={remote} empty={!words.length}><div className="meros-words-grid">{words.map(word => <article className="meros-word-card" key={word.id}><div className="meros-section-top"><span className="meros-eyebrow">{word.status === 'community' ? tr("JAMOATCHILIK TANLAGAN") : tr("LUG‘AT BIRLIGI")}</span></div><h2><Link to={`/words/${word.id}`}>{word.word} ↗</Link></h2><p>{word.meaning}</p>{word.example && <blockquote>{word.example}</blockquote>}<small>{tr("Manba:")}{' '}{word.source}</small>{word.monument && <Link className="meros-text-link" to="/monuments">{tr("Yodgorliklar korpusiga o‘tish →")}</Link>}</article>)}</div><Pagination data={remote.data} page={page} setPage={setPage} /></RemoteState>
-  </div>
+ const c=useCopy()
+ const [params,setParams]=useSearchParams()
+ const [input,setInput]=useState(params.get('search')||'')
+ useEffect(()=>setInput(params.get('search')||''),[params])
+ const page=Number(params.get('page'))||1
+ const remote=useRemote(`/words/?${params}`)
+ const words=items(remote.data)
+ const reviewed=params.get('reviewed')||''
+ const change=(values)=>setParams(Object.fromEntries(Object.entries({...Object.fromEntries(params),...values,page:'1'}).filter(([,value])=>value!=='')))
+ return <div className="container meros-page dictionary-page"><PageHeading eyebrow={c('QADIMGI SO‘ZDAN BUGUNGI MA’NOGACHA','ОТ ДРЕВНЕГО СЛОВА К СОВРЕМЕННОМУ ЗНАЧЕНИЮ','FROM ANCIENT WORDS TO PRESENT MEANINGS')} title={c('So‘zlar xazinasi','Сокровищница слов','A treasury of words')}>{c('Tarixiy shakl, talaffuz, ma’no va turkiy tillardagi muqobillar. So‘zni uning matni va manbasi bilan birga o‘rganing.','Исторические формы, произношение, значения и тюркские соответствия. Изучайте слово вместе с его текстом и источником.','Historical forms, pronunciation, meanings and Turkic equivalents. Study each word alongside its text and source.')}</PageHeading>
+ <form className="dictionary-search" onSubmit={e=>{e.preventDefault();change({search:input.trim()})}}><Search size={21}/><input type="search" maxLength={150} value={input} onChange={e=>setInput(e.target.value)} placeholder={c('So‘z yoki ma’nosini qidiring…','Найдите слово или значение…','Search a word or its meaning…')} aria-label={c('Lug‘atdan qidirish','Поиск в словаре','Search the dictionary')}/><button className="btn btn-primary" type="submit">{c('Qidirish','Найти','Search')}<ArrowRight size={17}/></button></form>
+ <div className="dictionary-toolbar"><span aria-live="polite">{remote.data&&<><strong>{remote.data.count}</strong> {c('lug‘at birligi','словарных статей','dictionary entries')}</>}</span><label><ShieldCheck size={15}/><select aria-label={c('Tekshiruv holati','Статус проверки','Review status')} value={reviewed} onChange={e=>change({reviewed:e.target.value})}><option value="">{c('Barcha yozuvlar','Все записи','All entries')}</option><option value="1">{c('Ekspert tekshirgan','Проверенные экспертом','Expert reviewed')}</option><option value="0">{c('Tekshiruv kutilmoqda','Ожидают проверки','Awaiting review')}</option></select></label></div>
+ <div className="dictionary-layout"><section><RemoteState remote={remote} empty={!words.length}><div className="dictionary-entries">{words.map(word=><article className="dictionary-entry" key={word.id}><header><span className={`editorial-badge ${word.reviewed?'editorial':''}`}><span/>{word.reviewed?c('EKSPERT TEKSHIRGAN','ПРОВЕРЕНО ЭКСПЕРТОМ','EXPERT REVIEWED'):c('TEKSHIRUV KUTILMOQDA','ОЖИДАЕТ ПРОВЕРКИ','AWAITING REVIEW')}</span><Link to={`/words/${word.id}`} aria-label={word.word}><ArrowUpRight size={20}/></Link></header><h2><Link to={`/words/${word.id}`}>{word.word}</Link>{word.pronunciation&&<small>/{word.pronunciation}/</small>}</h2><p>{word.meaning}</p>{word.example&&<blockquote>{word.example}</blockquote>}<footer><span>{c('Manba','Источник','Source')}: {word.source}</span><Link to={`/words/${word.id}`}>{c('Maqolani o‘qish','Открыть статью','Read entry')}<ArrowRight size={13}/></Link></footer></article>)}</div><Pagination data={remote.data} page={page} setPage={next=>setParams({...Object.fromEntries(params),page:String(next)})}/></RemoteState></section><aside className="dictionary-aside"><Languages size={27}/><h2>{c('So‘zni kontekstda o‘rganing','Изучайте слово в контексте','Study words in context')}</h2><p>{c('Tarixiy so‘zning ma’nosi uning davri va qo‘llanishiga bog‘liq. O‘xshash yozilish bir xil ma’noni anglatmasligi mumkin.','Значение исторического слова зависит от периода и употребления. Сходное написание не всегда означает одинаковый смысл.','A historical word’s meaning depends on its period and usage. Similar spelling does not always mean the same thing.')}</p><Link to={`/corpus${params.get('search')?`?q=${encodeURIComponent(params.get('search'))}`:''}`}>{c('Konkordansni ochish','Открыть конкорданс','Open concordance')}<ArrowUpRight size={15}/></Link><hr/><h3>{c('Ilmiy ishonchlilik','Научная достоверность','Scholarly reliability')}</h3><p>{c('O‘quv namunalari va tekshirilmagan ma’nolar ilmiy manba o‘rnini bosmaydi. Maqoladagi manba va ekspert holatini tekshiring.','Учебные примеры и непроверенные значения не заменяют научные источники. Проверяйте источник и статус статьи.','Educational examples and unreviewed meanings do not replace scholarly sources. Check each entry’s source and review status.')}</p><Link to="/quality">{c('Korpus sifati hisoboti','Отчёт о качестве','Corpus quality report')}<ArrowUpRight size={15}/></Link></aside></div></div>
 }

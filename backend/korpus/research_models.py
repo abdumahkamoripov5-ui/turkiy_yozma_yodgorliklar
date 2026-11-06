@@ -77,3 +77,25 @@ class ReadingVariant(models.Model):
 
     def __str__(self):
         return f'{self.line} · {self.scholar}'
+
+
+class EditorialSuggestion(models.Model):
+    """User-submitted, source-backed correction; never public before review."""
+    STATUS = [('pending', 'Ko‘rib chiqilmoqda'), ('accepted', 'Qabul qilindi'), ('declined', 'Qabul qilinmadi')]
+    line = models.ForeignKey('korpus.MonumentLine', on_delete=models.CASCADE, related_name='suggestions')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='editorial_suggestions')
+    proposed_reading = models.TextField('Taklif etilgan o‘qilish', max_length=5000)
+    rationale = models.TextField('Asos va izoh', max_length=5000)
+    source = models.CharField('Nashr / manba / sahifa', max_length=1000)
+    status = models.CharField('Holat', max_length=20, choices=STATUS, default='pending', db_index=True)
+    reviewer_note = models.TextField('Tahririyat izohi', blank=True, max_length=3000)
+    submitted_at = models.DateTimeField('Yuborilgan vaqt', auto_now_add=True)
+    reviewed_at = models.DateTimeField('Ko‘rib chiqilgan vaqt', null=True, blank=True)
+
+    class Meta:
+        ordering = ['status', '-submitted_at', '-id']
+        verbose_name = 'Manbali filologik taklif'
+        verbose_name_plural = 'Manbali filologik takliflar'
+
+    def __str__(self):
+        return f'{self.line} · {self.author} · {self.get_status_display()}'

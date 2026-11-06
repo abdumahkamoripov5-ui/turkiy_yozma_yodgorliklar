@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-12",
+  "cbu_rate_date": "2026-10-10",
+  "USD_UZS": "11897.90",
+  "domain_uz_annual_uzs": 27000,
+  "digitalocean_2gb_monthly_usd": 12,
+  "ahost_2gb_monthly_uzs": 320000,
+  "ai_model": "gpt-4o-mini",
+  "input_per_million_usd": "0.15",
+  "output_per_million_usd": "0.60",
+  "monthly_calls_assumption": 1000,
+  "input_per_call_assumption": 1500,
+  "output_per_call_assumption": 500,
+  "monthly_ai_budget_usd": 5,
+  "calculations": {
+    "expected_month_foreign": "151271.20",
+    "budget_month_foreign": "204514.30",
+    "expected_year_foreign": "1815254.37",
+    "budget_year_foreign": "2454171.60",
+    "budget_month_local": "381739.50",
+    "budget_year_local": "4580874.00",
+    "backup_year_foreign": "2796831.12",
+    "backup_month_foreign": "233069.26"
+  }
+}

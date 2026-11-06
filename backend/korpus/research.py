@@ -28,7 +28,9 @@ def integer(params, key, default, low, high):
 
 
 def filtered_monuments(params):
+    from .corpus_scope import apply_scope
     qs = Monument.objects.filter(status='Chop etilgan').order_by('year', 'pk')
+    qs = apply_scope(qs, params)
     search = params.get('search', '').strip()
     if search:
         if len(search) > 150:
@@ -175,6 +177,7 @@ def search_corpus(params):
                         'location': monument.location, 'field': FIELDS[field], 'field_key': field,
                         'position': line['position'], 'label': line.get('label') or str(line['position']),
                         'alignment': line['alignment'], 'source': line.get('source') or source,
+                        'provenance': line.get('provenance', {}), 'expert_reviewed': line.get('expert_reviewed', False),
                         'left': text[max(0, start - context):start], 'match': text[start:end],
                         'right': text[end:end + context], 'text': text,
                         'target': result_target(monument.pk, line['position'] if aligned else None),

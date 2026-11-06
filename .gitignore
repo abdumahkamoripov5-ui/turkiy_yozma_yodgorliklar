@@ -44,3 +44,5 @@ Thumbs.db
 .vercel
 .env*
 deploy-data/
+
+desktop.ini

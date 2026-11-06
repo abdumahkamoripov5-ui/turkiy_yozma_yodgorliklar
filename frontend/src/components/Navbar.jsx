@@ -1,123 +1,30 @@
-import { translateMvp as tr } from '../mvp/locale'
-import { useMerosLocale } from '../mvp/useLocale'
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { useCopy } from '../mvp/copy'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { ArrowUpRight, Menu, X, Moon, Sun, Globe2, BookOpen, LogOut } from 'lucide-react'
 import { useApp } from '../context/AppContext'
+import { useCopy } from '../mvp/copy'
 
 export default function Navbar() {
-  useMerosLocale()
-  const { theme, toggleTheme, lang, changeLang, user, logout, t } = useApp()
-  const [open, setOpen] = useState(false)
-  const loc = useLocation()
-
+  const { theme, toggleTheme, lang, changeLang, user, logout } = useApp()
   const c = useCopy()
-  const links = user ? [
-    { to: '/', label: t('nav_home') },
-    { to: '/corpus', label: c('Korpus qidiruvi', 'Поиск в корпусе', 'Corpus search') },
-    { to: '/monuments', label: t('nav_monuments') },
-    { to: '/words', label: c('Lug‘at', 'Словарь', 'Dictionary') },
-    { to: '/tools', label: c('Tadqiqot vositalari', 'Инструменты', 'Research tools') },
-    { to: '/polls', label: c('Hamjamiyat', 'Сообщество', 'Community') },
-    { to: '/saved', label: c('Tadqiqot daftari', 'Тетрадь', 'Notebook') },
-  ] : []
-
-  return (
-    <nav className="navbar-blur" style={{
-      borderBottom: '1px solid var(--border)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-    }}>
-      <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', minHeight:'52px', padding:'0.55rem 1rem' }}>
-        <Link to="/" className="meros-brand" aria-label={tr("Turkiy Meros — bosh sahifa")}>
-          <span className="brand-symbol" aria-hidden="true">𐰴</span><span>Turkiy Meros<small>{tr("RAQAMLI XAZINA")}</small></span>
-        </Link>
-
-        <div className="nav-controls" style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
-          {/* Language switcher */}
-          <select data-language-select value={lang} onChange={e => changeLang(e.target.value)} aria-label={tr("Til / Language")}
-            style={{ fontSize:'0.8rem', padding:'0.25rem 0.5rem', minHeight:'32px' }}>
-            <option value="uz">UZ</option>
-            <option value="ru">RU</option>
-            <option value="en">EN</option>
-            <option value="tr">TR · Türkçe</option>
-          </select>
-
-          {/* Theme toggle */}
-          <button onClick={toggleTheme} className="btn btn-ghost" style={{ padding:'0.35rem 0.5rem', fontSize:'1.1rem' }}
-            title={theme === 'dark' ? tr("Light mode") : tr("Dark mode")}
-            aria-label={theme === 'dark' ? tr("Light mode") : tr("Dark mode")}>
-            {theme === 'dark' ? '☀️' : '🌙'}
-          </button>
-
-          {/* Auth */}
-          {user?.is_staff && <a href="/django-admin/" className="btn btn-ghost nav-staff" style={{ fontSize:'0.8rem' }}>{tr("Boshqaruv ↗")}</a>}
-          {user ? (
-            <button onClick={logout} className="btn btn-outline" style={{ fontSize:'0.8rem', padding:'0.35rem 0.75rem' }}>
-              {t('nav_logout')}
-            </button>
-          ) : (
-            <Link to="/login?mode=register" className="btn btn-outline" style={{ fontSize:'0.8rem', padding:'0.35rem 0.75rem' }}>
-              {c('Bepul qo‘shilish', 'Присоединиться', 'Join for free')}
-            </Link>
-          )}
-
-          {/* Hamburger */}
-          {links.length > 0 && <button onClick={() => setOpen(o => !o)} className="btn btn-ghost hamburger"
-            aria-label={tr("Menu")} aria-expanded={open}
-            style={{ fontSize:'1.3rem', padding:'0.25rem 0.5rem' }}>
-            {open ? '✕' : '☰'}
-          </button>}
-        </div>
-      </div>
-
-      {/* Desktop links — logotip qatoridan pastda, alohida qator */}
-      {links.length > 0 && <div className="container nav-links-desktop"
-           style={{ display:'flex', gap:'0.25rem', flexWrap:'wrap', justifyContent:'center',
-                     padding:'0.5rem 1rem 0.6rem', borderTop:'1px solid var(--border)' }}>
-        {links.map(l => (
-          <Link key={l.to} to={l.to} aria-current={loc.pathname === l.to ? 'page' : undefined}
-            className={`nav-link${loc.pathname === l.to ? ' active' : ''}`}
-            style={{
-              color: loc.pathname === l.to ? 'var(--accent)' : 'var(--text2)',
-              background: loc.pathname === l.to ? 'rgba(var(--accent-rgb),0.1)' : 'transparent',
-            }}>
-            {l.label}
-          </Link>
-        ))}
-      </div>}
-
-      {/* Mobile menu */}
-      {open && links.length > 0 && (
-        <div style={{
-          background:'var(--bg2)',
-          borderTop:'1px solid var(--border)',
-          padding:'0.5rem 1rem',
-        }}>
-          {links.map(l => (
-            <Link key={l.to} to={l.to} aria-current={loc.pathname === l.to ? 'page' : undefined}
-              onClick={() => setOpen(false)}
-              style={{
-                display:'block',
-                padding:'0.65rem 0',
-                borderBottom:'1px solid var(--border)',
-                color: loc.pathname === l.to ? 'var(--accent)' : 'var(--text)',
-                fontSize:'0.95rem',
-              }}>
-              {l.label}
-            </Link>
-          ))}
-        </div>
-      )}
-
-      <style>{`
-        .hamburger { display: none; }
-        @media (max-width: 900px) {
-          .nav-links-desktop { display: none !important; }
-          .hamburger { display: flex !important; }
-        }
-      `}</style>
-    </nav>
-  )
+  const [open, setOpen] = useState(false)
+  const location = useLocation()
+  useEffect(() => setOpen(false), [location.pathname, location.search])
+  useEffect(() => { const close = e => { if (e.key === 'Escape') setOpen(false) }; window.addEventListener('keydown', close); return () => window.removeEventListener('keydown', close) }, [])
+  const links = [
+    ['/monuments', c('Yodgorliklar', 'Памятники', 'Monuments')],
+    ['/corpus', c('Korpus qidiruvi', 'Поиск в корпусе', 'Corpus search')],
+    ['/words', c('Lug‘at', 'Словарь', 'Dictionary')],
+    ['/map', c('Xarita', 'Карта', 'Atlas')],
+    ['/tools', c('Tadqiqot', 'Исследования', 'Research')],
+  ]
+  return <>
+    <a href="#main-content" className="skip-link">{c('Asosiy mazmunga o‘tish', 'Перейти к содержимому', 'Skip to content')}</a>
+    <div className="scholar-topline"><div className="container"><span><span className="status-dot" />{c('VII–VIII ASRLARDAGI TURKIY YOZMA YODGORLIKLAR', 'ТЮРКСКИЕ ПИСЬМЕННЫЕ ПАМЯТНИКИ VII–VIII ВЕКОВ', 'TURKIC WRITTEN MONUMENTS OF THE 7TH–8TH CENTURIES')}</span><Link to="/guide">{c('Foydalanish qo‘llanmasi', 'Руководство', 'Corpus guide')} <ArrowUpRight size={12} /></Link></div></div>
+    <header className="scholar-header"><div className="container scholar-nav">
+      <Link to="/" className="scholar-brand" aria-label="Turkiy Meros"><span className="scholar-mark" aria-hidden="true">𐱅</span><span>Turkiy Meros<small>{c('TURKIY YOZMA YODGORLIKLAR KORPUSI', 'КОРПУС ТЮРКСКИХ ПАМЯТНИКОВ', 'CORPUS OF TURKIC WRITTEN MONUMENTS')}</small></span></Link>
+      <nav className="scholar-desktop" aria-label={c('Asosiy menyu', 'Главное меню', 'Main navigation')}>{links.map(([to, label]) => <NavLink key={to} to={to}>{label}</NavLink>)}</nav>
+      <div className="scholar-controls"><label className="scholar-language"><Globe2 size={15} /><select data-language-select value={lang} onChange={e => changeLang(e.target.value)} aria-label="Til / Язык / Language"><option value="uz">UZ</option><option value="ru">RU</option><option value="en">EN</option></select></label><button className="scholar-icon-button" onClick={toggleTheme} aria-label={c('Rang rejimini almashtirish', 'Изменить тему', 'Toggle colour theme')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button>{user ? <Link to="/saved" className="scholar-account scholar-account-user" aria-label={c('Daftarim', 'Мои записи', 'Notebook')}><BookOpen size={16} /><span>{c('Daftarim', 'Мои записи', 'Notebook')}</span></Link> : <Link to="/login" className="scholar-account"><span>{c('Kirish', 'Войти', 'Sign in')}</span><ArrowUpRight size={16} /></Link>}{user && <button className="scholar-icon-button scholar-logout" onClick={logout} aria-label={c('Hisobdan chiqish', 'Выйти из аккаунта', 'Sign out')} title={c('Chiqish', 'Выйти', 'Sign out')}><LogOut size={16}/></button>}<button className="scholar-mobile-toggle scholar-icon-button" aria-expanded={open} aria-controls="mobile-navigation" aria-label={c('Menyu', 'Меню', 'Menu')} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button></div>
+    </div>{open && <nav id="mobile-navigation" className="scholar-mobile" aria-label={c('Mobil menyu', 'Мобильное меню', 'Mobile navigation')}>{links.map(([to, label]) => <NavLink key={to} to={to}>{label}<ArrowUpRight size={16} /></NavLink>)}<Link to="/timeline">{c('Vaqt shkalasi', 'Хронология', 'Timeline')}</Link><Link to="/sources">{c('Manbalar', 'Источники', 'Sources')}</Link>{user && <button onClick={logout}>{c('Chiqish', 'Выйти', 'Sign out')}</button>}</nav>}</header>
+  </>
 }

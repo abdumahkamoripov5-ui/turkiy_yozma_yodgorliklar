@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import EditorialNotice from './EditorialNotice'
 import { monuments as api } from '../api'
 import { useApp } from '../context/AppContext'
 import { buildCitations } from '../utils/citation'
@@ -118,6 +119,7 @@ export default function MonumentModal({ monument, onClose }) {
         </div>
 
         <div className="modal-body">
+          {!loading && !error && <EditorialNotice quality={data.quality} />}
           {!loading && !error && <div className="research-actions"><SaveButton item={{ key: `monument-${data.id}`, title: data.title, to: `/monuments?monument=${data.id}`, type: 'monument' }} /><Link to={`/corpus?monuments=${data.id}`} onClick={onClose}>{c('Ushbu matndan izlash', 'Искать в этом тексте', 'Search this text')} ↗</Link><Link to={`/compare?monuments=${data.id}`} onClick={onClose}>{c('Taqqoslashga qo‘shish', 'Добавить к сравнению', 'Add to comparison')} ↗</Link></div>}
           {loading && <div className="spinner" />}
           {error && <div className="error-msg" role="alert">{t('error_load')}<div><button className="btn btn-outline" onClick={() => setAttempt(a => a + 1)}>{t('retry')}</button></div></div>}

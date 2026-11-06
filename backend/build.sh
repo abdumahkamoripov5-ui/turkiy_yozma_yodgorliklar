@@ -25,6 +25,7 @@ python manage.py migrate
 #   python manage.py seed_data --refresh-demo
 python manage.py seed_data
 python manage.py seed_mvp
+python manage.py seed_scholarly_corpus --archive-samples --quarantine-unsourced
 
 # Superuser — env'dan (DJANGO_SUPERUSER_*); eski demo parollar bloklanadi
 python manage.py shell <<'PY'

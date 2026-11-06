@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useWorkspace } from '../context/WorkspaceContext'
 import { useCopy } from '../mvp/copy'
+import kulteginPhoto from '../assets/stones/kultegin.jpg'
+import bilgePhoto from '../assets/stones/bilge-khagan.jpg'
 
 export function FacsimileViewer({ monument, line }) {
   const c = useCopy()
@@ -8,7 +10,9 @@ export function FacsimileViewer({ monument, line }) {
   const [failed, setFailed] = useState(false)
   const scroll = useRef(null)
   const image = useRef(null)
-  const url = line?.facsimile_url || monument.image
+  const editionPhoto = line?.provenance?.release === 'thomsen1896-v1'
+    ? monument.year === 732 ? kulteginPhoto : monument.year === 735 ? bilgePhoto : null : null
+  const url = line?.facsimile_url || editionPhoto || monument.image
   useEffect(() => { setFailed(false); setZoom(1) }, [url])
   const region = line?.image_region
   const hasRegion = region && ['x', 'y', 'width', 'height'].every(key => typeof region[key] === 'number')

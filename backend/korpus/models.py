@@ -2,6 +2,7 @@ import os
 import uuid
 
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 
 
@@ -151,12 +152,27 @@ class MonumentLine(models.Model):
     image_region = models.JSONField('Suratdagi hudud: x, y, width, height (%)', default=dict, blank=True)
     certainty = models.CharField('O‘qilish holati', max_length=20, choices=[('certain', 'Aniq'), ('uncertain', 'Noaniq'), ('restored', 'Tiklangan')], default='certain')
     editorial_note = models.TextField('Ilmiy izoh', blank=True)
+    provenance = models.JSONField('Nashr, huquqlar va tekshiruv tarixi', default=dict, blank=True)
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='reviewed_monument_lines')
+    reviewed_at = models.DateTimeField('Mustaqil ilmiy tasdiq vaqti', null=True, blank=True)
 
     class Meta:
         ordering = ['position', 'id']
         verbose_name = 'Parallel satr'
         verbose_name_plural = 'Parallel satrlar'
         constraints = [models.UniqueConstraint(fields=['monument', 'position'], name='unique_monument_line_position')]
+        permissions = [('review_monumentline', 'Parallel satrni ilmiy tasdiqlash')]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            previous = type(self).objects.filter(pk=self.pk).first()
+            if previous and any(getattr(previous, field) != getattr(self, field) for field in
+                ('original', 'transliteration', 'translation', 'source', 'provenance', 'certainty', 'editorial_note', 'label')):
+                self.reviewed_by = None
+                self.reviewed_at = None
+                if kwargs.get('update_fields') is not None:
+                    kwargs['update_fields'] = set(kwargs['update_fields']) | {'reviewed_by', 'reviewed_at'}
+        super().save(*args, **kwargs)
 
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -321,4 +337,4 @@ class SiteSettings(models.Model):
 from .mvp_models import (  # noqa: E402,F401
     Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork, SourceLink,
 )
-from .research_models import ResearchItem, WordForm, ReadingVariant  # noqa: E402,F401
+from .research_models import EditorialSuggestion, ResearchItem, WordForm, ReadingVariant  # noqa: E402,F401

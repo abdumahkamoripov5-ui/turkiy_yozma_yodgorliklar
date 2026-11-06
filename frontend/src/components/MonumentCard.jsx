@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { formatYear } from '../utils/format'
+import EditorialNotice from './EditorialNotice'
+import kulteginPhoto from '../assets/stones/kultegin.jpg'
+import bilgePhoto from '../assets/stones/bilge-khagan.jpg'
 
 export default function MonumentCard({ monument, onClick }) {
   const { t } = useApp()
@@ -8,6 +11,8 @@ export default function MonumentCard({ monument, onClick }) {
 
   const yearLabel = formatYear(monument.year, t)
   const open = () => onClick(monument)
+  const image = monument.quality?.source_prepared_lines ?
+    (monument.year === 732 ? kulteginPhoto : monument.year === 735 ? bilgePhoto : monument.image) : monument.image
 
   return (
     <div className="card card-click" onClick={open} role="button" tabIndex={0}
@@ -20,9 +25,9 @@ export default function MonumentCard({ monument, onClick }) {
       flexDirection: 'column',
       gap: '0.75rem',
     }}>
-      {monument.image && failedImage !== monument.image ? (
+      {image && failedImage !== image ? (
         <div style={{ borderRadius:'var(--radius)', overflow:'hidden', height:'140px' }}>
-          <img src={monument.image} alt={monument.title} loading="lazy" onError={() => setFailedImage(monument.image)}
+          <img src={image} alt={monument.title} loading="lazy" onError={() => setFailedImage(image)}
             style={{ width:'100%', height:'100%', objectFit:'cover' }} />
         </div>
       ) : (
@@ -32,6 +37,7 @@ export default function MonumentCard({ monument, onClick }) {
       )}
 
       <div>
+        <EditorialNotice quality={monument.quality} compact />
         <div style={{ fontSize:'0.75rem', color:'var(--text2)', marginBottom:'0.3rem' }}>
           {monument.script_display || monument.script}
           {(monument.category_display || monument.category) && <> · {monument.category_display || monument.category}</>}

@@ -1,0 +1,20 @@
+[
+  {
+    "url": "https://archive.org/download/inscriptionsdel00thomgoog/inscriptionsdel00thomgoog_djvu.txt",
+    "file": "inscriptionsdel00thomgoog_djvu.txt",
+    "sha256": "1ff9b27025cb93c436749d98ed1e574b7d86a1060abf96546a6625f199b66a36",
+    "bytes": 664368
+  },
+  {
+    "url": "https://archive.org/download/inscriptionsdel00thomgoog/inscriptionsdel00thomgoog_scandata.xml",
+    "file": "inscriptionsdel00thomgoog_scandata.xml",
+    "sha256": "b9991f780155820b0a128eff5e9ef0b4ecd26267eda2f8090f8be6366a8c64a3",
+    "bytes": 69382
+  },
+  {
+    "url": "https://archive.org/download/inscriptionsdel00thomgoog/inscriptionsdel00thomgoog.pdf",
+    "file": "inscriptionsdel00thomgoog.pdf",
+    "sha256": "efe039c7b67ee8f66e7160b396ac369b8547e145b471fb29afb9b612cde5d9cf",
+    "bytes": 5707785
+  }
+]

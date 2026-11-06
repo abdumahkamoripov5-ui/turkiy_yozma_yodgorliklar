@@ -8,7 +8,10 @@ import { useState } from 'react'
 
 export function PageHeading({ eyebrow, title, children }) {
   useMerosLocale()
-  return <header className="meros-page-heading"><span className="meros-eyebrow">{eyebrow}</span><h1>{title}</h1>{children && <p>{children}</p>}</header>
+  const c = useCopy()
+  const location = useLocation()
+  const scoped = ['/monuments', '/corpus', '/concordance'].includes(location.pathname)
+  return <header className="meros-page-heading"><span className="meros-eyebrow">{eyebrow}</span><h1>{title}</h1>{children && <p>{children}</p>}{scoped && <p className="corpus-period-notice"><strong>VII–VIII / 601–800</strong><span>{c('Asosiy korpus. Keng yoki noaniq sanali arxiv yozuvlari kiritilmagan.', 'Основной корпус. Архивные записи с широкими датировками не включены.', 'Core corpus. Archival records with broad date ranges are excluded.')} <Link to="/quality">{c('Sifat hisoboti', 'Отчёт о качестве', 'Quality report')} ↗</Link></span></p>}</header>
 }
 
 export function RemoteState({ remote, empty, children }) {

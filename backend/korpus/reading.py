@@ -9,9 +9,12 @@ def normalize_word(value):
 
 def reading_data(monument):
     fields = ('id', 'position', 'label', 'original', 'transliteration', 'translation', 'source',
-              'facsimile_url', 'image_region', 'certainty', 'editorial_note')
+              'facsimile_url', 'image_region', 'certainty', 'editorial_note', 'provenance')
     lines = [{field: getattr(line, field) for field in fields}
              for line in monument.reading_lines.all() if line.published]
+    review = {line.pk: bool(line.reviewed_by_id and line.reviewed_at) for line in monument.reading_lines.all() if line.published}
+    for line in lines:
+        line['expert_reviewed'] = review[line['id']]
     if lines:
         return {'alignment': 'editorial', 'lines': lines}
     columns = [value.strip().splitlines() if value.strip() else [] for value in

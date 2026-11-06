@@ -103,6 +103,7 @@ class WordEntry(models.Model):
     meaning = models.TextField('Ma’nosi')
     example = models.TextField('Misol', blank=True)
     source = models.CharField('Manba', max_length=500)
+    provenance = models.JSONField('Nashr, huquqlar va tekshiruv tarixi', default=dict, blank=True)
     status = models.CharField('Maqom', max_length=20, choices=[
         ('historical', 'Tarixiy so‘z'), ('community', 'Jamoatchilik tanlagan')], default='historical')
     monument = models.ForeignKey('korpus.Monument', null=True, blank=True, on_delete=models.SET_NULL)
@@ -114,6 +115,18 @@ class WordEntry(models.Model):
         ordering = ['word']
         verbose_name = 'Lug‘at so‘zi'
         verbose_name_plural = 'Lug‘at so‘zlari'
+        permissions = [('review_wordentry', 'Lug‘at maqolasini ilmiy tasdiqlash')]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            previous = type(self).objects.filter(pk=self.pk).first()
+            if previous and any(getattr(previous, field) != getattr(self, field) for field in
+                ('word', 'meaning', 'example', 'source', 'equivalents', 'pronunciation', 'provenance', 'monument_id')):
+                self.reviewed_by = None
+                self.reviewed_at = None
+                if kwargs.get('update_fields') is not None:
+                    kwargs['update_fields'] = set(kwargs['update_fields']) | {'reviewed_by', 'reviewed_at'}
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.word

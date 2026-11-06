@@ -12,6 +12,7 @@ from django.utils.html import format_html
 
 from .models import Book, WordEntry, MediaLesson, WordPoll, PollOption, PollVote, ResearchWork, SourceLink
 from .admin_forms import WordAdminForm
+from .scientific_review import ScientificReviewMixin, approve_scientific_content
 
 
 @admin.register(Book)
@@ -22,7 +23,7 @@ class BookAdmin(admin.ModelAdmin):
 
 
 @admin.register(WordEntry)
-class WordAdmin(admin.ModelAdmin):
+class WordAdmin(ScientificReviewMixin, admin.ModelAdmin):
     form = WordAdminForm
     change_list_template = 'admin/korpus/wordentry/change_list.html'
     fieldsets = (
@@ -30,13 +31,14 @@ class WordAdmin(admin.ModelAdmin):
         ('Boshqa turkiy tillarda', {'fields': ('equivalents',)}),
         ('Talaffuz audiosi', {'fields': ('audio', 'audio_preview', 'audio_kind', 'audio_credit', 'audio_approved'),
                              'description': 'MP3, WAV yoki OGG, 10 MB gacha. Yangi audio avval tasdiqsiz saqlanadi. Keyin uni tinglab, tekshirildi belgisini qo‘ying va qayta saqlang.'}),
-        ('Nashr qilish', {'fields': ('status', 'published')}),
+        ('Nashr qilish', {'fields': ('status', 'published', 'provenance')}),
         ('Tekshiruv tarixi', {'fields': ('campaign', 'reviewed_by', 'reviewed_at'), 'classes': ('collapse',)}),
     )
     list_display = ['word', 'status', 'published', 'reviewed_by', 'reviewed_at']
     list_filter = ['status', 'published']
     search_fields = ['word', 'meaning']
     readonly_fields = ['campaign', 'reviewed_by', 'reviewed_at', 'audio_preview']
+    actions = [approve_scientific_content]
 
     @admin.display(description='Audioni tinglash')
     def audio_preview(self, obj):
@@ -98,11 +100,7 @@ class WordAdmin(admin.ModelAdmin):
         return TemplateResponse(request, 'admin/korpus/wordentry/import.html', context)
 
     def save_model(self, request, obj, form, change):
-        from django.utils import timezone
-        if obj.published:
-            obj.reviewed_by = request.user
-            obj.reviewed_at = timezone.now()
-        else:
+        if not obj.published:
             obj.reviewed_by = None
             obj.reviewed_at = None
         super().save_model(request, obj, form, change)

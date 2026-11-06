@@ -4,8 +4,8 @@ import { AppProvider, useApp } from './context/AppContext'
 import { WorkspaceProvider } from './context/WorkspaceContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import Home from './pages/Landing'
-import StonePreview from './pages/StonePreview'
+import Home from './pages/CorpusHome'
+import ErrorBoundary from './components/ErrorBoundary'
 import './mvp/landing.css'
 import MotionEffects from './components/MotionEffects'
 import UsageTracker from './components/UsageTracker'
@@ -33,10 +33,20 @@ const Words = lazy(() => import('./pages/Words'))
 const WordArticle = lazy(() => import('./pages/WordArticle'))
 const Sources = lazy(() => import('./pages/Sources'))
 const ResearchTools = lazy(() => import('./pages/ResearchTools'))
+const CorpusGuide = lazy(() => import('./pages/CorpusGuide'))
+const CorpusQuality = lazy(() => import('./pages/CorpusQuality'))
+const StonePreview = lazy(() => import('./pages/StonePreview'))
 
 function RouteScroll() {
-  const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (!hash) window.scrollTo({ top: 0, behavior: 'instant' })
+    else {
+      const scroll = () => document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView()
+      const timer = setTimeout(scroll, 250)
+      return () => clearTimeout(timer)
+    }
+  }, [pathname, hash])
   return null
 }
 
@@ -49,8 +59,10 @@ function Layout() {
 
   useEffect(() => {
     document.documentElement.lang = lang
-    document.title = { uz: 'Turkiy Meros — matnlar va so‘zlar', ru: 'Turkiy Meros — тексты и слова', en: 'Turkiy Meros — texts and words' }[lang] || 'Turkiy Meros'
-    document.querySelector('meta[name="description"]')?.setAttribute('content', { uz: 'Tarixiy matnlar, lug‘at va tadqiqot hamjamiyati. Bepul ro‘yxatdan o‘ting.', ru: 'Исторические тексты, словарь и исследовательское сообщество. Бесплатная регистрация.', en: 'Historical texts, a dictionary and a research community. Join for free.' }[lang] || 'Turkiy Meros')
+    const titles = { uz: 'Turkiy Meros — VII–VIII asrlardagi turkiy yozma yodgorliklar', ru: 'Turkiy Meros — Тюркские письменные памятники VII–VIII веков', en: 'Turkiy Meros — Turkic written monuments of the 7th–8th centuries' }
+    document.title = titles[lang] || titles.uz
+    const descriptions = { uz: 'VII–VIII asrlar turkiy yozma yodgorliklari: asl bitiklar, parallel o‘qish, tarixiy lug‘at, konkordans va ilmiy manbalar.', ru: 'Тюркские письменные памятники VII–VIII веков: оригиналы, параллельное чтение, словарь, конкорданс и научные источники.', en: 'Turkic written monuments of the 7th–8th centuries: original inscriptions, parallel reading, historical dictionary, concordance and scholarly sources.' }
+    document.querySelector('meta[name="description"]')?.setAttribute('content', descriptions[lang] || descriptions.uz)
   }, [lang])
 
   return (
@@ -59,12 +71,15 @@ function Layout() {
       <UsageTracker />
       <MotionEffects />
       <Navbar />
-      <main>
+      <main id="main-content" tabIndex={-1}>
+        <ErrorBoundary key={lang}>
         <Suspense fallback={<div className="page" style={{ textAlign:'center' }}>…</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/guide" element={<CorpusGuide />} />
           <Route path="/stone-preview" element={<StonePreview />} />
           <Route element={<RequireAuth />}>
+          <Route path="/quality" element={<CorpusQuality />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/monuments" element={<Monuments />} />
           <Route path="/words" element={<Words />} />
@@ -92,6 +107,7 @@ function Layout() {
           <Route path="*" element={<NotFound />} />
         </Routes>
         </Suspense>
+        </ErrorBoundary>
       </main>
       <Footer />
     </BrowserRouter>
