@@ -1,5 +1,6 @@
 import { getLang } from '../i18n.js'
 import { CORE_TRANSLATIONS } from './core-translations'
+import { EXTRA_COPY } from '../locale-additions'
 
 // Uzbek is the source language. Historical texts and user content retain their original language.
 export const TURKISH_UI = {
@@ -144,9 +145,10 @@ export const TURKISH_UI = {
 export function translateMvp(text, language = getLang()) {
   const translated = CORE_TRANSLATIONS[text]
   if (translated && (language === 'ru' || language === 'en')) return translated[language === 'ru' ? 0 : 1]
-  return language === 'tr' && typeof text === 'string' ? (TURKISH_UI[text] ?? text) : text
+  if (typeof text !== 'string') return text
+  return EXTRA_COPY[language]?.[text] ?? (language === 'tr' ? (TURKISH_UI[text] ?? text) : text)
 }
 
 export function localeCode(language = getLang()) {
-  return { uz: 'uz-UZ', tr: 'tr-TR', en: 'en-US', ru: 'ru-RU' }[language] || 'uz-UZ'
+  return { uz: 'uz-UZ', tr: 'tr-TR', en: 'en-US', ru: 'ru-RU', tg: 'tg-TJ', ky: 'ky-KG', kk: 'kk-KZ' }[language] || 'uz-UZ'
 }

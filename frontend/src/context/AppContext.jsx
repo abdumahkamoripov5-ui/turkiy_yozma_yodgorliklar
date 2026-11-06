@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { getLang, setLang as setI18nLang, t } from '../i18n'
+import { EXTRA_LANGUAGES } from '../locale-additions'
 
 const AppContext = createContext(null)
 const readTheme = () => {
@@ -11,7 +12,7 @@ export function AppProvider({ children }) {
   const [theme, setThemeState] = useState(readTheme)
   const [lang, setLangState] = useState(() => {
     const preferred = getLang()
-    if (['uz', 'ru', 'en'].includes(preferred)) return preferred
+    if (['uz', 'ru', 'en', ...EXTRA_LANGUAGES].includes(preferred)) return preferred
     setI18nLang('uz')
     return 'uz'
   })

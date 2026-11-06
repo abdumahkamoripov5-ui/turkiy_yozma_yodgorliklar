@@ -1,4 +1,5 @@
-import { READING_TRANSLATIONS } from './reading-translations'
+import { READING_TRANSLATIONS } from './reading-translations.js'
+import { EXTRA_LANGUAGES, EXTRA_TRANSLATIONS, EXTRA_READING } from './locale-additions.js'
 
 const TRANSLATIONS = {
   uz: {
@@ -648,13 +649,15 @@ const TRANSLATIONS = {
 }
 
 for (const [lang, labels] of Object.entries(READING_TRANSLATIONS)) Object.assign(TRANSLATIONS[lang], labels)
+for (const lang of EXTRA_LANGUAGES) TRANSLATIONS[lang] = { ...TRANSLATIONS.uz, ...TRANSLATIONS[lang], ...EXTRA_TRANSLATIONS[lang], ...EXTRA_READING[lang] }
 
-let currentLang = ['uz', 'ru', 'en'].includes(localStorage.getItem('lang')) ? localStorage.getItem('lang') : 'uz'
+const SUPPORTED_LANGUAGES = ['uz', 'ru', 'en', ...EXTRA_LANGUAGES]
+let currentLang = SUPPORTED_LANGUAGES.includes(localStorage.getItem('lang')) ? localStorage.getItem('lang') : 'uz'
 
 export function getLang() { return currentLang }
 
 export function setLang(lang) {
-  currentLang = ['uz', 'ru', 'en'].includes(lang) ? lang : 'uz'
+  currentLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'uz'
   localStorage.setItem('lang', currentLang)
 }
 

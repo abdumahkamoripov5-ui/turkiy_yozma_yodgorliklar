@@ -25,6 +25,8 @@ export default function Login() {
       const r = register ? await api.post('/auth/register/', form) : await auth.login(form.username, form.password)
       login(r.data)
       const next = params.get('next') || '/'
+      // Reject control characters in redirect URLs to prevent malformed paths.
+      // eslint-disable-next-line no-control-regex
       const safeNext = next.startsWith('/') && !next.startsWith('//') && !/[\\\u0000-\u001f]/.test(next) ? next : '/'
       navigate(safeNext, { replace: true })
     } catch (err) {

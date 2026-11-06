@@ -60,8 +60,10 @@ function Layout() {
   useEffect(() => {
     document.documentElement.lang = lang
     const titles = { uz: 'Turkiy Meros — VII–VIII asrlardagi turkiy yozma yodgorliklar', ru: 'Turkiy Meros — Тюркские письменные памятники VII–VIII веков', en: 'Turkiy Meros — Turkic written monuments of the 7th–8th centuries' }
+    Object.assign(titles, { tr: 'Turkiy Meros — VII–VIII. yüzyıl Türk yazıtları', tg: 'Turkiy Meros — ёдгориҳои хаттии туркии асрҳои VII–VIII', ky: 'Turkiy Meros — VII–VIII кылымдардагы түрк жазма эстеликтери', kk: 'Turkiy Meros — VII–VIII ғасырлардағы түркі жазба ескерткіштері' })
     document.title = titles[lang] || titles.uz
     const descriptions = { uz: 'VII–VIII asrlar turkiy yozma yodgorliklari: asl bitiklar, parallel o‘qish, tarixiy lug‘at, konkordans va ilmiy manbalar.', ru: 'Тюркские письменные памятники VII–VIII веков: оригиналы, параллельное чтение, словарь, конкорданс и научные источники.', en: 'Turkic written monuments of the 7th–8th centuries: original inscriptions, parallel reading, historical dictionary, concordance and scholarly sources.' }
+    Object.assign(descriptions, { tr: 'VII–VIII. yüzyıl Türk yazıtları: özgün metinler, paralel okuma, tarihî sözlük, konkordans ve bilimsel kaynaklar.', tg: 'Ёдгориҳои хаттии туркии асрҳои VII–VIII: матнҳои аслӣ, хониши мувозӣ, фарҳанг, конкорданс ва сарчашмаҳои илмӣ.', ky: 'VII–VIII кылымдардагы түрк жазма эстеликтери: түп нускалар, катар окуу, тарыхый сөздүк, конкорданс жана илимий булактар.', kk: 'VII–VIII ғасырлардағы түркі жазба ескерткіштері: түпнұсқа мәтіндер, қатар оқу, тарихи сөздік, конкорданс және ғылыми дереккөздер.' })
     document.querySelector('meta[name="description"]')?.setAttribute('content', descriptions[lang] || descriptions.uz)
   }, [lang])
 
